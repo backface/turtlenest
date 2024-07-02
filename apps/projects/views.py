@@ -726,7 +726,7 @@ def like(request, id):
 @require_http_methods(["DELETE"])
 def delete_comment(request, id):
     comment = get_object_or_404(Comment, pk=id)
-    if not request.user == comment.author or request.user.is_moderator or request.user.is_superuser:
+    if not request.user == comment.author and not request.user.is_moderator and not request.user.is_superuser:
         raise (PermissionDenied)
     else:
         comment.delete()
