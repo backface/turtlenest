@@ -5,7 +5,7 @@
     {% for tag in tags %}
     <span class="mr-4 text-xs">
     <a href="{% url basename 'tag' tag.slug %}" 
-        class="text-5xl hover:text-green-500 break-words" style="font-size: {% scale_tag tag.count 1 12 maxima %}em">
+        class="text-5xl hover:text-green-500 break-words" style="font-size: {% scale_tag tag.count 1.5 12 maxima %}em">
         #{{ tag.name }}</a> 
     ({{ tag.count }})
     </span>
