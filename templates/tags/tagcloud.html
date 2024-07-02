@@ -2,7 +2,7 @@
     {% for tag in tags %}
     <span class="mr-4 text-xs">
     <a href="{% url basename 'tag' tag.slug %}" 
-        class="text-5xl hover:text-green-500 break-words" style="font-size: {% widthratio tag.count 1 scale %}px">
+        class="text-5xl hover:text-green-500 break-words" style="font-size: {% widthratio tag.count scale 3.5 %}em">
         #{{ tag.name }}</a> 
     ({{ tag.count }})
     </span>

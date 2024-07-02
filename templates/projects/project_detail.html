@@ -103,14 +103,14 @@
         {% endif %}        
 
         <div class="mt-10 mb-10">
-            {% if project.tags.all %}
+            <!-- {% if project.tags.all %}
             <div class="mt-5 p-1">
                 <h4 class="inline">{% trans "Tags" %}:</h4>
                 {% for tag in project.tags.all %}
                     <a href="{% url 'projects:list_by_tag' tag.slug %}" class="text-tertiary hover:text-primary">#{{ tag }}</a>
                 {% endfor %}
             </div>
-            {% endif %}
+            {% endif %} -->
             <div class="text-slate-600 text-xs border-b border-slate-800 p-1 mt-10">  
                 {% if project.date_created %}
                 <i class="icon-[gridicons--create] text-lg align-middle"></i> 

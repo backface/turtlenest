@@ -132,8 +132,8 @@ class Project(models.Model):
         return reverse(
             "projects:detail",
             kwargs={
-                "username": self.user.username or "",
-                "projectname": self.name.replace("\n", ""),
+                "username": self.user.username if self.user else "",
+                "projectname": self.name,
             },
         )
 

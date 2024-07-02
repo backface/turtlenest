@@ -203,18 +203,24 @@ def migrate_comments():
             progress = ((ii * 100 + i) / count) * 100
             counter = (ii * 100 + i) + 1
             print(f"\r  .. {(progress):.1f}% ({counter})..", end="")
-
-            new_object, created = Comment.objects.get_or_create(
-                author=User.objects.get(username=old_object.author),
-                project=Project.objects.get(
-                    name=old_object.projectname,
-                    user=User.objects.get(username=old_object.projectowner),
-                ),
-            )
-            new_object.contents = old_object.contents
-            new_object.date_created = old_object.date
-            new_object.date_modified = old_object.date
-            new_object.save()
+            
+            try:
+                new_object, created = Comment.objects.get_or_create(
+                    author=User.objects.get(username=old_object.author),
+                    project=Project.objects.get(
+                        name=old_object.projectname,
+                        user=User.objects.get(username=old_object.projectowner),
+                    ),
+                )
+                new_object.contents = old_object.contents
+                new_object.date_created = old_object.date
+                new_object.date_modified = old_object.date
+                new_object.save()
+            except IntegrityError:
+                print("error: duplicate comment?")                
+            except Project.DoesNotExist:
+                print("error: project does not exist")   
+                             
     print("\nDone.")
 
 
