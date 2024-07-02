@@ -64,7 +64,7 @@
                 <div class="bg-white text-black w-full py-2 mt-1 grow">
                     <h2 class="mt-0 pt-0">Staff-picked projects brought to surface</h2>
                     {% if featured.notes %}
-                        <p> {{ featured.notes|linebreaksbr|link_uris|linktags|truncatechars_html:200 }}</p>
+                        <p> {{ featured.notes|linebreaksbr|truncatechars_html:200 }}</p>
                     {% else %}
                         {{ featured.name }} <br>
                         by {{ featured.user.username }}

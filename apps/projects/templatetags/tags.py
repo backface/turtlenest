@@ -59,3 +59,10 @@ def link_uris(value):
             value,
         )
     )
+
+@register.simple_tag
+def scale_tag(value, min_out, max_out, max_in):
+    print(value, min_out, max_out, max_in)
+    size = max(min_out, (value/max_in * max_out))
+    print(size)
+    return f"{size}"

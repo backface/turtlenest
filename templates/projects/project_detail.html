@@ -2,10 +2,10 @@
 {% load i18n tags humanize static %}
 {% load tailwind_filters crispy_forms_tags  %}
 
-{% block title %}{{ project.name }} - {{ block.super }}{% endblock %}
+{% block title %}{{ project.name }} by {{ project.user.username }} / {{ block.super }}{% endblock %}
 
 {% block sharing %}
-<meta property="og:title" content="{{ project.name }} / TurtleStitch - Coded Embroidery" />
+<meta property="og:title" content="{{ project.name }} by {{ project.user.username }} / TurtleStitch - Coded Embroidery" />
 <meta property="og:description" content="{{ project.notes }}"/>
 <meta property="og:url" content="{{ request.build_absolute_uri }}" />
 <meta property="og:type" content="website"/>
@@ -13,7 +13,7 @@
 <meta property="og:image" content="{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}{{ project.featured_image.url }}" />
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:site" content="@turtlestitch">
-<meta name="twitter:title" content="{{ project.name }} / TurtleStitch - Coded Embroidery" />
+<meta name="twitter:title" content="{{ project.name }} by {{ project.user.username }}  / TurtleStitch - Coded Embroidery" />
 <meta name="twitter:description" content="{{ project.notes }}"/>
 <meta name="twitter:domain" content="turtlestitch.org" />
 <meta name="twitter:image" content="{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}{{ project.featured_image.url }}" />
@@ -119,7 +119,7 @@
                 </span>
                 {% endif %}
 
-                {% if project.date_updated %}
+                {% if project.date_updated and project.date_updated != project.date_created %}%}
                     <i class="icon-[eos-icons--content-modified] text-lg align-middle"></i> Last modified: {{ project.date_updated|naturaltime }}<br>
                 {% endif %}               
             </div>

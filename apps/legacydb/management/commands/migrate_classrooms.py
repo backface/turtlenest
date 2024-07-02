@@ -1,5 +1,6 @@
 import math
 from django.utils import timezone
+from django.db.utils import IntegrityError
 from django.core.management.base import BaseCommand
 from django.utils.text import slugify
 from django.db import migrations
@@ -106,15 +107,21 @@ def migrate_units():
             counter = (ii * 100 + i) + 1
             print(f"\r  .. {(progress):.1f}% ({counter})..", end="")
 
-            new_object, created = Unit.objects.get_or_create(
-                id=old_object.id, group=Group.objects.get(id=old_object.classroom_id)
-            )
-            new_object.title = old_object.title
-            new_object.slug = slugify(old_object.title, allow_unicode=True)
-            new_object.number = old_object.number
-            new_object.date_created = old_object.created_at or timezone.now()
-            new_object.date_modified = old_object.updated_at or timezone.now()
-            new_object.save()
+            try:
+                new_object, created = Unit.objects.get_or_create(
+                    id=old_object.id, group=Group.objects.get(id=old_object.classroom_id)
+                )
+                new_object.title = old_object.title
+                new_object.slug = slugify(old_object.title, allow_unicode=True)
+                new_object.number = old_object.number
+                new_object.date_created = old_object.created_at or timezone.now()
+                new_object.date_modified = old_object.updated_at or timezone.now()
+                new_object.save()
+            except IntegrityError:
+                print("error: duplicate entry?")                
+            except Group.DoesNotExist:
+                print("error: group does not exist")   
+
     print("\ndone")
 
 
@@ -137,17 +144,24 @@ def migrate_projects():
             counter = (ii * 100 + i) + 1
             print(f"\r  .. {(progress):.1f}% ({counter})..", end="")
 
-            new_object, created = ProjectSelection.objects.get_or_create(
-                id=old_object.id,
-                project_id=old_object.project_id,
-                is_starter=old_object.is_starter,
-                group=Group.objects.get(id=old_object.classroom_id)
-                if old_object.classroom_id
-                else None,
-                unit=Unit.objects.get(id=old_object.unit) if old_object.unit else None,
-            )
-            new_object.date_created = old_object.created_at or timezone.now()
-            new_object.date_modified = old_object.updated_at or timezone.now()
-            new_object.save()
+            try:
+                new_object, created = ProjectSelection.objects.get_or_create(
+                    id=old_object.id,
+                    project_id=old_object.project_id,
+                    is_starter=old_object.is_starter,
+                    group=Group.objects.get(id=old_object.classroom_id)
+                    if old_object.classroom_id
+                    else None,
+                    unit=Unit.objects.get(id=old_object.unit) if old_object.unit else None,
+                )
+                new_object.date_created = old_object.created_at or timezone.now()
+                new_object.date_modified = old_object.updated_at or timezone.now()
+                new_object.save()
+            except IntegrityError:
+                print("error: duplicate entry?")                
+            except Group.DoesNotExist:
+                print("error: group does not exist")   
+            except Unit.DoesNotExist:
+                print("error: unit does not exist") 
 
     print("\nDone.")
