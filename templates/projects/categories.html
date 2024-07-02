@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load render_partial i18n %}
+
+{% block content %}
+
+{% include "projects/__list_header.html" with collection="categories" %}
+
+{% for cat in categories %}
+
+    {% if cat.page_obj|length > 0 %}
+    <div class="container mx-auto mb-24" >
+        <h2 class="uppercase text-left px-2"><a href="{{ cat.get_absolute_url }}">{{ cat.name }}</a></h2>
+
+        {% if cat.description %}
+        <div class="text-left px-2">{{ cat.description }}</div>
+        {% endif %}
+
+        <div class="container mx-auto sm:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 projects" >        
+            {% include "projects/_project_list.html" with page_obj=cat.page_obj arg=cat.slug %}
+        </div>
+        <a href="{{ cat.get_absolute_url }}" class="">
+            <button>View all projects from "{{ cat.name }}"</button>
+        </a>
+    </div>
+    {% endif %}
+
+{% endfor %}
+
+
+<script>
+    if ("loading" in HTMLImageElement.prototype) {
+        console.log("has loading")
+        var images = document.querySelectorAll('img[loading="lazy"]');
+        var sources = document.querySelectorAll("source[data-srcset]");
+        sources.forEach(function (source) {
+            source.srcset = source.dataset.srcset;
+        });
+        images.forEach(function (img) {
+            img.src = img.dataset.src;
+        });
+    } else {
+        var images = document.querySelectorAll('img[loading="lazy"]');
+        var sources = document.querySelectorAll("source[data-srcset]");
+        sources.forEach(function (source) {
+            source.srcset = source.dataset.srcset;
+        });
+        images.forEach(function (img) {
+            img.src = img.dataset.src;
+        });
+    }
+</script>
+
+{% endblock %}

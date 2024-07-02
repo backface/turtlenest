@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load tailwind_filters crispy_forms_tags  %}
+
+{% block content %}
+
+<div class="my-10 mx-auto">
+    <h2 class="text-5xl mb-10">{% if form.instance.pk %}Edit{% else %}Add{% endif %} Group</h2>
+
+    <div class="container mx-auto text-left" >
+        <form method="post">{% csrf_token %}
+            {{ form|crispy }}
+            <button><i class="icon-[ion--save-sharp] mr-1"></i>Save Group</button>
+        </form>   
+    </div>
+
+</div>
+{% endblock %}

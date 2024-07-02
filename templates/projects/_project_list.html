@@ -1,0 +1,32 @@
+{% for project in page_obj %}
+    {% if forloop.last and page_obj.has_next and not autoload %}
+    <div
+        hx-get="{% url basename collection=collection arg=arg %}?page={{ page_obj.number|add:1 }}"
+        hx-trigger="intersect once"
+        hx-swap="afterend">
+    {% else %}
+    <div>
+    {% endif %}    
+
+    {% include "projects/_project.html" with project=project %}
+    </div>    
+{% endfor %}
+
+<script>
+    if ("loading" in HTMLImageElement.prototype) {
+        console.log("has loading")
+        var images = document.querySelectorAll('img[loading="lazy"]');
+        var sources = document.querySelectorAll("source[data-srcset]");
+        sources.forEach(function (source) {
+            source.srcset = source.dataset.srcset;
+        });
+        images.forEach(function (img) {
+            img.src = img.dataset.src;
+        });
+    } else {
+        console.log("no loading")
+        var script = document.createElement("script");
+        script.src = "/link/to/lazyload.js";
+        document.body.appendChild(script);
+    }
+</script>

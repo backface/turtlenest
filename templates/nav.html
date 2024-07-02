@@ -1,0 +1,101 @@
+
+<nav class="relative bg-primary text-white mt-0" hx-boost="false" >
+  <div class="container mx-auto text-left flex items-stretch">
+    <a href="/" class="hover:bg-primary">
+      <img alt="TurtleStitch" src="/static/img/TurtleBlackGreen-150x150.png" 
+        class="w-14 absolute top-2 h-14 -ml-2 rotate">
+    </a>
+  
+    <div class="flex-auto pl-0 navlinks">
+      <div class="ml-10 dropdown ">
+        <a tabindex="0" role="button" class="hover:text-secondary lg:hidden m-1">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6 text-black"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h8m-8 6h16" />
+          </svg>
+        </a>
+        <ul tabindex="0"  class="menu dropdown-content  z-[1] bg-primary p-2 shadow">
+          <li><a href="/page/about">About</a></li>
+          <li><a href="/page/tutorials">Tutorials</a></li>
+          <li><a href="/categories" hx-boost="false">Categories</a></li>
+          <li><a href="/page/faq" hx-boost="false">FAQ</a></li>
+          <li>        
+            <form action="{% url 'projects:search' 'all' %}" method="get" 
+              class="inline-flex p-3 items-center text-white relative top-1">        
+              <label for="default-search" class="text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4">
+                <path fill-rule="evenodd" d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z" clip-rule="evenodd" />
+              </svg>
+              <input name="q" type="text" class="ml-2 w-24 outline-none
+              border-secondary border-b-2 text-white bg-primary
+              placeholder-slate-300" placeholder="Search" 
+              />
+              <button class="hidden" name="search" type="submit"></button>        
+            </form>
+          </li>          
+        </ul>
+      </div>      
+      
+      <div class="hidden lg:inline">
+        <a href="/" class="hover:text-white text-black">
+          TurtleStitch
+        </a>|
+        <a href="/page/about">About</a>|
+        <a href="/page/tutorials">Tutorials</a>|
+        <a href="/categories" hx-boost="false">Categories</a>|
+        <a href="/page/faq" hx-boost="false">FAQ</a>| 
+        <form action="{% url 'projects:search' 'projects' %}" method="get" 
+          class="inline-flex p-3 items-center text-white relative top-1">        
+          <label for="default-search" class="text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4">
+            <path fill-rule="evenodd" d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z" clip-rule="evenodd" />
+          </svg>
+          <input name="q" type="text" class="ml-2 w-24 outline-none
+          border-secondary border-b-2 text-white bg-primary placeholder-secondary" placeholder="Search" 
+          />
+          <button class="hidden" name="search" type="submit"></button>        
+        </form>
+      </div>
+    </div>
+  
+    <div class="hidden md:block md:flex-auto">
+      <a class="mx-8 px-5 py-3 bg-secondary pt-3 pb-3 text-xl hover:bg-tertiary hover:text-white uppercase " href="/run">Run</a>
+    </div>
+    
+    <div class="flex-auto text-right">
+       {% if request.user.is_authenticated %} 
+
+        {% if request.session.group %}
+        <a href="/group/{{ request.session.group }}" class="h-12 align-text-top mr-4 pt-1 hover:text-secondary">
+          <i class="icon-[fa--leanpub]"></i>
+        </a>
+        {% endif %}
+          
+        <div class="dropdown  dropdown-end">
+          <div tabindex="0" role="button" class="m-1" >
+            <img  class="w-10 pt-0.5 rounded-full" alt="gravatar" src="{{ request.user.avatar_url }}" />
+          </div>
+          <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-primary w-52">
+            <li><a href="/user/profile">My profile</a></li>
+            <li><a href="/myprojects" hx-boost="false">My projects</a></li>
+            <li><a href="/mygroups">My Groups</a></li>
+            <li><a href="/logout">Logout</a></li>
+          </ul>
+        </div>
+
+      {% else %}
+      
+        <a href="/signup">Signup</a> |
+        <a href="/login">Login</a>
+      {% endif %}
+    </div>
+  </div>
+</nav>

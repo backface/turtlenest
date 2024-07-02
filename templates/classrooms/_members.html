@@ -1,0 +1,35 @@
+
+
+<div id="memberlist" class="container mx-auto grid grid-cols-8 gap-7 border-black border p-10 rounded" > 
+    {% for user in group.members.all %}
+        {% include 'classrooms/_member_card.html' %}
+    {% endfor %}
+</div>   
+
+{% if group.host == request.user %}
+<div class="container mx-auto bg-slate-50 p-4 mb-10">
+    <form action="{% url 'groups:add_member' group.id %}" method="POST">
+        {% csrf_token %}
+        {{ addMemberForm }}
+        <button
+            hx-post="{% url 'groups:add_member' group.id %}"
+            hx-trigger="click" 
+            hx-target="#members"
+        ><i class="icon-[ion--person-add] mr-1"></i>Add Member
+        </button>  
+        <button onclick="bulkmodal.showModal()">
+            <i class="icon-[ion--person-add] mr-1"></i><i class="icon-[ion--person-add] mr-1"></i><i class="icon-[ion--person-add] mr-1"></i> Bulk Add
+        </button>      
+    </form>
+
+    <dialog id="bulkmodal" class="modal">
+        <div class="modal-box">
+            {% include "classrooms/_members_bulkadd.html" %}
+            <form method="dialog">
+                <button class="btn">Close</button>
+            </form>
+        </div>
+    </dialog>
+      
+</div>
+{% endif %}

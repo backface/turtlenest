@@ -1,0 +1,59 @@
+:root {
+  --primary: #59b35f;
+  --secondary: #008b78;
+  --tertiary: #188a4c;
+  --blue: #4a6cd4;
+  --dark: #2c2c2c;
+  background: white;
+  text-align:center;  
+}
+
+
+/*
+nav {
+  background: linear-gradient(0deg, var(--primary) 24px, white 100%);
+}
+
+nav a {padding-top:10px; padding-bottom:10px}
+*/
+
+
+html, body {
+  font-family: "Noto Sans Variable", sans-serif;
+  height: 100%;
+  font-variation-settings: 'wght' 350;
+}
+
+
+/* body {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+} */
+
+nav, nav a { height: 54px}
+
+/* svg .st0 {fill:#59B35F;}
+svg .st1 {fill:#008B78;}
+svg .st2 {fill:#188A4C;} */
+
+svg .st0 {fill: var(--primary)}
+svg .st1 {fill: var(--secondary);}
+svg .st2 {fill: var(--tertiary);}
+
+svg:hover .st0 {fill: var(--secondary);}
+svg:hover .st1 {fill: var(--tertiary);}
+svg:hover .st2 {fill: var(--secondary);}
+
+.djhj-button  {
+  color:black
+}
+
+.page a { text-decoration: underline; color: var(--tertiary)}
+.page a:hover { color: var(--primary);}
+.page h3 { margin: 1.5rem 0; }
+.page p, .blog p, .blog figure { margin-bottom: 1rem}
+.page h3 a { text-decoration: none; }
+
+/* img {
+  display: inline
+} */

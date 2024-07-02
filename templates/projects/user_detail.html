@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load i18n tags %}
+
+{% block content %}
+
+<div class="container mx-auto my-10 text-center grid lg:grid-cols-2">
+    <div class="pr-8 lg:text-right ">
+        <img class="rounded-full    " alt="gravatar" src="{{ user.avatar_url }}" />
+    </div>
+    <div class="lg:text-left">
+        <h1>{{ user.username }}</h1>
+
+        {% if request.user.is_superuser %}
+        <form action="{% url 'hijack:acquire' %}" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="user_pk" value="{{ user.pk }}">
+        <button type="submit" class="bg-red-700"><i class="icon-[mdi--robber] text-lg"></i> hijack {{ user.username }}</button>
+        <input type="hidden" name="next" value="{{ request.path }}">
+        </form>
+        {% endif %}
+
+        {% if user.about %}
+        <div class="mt-2">
+            <h4 class="uppercase">About me</h4>
+            {{ user.about|link_uris }}
+        </div>
+        {% endif %}
+
+        {% if user.location %}
+        <div class="mt-4">
+            <h4 class="uppercase">Location</h4>
+            {{ user.location }}
+        </div>
+        {% endif %}
+
+        <div class="mt-4 text-slate-600">
+            Member since:<br>
+            {{ user.date_joined }}
+        </div>
+
+    </div>
+</div>
+
+<div class="my-14 mx-10">
+    <h2>Projects</h2>
+    <div>{{ projects.count }} public projects</div>
+    <div class="mt-4 container mx-auto grid grid-cols-[repeat(auto-fit,_16.666666%)] justify-center projects" >        
+        {% include "projects/_project_list.html" with page_obj=page_obj %}
+    </div>
+</div>
+
+{% endblock %}

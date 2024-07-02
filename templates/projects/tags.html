@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+{% include "projects/__list_header.html" with collection_str=_("Tags") %}
+
+
+<div class="container mx-auto">
+    {% for tag in tags %}
+    <span class="mr-4">
+    <a href="{% url basename 'tag' tag.slug %}" 
+        class="text-5xl hover:text-green-500" style="font-size: {% widthratio tag.count 1 scale %}px; white-space: nowrap;">
+        #{{ tag.name }} 
+    </a> 
+    ({{ tag.count }})
+    </span>
+    {% endfor %}
+</div>
+
+
+{% endblock %}

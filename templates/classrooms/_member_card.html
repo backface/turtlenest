@@ -1,0 +1,26 @@
+{% load static %}
+<div class="text-uppercase grid grid-cols-1 text-center content-center relative">
+    <a href="/user/{{ user.username }}">
+        <img 
+            src="{{ user.avatar_url }}"            
+            alt="{{ user.username }}"
+            class="mx-auto rounded-full"
+        />         
+    </a>
+    {% if group.host == request.user %}
+    <div 
+        class="absolute -top-2 -right-2 w-6 h-6 text-center border bg-white border-red-700 text-red-700 rounded-full hover:bg-red-700 hover:text-white"        
+        hx-post="{% url 'groups:remove_member' group.id user.username %}"
+        hx-trigger="click" 
+        hx-target="#members"            
+    >
+        <i class="icon-[ion--remove]"></i>
+    </div>
+    {% endif %}
+
+    <div class=""> 
+        <h2 class="text-sm truncate m-0 p-0 pb-1">
+             <a href="/user/{{ user.username }}" class="text-uppercase">{{ user.username }}</a>
+         </h2>
+    </div>
+ </div>

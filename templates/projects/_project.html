@@ -1,0 +1,35 @@
+{% load static humanize %}
+<div class="grid grid-cols-1 content-center sm:p-3 lg:p-4 mt-2">
+    <div class="text-sm flex items-end justify-center">
+         <h2 class="text-lg m-0 p-0 pb-1 truncate">
+             <a href="{{ project.get_absolute_url }}">{{ project.name }}</a>
+         </h2>
+     </div>
+     <a href="{{ project.get_absolute_url }}" class="hover:opacity-80">
+        <img 
+            src="{% static 'img/no-thumb.png' %}"
+            data-src="{{ project.featured_image.url }}" 
+            alt="{{ project.name }}" 
+            loading="lazy"
+            class="w-full aspect-[4/3] object-cover border border-rounded border-light shadow"
+        />         
+     </a>
+     <div class="pt-1 mb-1">
+       
+    </div>     
+     <div class="text-sm pt-1">
+        {% if not mine %}
+        <p>
+           by <a href="{% url 'users:detail' project.user.username %}" class="text-primary">{{ project.user.username }}</a>
+        </p>
+        {% endif %}
+        <!-- <p class="text-slate-500">{{ project.date_created }}</p> -->
+        <p class="text-xs text-slate-600">{{ project.date_updated|naturaltime }}</p>
+    </div>
+
+    
+     <div
+        hx-get="{% url 'projects:project_stats' project.id %}"
+        hx-trigger="none"
+     > </div>
+ </div>

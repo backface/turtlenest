@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<iframe id="iframe" class="w-full h-full" src="" border="0" height="100%" style="height:100%; width:100%"></iframe>
+
+<script>
+	url = new URL(window.location.href);
+	u = "";
+	searchParams = new URLSearchParams(url.search);
+	if (window.location.hash) {
+		u =  window.location.hash; // + "&d =" + Date.now();
+	}
+	params = '?' + searchParams  + "&d=" + Date.now();
+    document.getElementById('iframe').src = "/static/run/index.html" + params + u;
+</script>
+
+{% endblock %}

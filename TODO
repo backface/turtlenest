@@ -1,0 +1,20 @@
+* strip linebreaks from project names
+
+* more unit tests
+
+* tags suggestions?
+
+* meta tags
+
+
+more:
+
+* staging vs. deployment setup
+
+* ruff oder black? pre-commits
+
+* internationalisation / translations?
+  django-modeltranslation / django-translations
+  https://docs.wagtail.org/en/stable/advanced_topics/i18n.html#internationalisation
+
+

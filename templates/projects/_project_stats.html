@@ -1,0 +1,39 @@
+<p class="socialstats">
+    <span title="Likes">
+        {% if user.is_authenticated %}
+        <a href="{% url 'projects:like' project.id %}"
+          hx-get="{% url 'projects:like' project.id %}"
+          hx-trigger="click"
+          hx-target="closest .socialstats"
+        >
+        {% endif %}   
+
+        {% if ilike %}<i class="icon-[ion--heart] text-red-600"></i>
+        {% elif project.likes.count > 0 %}<i class="icon-[ion--heart]"></i>
+        {% else %}<i class="icon-[ion--heart-outline]"></i>
+        {% endif %}
+
+        {{ project.likes.count }} 
+
+        {% if user.is_authenticated %}
+        </a>
+        {% endif %}   
+   </span>
+   <span class="ml-3" title="Comments">
+      {% if project.comment_set.count > 0 %}
+          <i class="icon-[ion--chatbubble]"></i> 
+      {% else %}
+          <i class="icon-[ion--chatbubble-outline]"></i>
+      {% endif %}
+      {{ project.comment_set.count }} 
+   </span>
+   {% if project.remixed_from.all.count > 0 %}
+   <span class="ml-3" title="Remixes">
+        <i class="icon-[ion--reload]"></i> 
+        {{ project.remixed_from.all.count }}   
+   </span>
+   {% endif %}
+   <span class="ml-3" title="Views">
+      <i class="icon-[ion--eye]"></i> {{ project.views }} 
+  </span>
+</p>

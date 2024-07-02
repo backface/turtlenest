@@ -1,0 +1,15 @@
+{% load static %}
+<div class="text-uppercase grid grid-cols-1 content-center my-10 ">
+    <div class="h-16"> 
+        <h2 class="text-uppercase text-lg">
+             <a href="/user/{{ user.username }}" class="text-uppercase">{{ user.username }}</a>
+         </h2>
+     </div>
+     <a href="/user/{{ user.username }}" class="hover:opacity-80">
+         <img 
+            src="{{ user.avatar_url }}"            
+            alt="{{ user.username }}"
+            class="mx-auto"
+        />         
+     </a>
+ </div>

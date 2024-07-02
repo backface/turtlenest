@@ -1,0 +1,47 @@
+name: Django tests
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    name: Run unit tests on Django
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Show GitHub context   
+        env: 
+          GITHUB_CONTEXT: ${{ toJson(github) }}   
+        run: echo "$GITHUB_CONTEXT"
+        shell: bash
+
+      - name: Show user id
+        run: id
+        shell: bash
+
+      - run: cp env.SAMPLE .env
+
+      - run: cp docker-compose.dev.yml docker-compose.override.yml
+
+      - name: create app-data folder
+        run: mkdir -p app-data/media
+      
+      - name: Set permissions
+        run: sudo chown -R 1000:1000 app-data
+
+      - run: docker compose build
+
+      - run: docker compose up -d
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres_password      
+          POSTGRES_DB: postgres
+          POSTGRES_HOST: db
+
+      - name: Run API Tests
+        run: docker compose exec -T django python manage.py test api

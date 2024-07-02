@@ -1,0 +1,22 @@
+{% autoescape off %}Dear TurtleStitch Admin,
+
+There is was a new trainer account request:
+
+User: {{ request.user.username }}
+Full Name:  {{ trainer_request.full_name }}
+Phone Number: {{ trainer_request.phone_number }}
+Organization: {{ trainer_request.organization }}
+Role: {{ trainer_request.role }}
+Type of Organization: {{ trainer_request.type }}
+Website: {{ trainer_request.website }}
+TOS: {{ trainer_request.tos }}
+Userlink: {{ request.scheme }}://{{ request.get_host }}/user/{{ request.user.username }}
+
+--
+
+Your TurtleStitch Platform,
+Happy Stitching!
+http://www.turtlestitch.org
+
+
+{% endautoescape %}

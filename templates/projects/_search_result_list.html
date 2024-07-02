@@ -1,0 +1,39 @@
+
+        
+{% for project in page_obj %}
+    {% if forloop.last and page_obj.has_next and not target == "all" %}
+    <div
+        hx-get="{{ request.path }}?q={{ q }}&page={{ page_obj.number|add:1 }}""
+        hx-trigger="revealed"
+        hx-swap="afterend">
+    {% else %}
+    <div>
+    {% endif %}   
+
+    {% if target == "users" %}
+        {% include "projects/_user.html" with user=project %}
+    {% else %}
+        {% include "projects/_project.html" with project=project %}
+    {% endif %}
+
+    </div>
+{% endfor %}
+
+<script>
+    if ("loading" in HTMLImageElement.prototype) {
+        console.log("has loading")
+        var images = document.querySelectorAll('img[loading="lazy"]');
+        var sources = document.querySelectorAll("source[data-srcset]");
+        sources.forEach(function (source) {
+            source.srcset = source.dataset.srcset;
+        });
+        images.forEach(function (img) {
+            img.src = img.dataset.src;
+        });
+    } else {
+        console.log("no loading")
+        var script = document.createElement("script");
+        script.src = "/link/to/lazyload.js";
+        document.body.appendChild(script);
+    }
+</script>

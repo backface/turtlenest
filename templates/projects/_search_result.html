@@ -1,0 +1,84 @@
+
+{% load i18n %}
+
+<div class="container mx-auto pt-2 pb-10 bg-blue text-white mb-4 search">
+    <button class="{% if target == 'projects' or not target %}active{% endif %}">
+        <a href="{% url 'projects:search' 'projects' %}?q={{ q }}" class="text-sm px-2 py-1">
+        projects</a> 
+    </button>
+    <button class="{% if target == 'users' or not target %}active{% endif %}">
+        <a href="{% url 'projects:search' 'users' %}?q={{ q }}" class="text-sm px-2 py-1">
+        users</a>
+    </button>
+    <button class="{% if target == 'semantic' or not target %}active{% endif %}">
+        <a href="{% url 'projects:search' 'semantic' %}?q={{ q }}"  class="text-sm px-2 py-1">
+        semantic</a>
+    </button>
+</div>
+
+
+{% if target == "all" and q|length > 1 %}
+    <h2 class="text-center mt-6 mb-6">Projects</h2>
+    
+    <div class="container mx-auto text-center mb-8" > 
+        {% if target != "semantic" %}{{ page_obj.paginator.count }} {% trans "results" %}. {% endif %}
+    </div>
+    <div class="container mx-auto
+        sm:grid 
+        sm:grid-cols-[repeat(auto-fit,_50%)]
+        md:grid-cols-[repeat(auto-fit,_33.3333%)]
+        lg:grid-cols-[repeat(auto-fit,_25%)]
+        xl:grid-cols-[repeat(auto-fit,_16.666666%)]
+        justify-center projects" 
+            >   
+        {% include "projects/_search_result_list.html" %}
+    </div>
+    {% if page_obj.has_next %}
+    <div class="container mx-auto text-center mb-12" >
+        <a href="{% url 'projects:search' 'projects'%}?q={{ q }}" class="underline">
+            <button>View all results</button>
+        </a>
+    </div>
+    {% endif %}
+
+    <h3 class="text-center mb-6">Users</h3>
+    <div class="container mx-auto
+        sm:grid 
+        sm:grid-cols-[repeat(auto-fit,_50%)]
+        md:grid-cols-[repeat(auto-fit,_33.3333%)]
+        lg:grid-cols-[repeat(auto-fit,_25%)]
+        xl:grid-cols-[repeat(auto-fit,_16.666666%)]
+        justify-center projects" 
+            > 
+        {{ user_page_obj.paginator.count }} {% trans "results" %}
+    </div>
+    <div class="container mx-auto grid grid-cols-6 gap-10 mb-12 projects" > 
+        {% include "projects/_search_user_result_list.html" with users=user_page_obj %}
+    </div>
+    {% if user_page_obj.has_next %}
+    <div class="container mx-auto text-center mb-12" >
+        <a href="{% url 'projects:search' 'users'%}?q={{ q }}" class="underline">
+            <button>View all results from users</button>
+        </a>
+    </div> 
+    {% endif %}   
+
+{% elif q|length > 0 %}
+    <div class="container mx-auto text-center mb-10" > 
+        {% if target != "semantic" %}{{ count }} {% trans "results" %}. {% endif %} 
+        {% if q|length < 2 %} ({% trans "query too short" %}) {% endif %}
+    </div>
+    <div class="container mx-auto
+        sm:grid 
+        sm:grid-cols-[repeat(auto-fit,_50%)]
+        md:grid-cols-[repeat(auto-fit,_33.3333%)]
+        lg:grid-cols-[repeat(auto-fit,_25%)]
+        xl:grid-cols-[repeat(auto-fit,_16.666666%)]
+        justify-center projects" 
+    > 
+        {% if page_obj %}
+            {% include "projects/_search_result_list.html" %}
+        {% endif %}
+    </div>
+{% else %}
+{% endif %}

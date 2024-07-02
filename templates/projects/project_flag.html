@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load tailwind_filters crispy_forms_tags  %}
+
+{% block content %}
+
+<div class="my-10 container mx-auto">
+    <h2 class="text-5xl mb-10">Report a Project</h2>
+
+    <div class="mt-3">Project:
+        <a href="{% url 'projects:detail_by_id' project.id %}" class="text-primary">{{ project.name }}</a>
+        by 
+        <a href="{% url 'users:detail' project.user.username %}" class="text-primary">{{ project.user.username }}</a>
+
+    </div>
+    <div class="my-4">
+        <p>Is this project or content inappropriate? Report it to the the team.</p>
+    </div>
+
+    <form class="text-left" method="post" action="{% url 'projects:flag' project.id %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            {{ form|crispy }}
+        </div>
+        <button ><i class="icon--[ion--flag] mr-1"></i> Report as inappropriate</button>
+        </div>
+    </form>
+    
+</div>
+{% endblock %}

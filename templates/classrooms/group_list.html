@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="my-10 container mx-auto text-left">
+    <h2 class="text-5xl mb-10 text-center">My Groups</h2>
+
+    <div class="container mx-auto" >
+        
+    {% if user.is_teacher %}
+    <div class="my-4 text-center">
+        <a href="{% url 'groups:group_create' %}">
+            <button><i class="icon-[ion--add] mr-1"></i>Create a New Group</button>
+        </a>
+    </div>
+    {% endif %}
+
+    {% for group in group_list %}
+    <div class="mb-10">
+        <h2>{{ group }}</h2>
+
+        <div class="mb-2">
+        {% if group.host == request.user %}
+        <p>You are hosting this group!</p>
+        {% else %}
+        <p>hosted by <a href="{% url 'users:detail' group.host.username %}" class="underline text-primary">{{ group.host }}</a></p>
+        {% endif %}
+        </div>
+
+        {% if group.description %}
+        <div class="mb-2">
+            {{ group.description }}
+        </div>
+        {% endif %} 
+        
+        <div class="text-sm text-gray-600 mb-2">
+            created on {{ group.date_created }}
+        </div>
+       
+        <div class="">
+            <a href="{% url 'groups:group_detail' group.id %}">
+                <button><i class="icon-[ion--enter] mr-1"></i>Join Group</button>
+            </a>           
+            {% if group.host == request.user %}
+                <a href="{% url 'groups:group_update' group.id %}">
+                    <button><i class="icon-[ion--edit] mr-1"></i>Edit Group Info</button>
+                </a>
+                <a href="{% url 'groups:group_detail' group.id %}">
+                    <button class="bg-red-600"><i class="icon-[ion--trash] mr-1"></i>Delete Group</button>
+                </a>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+    </div>
+
+</div>
+{% endblock %}

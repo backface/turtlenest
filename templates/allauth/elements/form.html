@@ -1,0 +1,7 @@
+{% load allauth %}
+<form class="container mx-auto my-4" method="{{ attrs.method }}" action="{{ attrs.action }}">
+    {% slot body %}
+    {% endslot %}
+    {% slot actions %}
+    {% endslot %}
+</form>

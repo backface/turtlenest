@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- 
+<div class="my-10 mx-10">
+    <h2 class="text-5xl">Search</h2>
+
+</div> -->
+
+<div class="container mx-auto mt-12 bg-blue text-white p-5 text-center">
+    <h2 class="text-5xl">Search</h2>
+    <div class="container mx-auto mt-8 search">
+        <form  method="get">
+            <input 
+                type="text" 
+                name="q" 
+                id="q"
+                ref="q"
+                value="{{ q }}" 
+                class="w-1/4 py-2 pl-2 text-center  bg-white border-b border-gray-700 
+                    focus:outline-none focus:border-primary-500" 
+                placeholder="Search for projects"
+                hx-get="/search/{{ target }}" 
+                hx-trigger="input changed delay:500ms, search" 
+                hx-target="#searchresult" 
+                hx-indicator=".htmx-indicator"
+                hx-push-url="true"
+                autocomplete="off"
+            >
+            <button type="submit" class="px-8 mt-1 text-base focus:outline-none focus:shadow-outline">
+                <i class="icon-[ion--search]"></i> Search
+            </button>
+        </form>
+    </div>
+
+</div>
+
+<div class="container mx-auto  bg-blue text-white">
+    <div class="htmx-indicator text-xl">
+        <style>
+        .htmx-indicator{
+            display:none;
+        }
+        .htmx-request .htmx-indicator{
+            display:inline;
+        }
+        .htmx-request.htmx-indicator{
+            display:inline;
+        }
+         </style>
+        <i class="icon-[eos-icons--bubble-loading]"></i>
+    </div>
+    
+</div>
+
+<div id="searchresult">      
+    {% include "projects/_search_result.html" %}
+</div>
+    
+
+
+
+
+
+
+{% endblock %}

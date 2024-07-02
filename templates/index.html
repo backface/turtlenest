@@ -1,0 +1,344 @@
+{% extends 'base.html' %}
+{% load project_renderers static tags %}
+
+{% block css %}
+{{ block.super }}
+<link rel="stylesheet" type="text/css" href="{% static 'css/toots.css' %}">
+{% endblock css %}
+
+
+{% block content %}
+
+<div class="bg-slate-50 text-left pt-6 pb-12">
+    <div class="container mx-auto px-4">
+        <h1>Coded Embroidery</h1>
+        <p class="text-2xl">A community driven platform turning your coded designs into embroidered works of art</p>
+    </div>
+</div>
+
+
+<div class="container mx-auto px-4 lg:grid lg:grid-cols-3 lg:gap-5 text-left">
+    <div class="my-14 ">
+        <a href="/page/tutorials" class="hover:opacity-70">
+            <div class="bg-primary text-white py-2 h-full flex flex-col">
+                <h3 class="normal-case mt-1 mb-2 px-2">How to Code</h3>
+                <h4 class="normal-case px-2 mb-4">Tutorials</h4>
+                <img src="{% static 'img/feature-code.jpg' %}" class="object-cover w-full h-48" />
+                <div class="bg-white text-black w-full py-2 mt-1 grow">
+                    <h2 class="mt-0 pt-0">From first steps to advanced examples</h2>
+                    <p>Find Beginner's Manuals, Cards, and Resources in different languages and formats.</p>
+                </div>
+                <div class="bg-white text-black w-full py-2">
+                    <p class="text-primary text-sm text-right">Get Started</p>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="my-14">
+        <a href="/make"  class="hover:opacity-70">
+            <div class="bg-tertiary text-white py-2 h-full flex flex-col">
+                <h3 class="normal-case mt-1 mb-2 px-2">How to Make</h3>
+                <h4 class="normal-case px-2 mb-4">Project Descriptions</h4>
+                <img src="{% static 'img/feature-make.jpg' %}" class="object-cover w-full h-48" />
+                <div class="bg-white text-black w-full py-2 mt-1 grow">
+                    <h2 class="mt-0 pt-0">Ideas and descriptions of physical creations</h2>
+                    <p>You are curious on how to make embroidery design systems on 
+                        cardboard, paper or felt? Or how to make bags, pouches, etuis, 
+                         and other physical ojects?</p>                   
+                </div>
+                <div class="bg-white text-black w-full py-2">
+                    <p class="text-tertiary text-sm text-right">Latest Articles</p>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    {% if featured %}
+    <div class="my-14">
+        <a href="{{ featured.get_absolute_url }}" class="hover:opacity-70">
+            <div class="bg-secondary text-white py-2 h-full flex flex-col">
+                <h3 class="normal-case mt-1 mb-2 px-2">Featured Project</h3>
+                <h4 class="normal-case px-2 mb-4">{{ featured.name }}</h4>
+                <img src="{{ featured.featured_image.url }}" class="object-cover w-full h-48" />
+                <div class="bg-white text-black w-full py-2 mt-1 grow">
+                    <h2 class="mt-0 pt-0">Staff-picked projects brought to surface</h2>
+                    {% if featured.notes %}
+                        <p> {{ featured.notes|linebreaksbr|link_uris|linktags|truncatechars_html:200 }}</p>
+                    {% else %}
+                        {{ featured.name }} <br>
+                        by {{ featured.user.username }}
+                    {% endif %}
+                </div>
+                <div class="bg-white text-black text-right w-full py-2">
+                    <p class="text-secondary text-sm text-right">Open Project</p>
+                </div>
+            </div>
+        </a>
+    </div>  
+    {% endif %}
+
+</div>
+
+
+<div class="bg-slate-50 text-left pt-6 pb-12">
+    <div class="container mx-auto px-4">
+        <div x-data=""  class="container mx-auto bg-blue text-white p-5 text-center search">
+            <h2 class="lg:text-5xl">Search</h2>
+            <div class="container mx-auto mt-8 search">
+                <form action="{% url 'projects:search' 'projects' %}" method="get" x-ref="search">
+                    <input 
+                        x-ref="q"
+                        type="text" 
+                        id="q"
+                        name="q" 
+                        value="{{ q }}" 
+                        class="w-1/4 py-2 pl-2 text-center  bg-white border-b border-gray-700 
+                            focus:outline-none focus:border-primary-500" 
+                        placeholder="Search for projects"
+                        autocomplete="off"
+                    >
+                    <button type="submit" class="px-8 mt-1 text-base focus:outline-none focus:shadow-outline">
+                        <i class="icon-[ion--search]"></i> Search</button>
+                </form>
+            </div>
+            <div class="mt-2 mb-10">
+                <button>
+                    <a x-on:click="if ($refs.q.value.length > 2) $refs.search.submit()"
+                     class="text-sm px-2 py-1">
+                    projects</a>
+                </button>
+                <button>
+                    <a x-on:click="if ($refs.q.value.length > 2) window.location.href = '{% url 'projects:search' 'users' %}?q=' + $refs.q.value"
+                     class="text-sm px-2 py-1">
+                    users</a>
+                </button>
+                
+                <button>
+                    <a x-on:click="if ($refs.q.value.length > 2) window.location.href = '{% url 'projects:search' 'semantic' %}?q=' + $refs.q.value"
+                    class="text-sm px-2 py-1">
+                    semantic</a>
+                </button> 
+            </div>
+            
+        </div>
+        <div class="container mx-auto my-8 overflow-hidden">
+            {% render_tagcloud %}
+        </div>
+    </div>
+</div>
+
+
+<div class="container mx-auto text-center my-8 px-4">
+    <h2>Featured</h2>
+    <div class="mb-10">
+        <div class="container mx-auto 
+            sm:grid 
+            sm:grid-cols-[repeat(auto-fit,_50%)]
+            md:grid-cols-[repeat(auto-fit,_33.3333%)]
+            lg:grid-cols-[repeat(auto-fit,_25%)]
+            xl:grid-cols-[repeat(auto-fit,_16.666666%)]
+            justify-center projects" 
+        > 
+            {% render_collection "featured" %}
+        </div>
+    </div>
+</div>
+
+
+<div class="container mx-auto text-center my-8 px-4">
+    <h2>Latest</h2>
+    <div class="mb-10">
+        <div class="container mx-auto 
+            sm:grid 
+            sm:grid-cols-[repeat(auto-fit,_50%)]
+            md:grid-cols-[repeat(auto-fit,_33.3333%)]
+            lg:grid-cols-[repeat(auto-fit,_25%)]
+            xl:grid-cols-[repeat(auto-fit,_16.666666%)]
+            justify-center projects" 
+        > 
+            {% render_collection "newest" %}
+        </div>
+    </div>
+</div>
+
+<!-- <div class="bg-slate-100 text-left pt-6 pb-12">
+    <div class="container mx-auto px-4">
+        <h1>Creation Steps</h1>
+        <p class="text-2xl">Discover the step-by-step process to transform your ideas into embroidered creations with TurtleStitch.
+            From coding to making, following these simple steps to bring your designs to life.
+        </p>
+        <img src="/static/img/creation_steps.png" class="w-full"/>
+    </div>    
+</div> -->
+
+<div class="bg-light text-left pt-6 pb-12">
+    <div class="container mx-auto px-4">
+        <h1>Creation Steps</h1>
+        <p class="text-2xl">Discover the step-by-step process to transform your ideas into embroidered creations with TurtleStitch.
+            From coding to making, following these simple steps to bring your designs to life.
+        </p>
+        <div class="container grid grid-cols-1 lg:grid-cols-[1fr_100px_1fr] lg:px-16 my-10 gap-y-8">
+            <div class="order-2 pt-4 lg:order-none lg:text-right lg:px-8">
+                <h2 class="normal-case m-0 lg:mt-[50px] mb-1">Code</h2>
+                <p>Use the graphical coding framework to select commands 
+                 from the pallette on the left  section connect them in the script area. 
+                You can always give it a try and exectute them by just clicking the blocks. 
+                Is the turtle moving?</p>
+            </div>
+            <div class="order-1 mt-4 lg:mt-0 lg:order-none text-center">
+                <img src="/static/img/creation_step_1.png" />
+            </div>
+            <div class="order-3 lg:order-none">
+                <!-- <img src="/static/img/creaton_thumb_1.png" /> -->
+                <video class="w-full" 
+                    nocontrols muted loop onmouseover="this.play()"
+                    poster="/static/img/creaton_thumb_1.png">
+                    <source src="/static/mov/Turtlestitch_code.mp4" type="video/mp4" />
+                </video>
+            </div>
+
+            <div class="order-6 lg:order-none">
+                <!-- <img src="/static/img/creaton_thumb_2.png"/> -->
+                <video class="w-full" 
+                    nocontrols muted loop onmouseover="this.play()"
+                    poster="/static/img/creaton_thumb_2.png">
+                    <source src="/static/mov/Turtlestitch_code.mp4" type="video/mp4" />
+                </video>              
+            </div>
+            <div class="order-4 lg:order-none mt-4 lg:mt-0">
+                <img src="/static/img/creation_step_2.png" />
+            </div>
+            <div class="order-5 lg:order-none">
+                <h2 class="normal-case m-0 mb-1 lg:mt-[50px]">Draw</h2>
+                <p>The moving turtle in the stage area draws a line, which is
+                    equivalent of the thread's path on the embroidery machine. What's 
+                    the size of the drawing? Does it fit your embroidery hoop?
+                </p>
+            </div>
+            <div class="lg:text-right lg:px-8 order-8 lg:order-none">
+                <h2 class="normal-case m-0 lg:mt-[50px] mb-1">Stitch</h2>
+                <p>Frame the hoop, connect it to the machine, and get excited seeing 
+                    your design come alive evolving into a touchable embroidery.</p>
+                </p>
+            </div>
+            <div class="order-7 lg:order-none mt-4 lg:mt-0 ">
+                <img src="/static/img/creation_step_3.png" />
+            </div>
+            <div class="order-9 lg:order-none">
+                <img src="/static/img/creaton_thumb_3.png" />                
+            </div>
+
+            <div class="order-12 lg:order-none">
+                <img src="/static/img/creaton_thumb_4.png" />
+            </div>           
+            <div class="order-10 lg:order-none mt-4 lg:mt-0 ">
+                <img src="/static/img/creation_step_4.png" />
+            </div>
+            <div class="lg:px-8 order-11 lg:order-none">
+                <h2 class="normal-case m-0 lg:mt-[50px] mb-1">Make</h2>
+                <p>What do you intend to make out of your design? Get inspired by our new platform,
+                    focusing on creations made by TurtleStitch users.
+                </p>
+            </div>
+        </div>
+    </div>    
+</div>
+
+
+<div class="text-center mt-12">
+    <h1>Next Steps</h1>
+</div>
+
+<div  class="container mx-auto mt-6 py-12 mb-6 grid grid-cols-1 md:grid-cols-3 gap-y-4 text-center relative"  >
+    <a href="/page/tutorials" class="mx-auto  w-2/3 lg:w-1/2 flex text-center relative" >
+        <div class="text-white text-4xl absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2">Tutorials</div>
+        <svg class="w-full" version="1.1" id="Ebene_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+            viewBox="0 0 200 200" style="enable-background:new 0 0 200 200;" xml:space="preserve">
+            <g>
+                <circle class="st0" cx="99.52" cy="99.75" r="96.19"/>
+                <g>
+                    <path class="st1" d="M44.45,129.38h38.03h0.34c3.96,0,7.87,0.84,11.48,2.45l0.35,0.16c1.24,0.55,2.56,0.82,3.89,0.82
+                        c1.33,0.01,2.65-0.26,3.89-0.82l0.35-0.16c3.61-1.62,7.52-2.45,11.48-2.45h0.34h38.03l0.09-76.23h-0.09h-41.79h-0.09
+                        c-1.86,0-3.69,0.32-5.43,0.93c-1.24,0.44-2.37,1.12-3.36,1.97l-3.42,2.93l-3.42-2.93c-1-0.85-2.13-1.53-3.36-1.97
+                        c-1.74-0.61-3.57-0.93-5.43-0.93h-0.09H44.45h-0.09L44.45,129.38z M98.54,95.18l0.19,0.09l-0.19,0.4l-0.19-0.4L98.54,95.18z"/>
+                    <path class="st1" d="M158.79,66.72v70.66H109.3h-0.09c-2.12,0-3.83,1.72-3.83,3.83c0,0.85,0,2.27-4.57,2.27h-4.51
+                        c-4.57,0-4.57-1.42-4.57-2.27c0-2.12-1.72-3.83-3.83-3.83h-0.09H38.3V66.72h-7.67v74.49c0,2.12,1.72,3.83,3.83,3.83h50.23
+                        c1.17,2.89,4.12,6.11,11.51,6.11h0.09h4.51h0.09c7.38,0,10.34-3.22,11.51-6.11h50.23c2.12,0,3.83-1.72,3.83-3.83V66.72H158.79z"/>
+                </g>
+            </g>
+        </svg>
+    </a>
+    <a href="/run" class="mx-auto  w-3/4 lg:w-2/3 flex text-center relative">
+        <div class="text-white text-5xl absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 uppercase">Run</div>
+        <svg class="w-full" version="1.1" id="Ebene_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                viewBox="0 0 240 240" style="enable-background:new 0 0 240 240;" xml:space="preserve">
+            <g>
+                <g>
+                    <circle class="st0" cx="119.76" cy="119.98" r="119.3"/>
+                    <g>
+                        <path class="st1" d="M144.03,95.43c-17.85-17.72-30.88-17.33-49.69,1.49c-9.26,9.28-16.11,22.39-19.31,37
+                            c-3.04,14-2.49,25.13,1.46,29.09c3.95,3.93,15.08,4.49,29.09,1.43c14.6-3.19,27.73-10.04,36.99-19.3
+                            C161.38,126.33,161.79,113.31,144.03,95.43z"/>
+                        <path class="st1" d="M204.29,35.44c-46.7-46.69-122.41-46.68-169.1,0c-38.31,38.3-45.13,96.09-20.59,141.41l11.15-0.48l0.32,7.45
+                            l-7.18,0.29c4.6,7.23,9.99,14.1,16.29,20.4c46.69,46.68,122.4,46.69,169.1,0C250.99,157.83,250.99,82.13,204.29,35.44z
+                                M31.53,183.57l-0.31-7.43l14.4-0.62l0.3,7.43L31.53,183.57z M52.38,180.64l-3.17-6.72l13.02-6.17l3.18,6.73L52.38,180.64z
+                                M180.97,163.06l-20.1-20.1c-0.22-0.22-0.51-0.33-0.82-0.31c-0.31,0.02-0.59,0.18-0.78,0.42c-2.5,3.33-5.56,6.81-9.08,10.32
+                            c-6.48,6.48-13.75,11.25-22.93,15.69c-0.39,0.2-0.64,0.61-0.59,1.07l1.21,12.87c0.01,0.06,0.03,0.1,0.03,0.16
+                            c2.04,12-3.79,22.69-14.94,25.68c-0.16,0.04-0.35,0.01-0.49-0.07c-0.17-0.08-0.26-0.23-0.31-0.41l-8.23-30.68
+                            c-0.05-0.18-0.14-0.35-0.27-0.48l-0.14-0.14c-0.25-0.25-0.58-0.36-0.92-0.3c-10.99,1.77-25.78,2.15-33.9-5.98
+                            c-8.12-8.13-7.74-22.91-5.98-33.9c0.05-0.34-0.06-0.68-0.31-0.92l-0.14-0.15c-0.13-0.14-0.3-0.23-0.47-0.28l-30.7-8.23
+                            c-0.18-0.04-0.33-0.16-0.41-0.3c-0.09-0.16-0.1-0.33-0.07-0.5c2.99-11.15,14.06-16.75,25.68-14.94c0.06,0,0.11,0.02,0.17,0.04
+                            l12.88,1.2c0.43,0.03,0.86-0.2,1.05-0.6c4.47-9.17,9.23-16.44,15.71-22.91c3.52-3.52,7-6.57,10.32-9.08
+                            c0.24-0.19,0.4-0.47,0.42-0.77c0.02-0.31-0.1-0.62-0.31-0.83l-20.1-20.08c-0.25-0.26-0.24-0.69,0.01-0.94
+                            c8.22-8.21,21.59-8.22,29.81,0l12.9,12.9c0.2,0.2,0.49,0.31,0.78,0.29c7.78-0.2,14.98,2.1,23.03,8.07
+                            c0.42,0.32,1.02,0.27,1.37-0.09c3.73-3.72,5.19-6.28,6.74-8.98c1.64-2.89,3.34-5.85,8.06-10.57c5.18-5.18,15.2-4.6,20.47,0.66
+                            c5.25,5.25,5.83,15.28,0.65,20.45c-4.65,4.65-7.5,6.26-10.27,7.82c-2.6,1.47-5.29,3-9.27,6.98c-0.36,0.37-0.42,0.95-0.1,1.37
+                            c5.97,8.05,8.27,15.24,8.07,23.03c-0.02,0.29,0.1,0.58,0.31,0.79l12.9,12.89c8.21,8.22,8.21,21.58,0,29.8
+                            C181.64,163.3,181.21,163.32,180.97,163.06z"/>
+                    </g>
+                </g>
+            </g>
+        </svg>
+    </a>
+    <a href="https://make.turtlestitch.org" class="mx-auto w-2/3 lg:w-1/2 flex text-center relative">
+        <div class="text-white text-4xl absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2">
+            <p>Project<br>
+            <span class="text-xl">Description</span>
+            </p>
+        </div>
+
+        <svg class="w-full" version="1.1" id="Ebene_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+            viewBox="0 0 200 200" style="enable-background:new 0 0 200 200;" xml:space="preserve">
+            <g>
+                <circle class="st2" cx="100.16" cy="99.48" r="96.19"/>
+                <g>
+                    <path class="st0" d="M34.77,147.91c0,1.76,1.43,3.19,5.42,3.19h119.63v-8.41H34.77V147.91z"/>
+                    <path class="st0" d="M145.67,63.21h-41.88c-1.76,0-3.19,1.43-3.19,3.19v1.31c0,1.76,1.43,3.19,3.19,3.19h41.88
+                        c1.76,0,3.19-1.43,3.19-3.19V66.4C148.86,64.64,147.43,63.21,145.67,63.21z"/>
+                    <path class="st0" d="M156.16,51.71H37.95c-1.43,0-3.16,1.43-3.16,3.19v35.96c0,3.52,2.88,6.38,6.4,6.38h4.49v13.58h1.45l0.64,6.06
+                        h-9.82c-1.76,0-3.19,1.43-3.19,3.19v15.57h125.05V54.9C159.81,53.14,158.82,51.71,156.16,51.71z M122.46,113.68
+                        c0,1.76-1.43,3.19-3.19,3.19h-69.8l0.64-6.06h1.77v-3.72h4.78v-2.55h-4.78v-7.31h4.87c3.52,0,6.37-2.85,6.37-6.38
+                        s2.85-6.38,6.37-6.38h46.59c3.52,0,6.37,2.85,6.37,6.38V113.68z M154.11,73.6c0,1.76-1.43,3.19-3.19,3.19H99.29
+                        c-1.76,0-3.19-1.43-3.19-3.19V61.32c0-1.76,1.43-3.19,3.19-3.19h51.62c1.76,0,3.19,1.43,3.19,3.19V73.6z"/>
+                    <path class="st0" d="M172.08,52.37c-2.29,0-4.14,1.86-4.14,4.14v43.3c0,2.29,1.85,4.14,4.14,4.14c2.29,0,4.14-1.85,4.14-4.14
+                        v-43.3C176.22,54.23,174.36,52.37,172.08,52.37z"/>
+                </g>
+            </g>
+        </svg>
+    </a>        
+</div>
+
+<div class="bg-light py-16 pb-24">
+   
+    <div class="container mx-auto px-4 text-left text-sm">
+        <h2 class="mb-8 px-2">Follow us into the Fediverse...</h2>
+        <a class="mastodon-feed"
+        href="https://fosstodon.org/@turtlestitch"
+        data-toot-limit="3">Follow us into the Fediverse...</a>
+        <script type="module" src="https://esm.sh/emfed@1"></script>
+    </div>
+    
+</div>
+
+{% endblock %}

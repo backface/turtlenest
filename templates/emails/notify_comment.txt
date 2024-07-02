@@ -1,0 +1,16 @@
+{% autoescape off %}Dear {{ comment.project.user.username }}!
+
+Your project {{ like.project.name }} got a comment from {{ comment.author.username }}:
+
+{{ comment.contents }}
+
+Visit your project and read all comments here: 
+https://turtlestitch.org/{% url "projects:detail_by_id" comment.project.id %}
+
+
+Happy Stitching!
+
+Your TurtleStitch Team
+http://www.turtlestitch.org
+
+{% endautoescape %}

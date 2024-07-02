@@ -1,0 +1,64 @@
+[tool.poetry]
+name = "turtlenest"
+version = "0.1.0"
+description = ""
+authors = ["Michael <m@ash.to>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.11,<3.13"
+django = "^5.0.4"
+psycopg = {extras = ["binary"], version = "^3.1.18"}
+pgvector = "^0.2.5"
+gunicorn = "^22.0.0"
+uvicorn = {extras = ["standard"], version = "^0.29.0"}
+whitenoise = {extras = ["brotli"], version = "^6.6.0"}
+celery = "^5.4.0"
+celery-progress = "^0.3"
+flower = "^2.0.1"
+redis = "^5.0.4"
+django-grappelli = "^4.0.1"
+django-extensions = "^3.2.3"
+django-allauth = "^0.62.1"
+django-hijack = "^3.4.5"
+django-cors-headers = "^4.3.1"
+django-markup = "^1.8.1"
+django-storages = "^1.14.2"
+django-filter = "^24.2"
+django-ninja = "^1.1.0"
+django-taggit = "^5.0.1"
+django-cleanup = "^8.1.0"
+django-ratelimit = "^4.1.0"
+django-markdownx = "^4.0.7"
+django-htmx = "^1.17.3"
+django-tailwind = "^3.8.0"
+django-crispy-forms = "^2.1"
+crispy-tailwind = "^1.0.3"
+wagtail = "^6.0.2"
+wagtail-localize = "^1.9"
+wagtail-modeladmin = "^2.0.0"
+sentry-sdk = "^2.0.1"
+pillow = "^10.3.0"
+requests = "^2.31.0"
+shortuuid = "^1.0.13"
+markdown = "^3.6"
+beautifulsoup4 = "^4.12.3"
+lxml = "^5.2.1"
+geoip2 = "^4.8.0"
+tqdm = "^4.66.2"
+better-profanity = "^0.7.0"
+fastembed = "0.2.7"
+ollama = "^0.1.9"
+django-browser-reload = "^1.12.1"
+django-debug-toolbar = "^4.3.0"
+django-template-partials = "^24.2"
+numpy = "<2"
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.4.2"
+pre-commit = "^3.7.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

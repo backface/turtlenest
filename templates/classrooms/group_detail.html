@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="my-10 container mx-auto text-left">
+    <h2 class="text-5xl mb-10  text-center">{{ group.title }}</h2>
+    
+    <div class="container mx-auto text-center" >
+        {% if group.host == request.user %}
+        <h4>You are hosting this group!</h4>
+        {% else %}
+        <p class="mx-auto text-center">hosted by <a href="{% url 'users:detail' group.host.username %}">{{ group.host }}</a></p>
+        {% endif %}
+    </div>
+
+    {% if group.description %}
+    <div class="mt-8">
+        <p>{{ group.description }}</p>
+    </div>
+    {% endif %}  
+
+    <div class="mt-4">
+        <a href="{% url 'groups:leave' %}">
+            <button><i class="icon-[ion--exit] mr-1"></i>Leave Group</button>
+        </a>
+        {% if group.host == request.user %}
+        <a href="{% url 'groups:group_update' group.id %}">
+            <button><i class="icon-[ion--edit] mr-1"></i>Edit Group Info</button>
+        </a> 
+        <a href="{% url 'groups:unit_create' group.id %}">
+            <button type="button"><i class="icon-[ion--person-add] mr-1"></i>Add a Unit</button>
+        </a>
+        <a href="{% url 'groups:group_delete' group.id %}">
+            <button class="bg-red-600"><i class="icon-[ion--trash] mr-1"></i>Delete Group</button>
+        </a>
+        {% endif %}
+    </div>
+    
+      
+    <div class="mt-4">
+        <h2 class="mb-2 text-xl p-4 text-left">Members</h2>
+        <div id="members">
+            {% include "classrooms/_members.html" %}
+        </div>
+    </div>
+
+
+    {% if group.introduction %}
+    <div class="container mx-auto mt-10 mb-8    ">
+        <h2 class="border-b pb-2 mb-8">Introduction</h2>
+        <p>{{ group.introduction }}</p>
+    </div>
+    {% endif %}  
+
+    {% if group.get_starters %}
+    <div class="mt-8 text-left">
+        <h2 class="border-b pb-2 mb-0 text-left">Starters</h2>
+        <div class="container mx-auto bg-slate-50
+            sm:grid 
+            sm:grid-cols-[repeat(auto-fit,_50%)]
+            md:grid-cols-[repeat(auto-fit,_33.3333%)]
+            lg:grid-cols-[repeat(auto-fit,_25%)]
+            xl:grid-cols-[repeat(auto-fit,_16.666666%)]
+            projects" 
+        >    
+            {% include "classrooms/_projects.html" with projects=group.get_starters %}
+        </div>   
+    </div>
+    {% endif %}
+
+    {% if group.get_projects %}
+    <div class="mt-8">
+        <h2>Projects</h2>
+        <div class="container mx-auto
+        sm:grid 
+        sm:grid-cols-[repeat(auto-fit,_50%)]
+        md:grid-cols-[repeat(auto-fit,_33.3333%)]
+        lg:grid-cols-[repeat(auto-fit,_25%)]
+        xl:grid-cols-[repeat(auto-fit,_16.666666%)]
+        projects" 
+    > 
+            {% include "classrooms/_projects.html" with projects=group.get_projects %}
+        </div>   
+    </div>
+    {% endif %}
+
+    {% for unit in group.units.all %}
+    <div class="container mx-auto {% if group.current_unit == unit.id %}active{% else %}opacity-60 {% endif %}">
+        <h2 class="relative border-b border-black pb-2 mb-8"
+            hx-on:click="htmx.find('#unit{{ unit.id }}').classList.toggle('hidden')">
+        #{{ unit.number }}. {{ unit.title }}
+            {% if group.host == request.user %}
+            <div class="absolute right-0 top-0 text-sm">
+                {% if not group.current_unit == unit.id %}
+                <a href="{% url 'groups:unit_activate' unit.id %}">
+                    <button type="button"><i class="icon-[ion--trash] mr-1"></i>Activate Unit</button>
+                </a>
+                {% endif %}                
+                <a href="{% url 'groups:unit_update' unit.id %}">
+                    <button type="button"><i class="icon-[ion--edit] mr-1"></i>Edit Unit Info</button>
+                </a>
+                <a href="{% url 'groups:unit_delete' unit.id %}">
+                    <button type="button" class="bg-red-600"><i class="icon-[ion--trash] mr-1"></i>Delete Unit</button>
+                </a>
+            </div>
+            {% endif %}
+        </h2>
+    </div>
+    <div id="unit{{ unit.id }}"
+         class="container mx-auto mb-10 {% if group.current_unit != unit.id %}hidden opacity-60{% endif %}">
+
+        {% if unit.description %}
+        <p>{{ unit.description }}</p>
+        {% endif %}
+
+        {% if unit.get_starters %}
+        <div class="mt-8">
+            <h2 class="border-b pb-2 mb-0 text-left">Starters</h2>
+            <div class="container mx-auto bg-slate-50
+                sm:grid 
+                sm:grid-cols-[repeat(auto-fit,_50%)]
+                md:grid-cols-[repeat(auto-fit,_33.3333%)]
+                lg:grid-cols-[repeat(auto-fit,_25%)]
+                xl:grid-cols-[repeat(auto-fit,_16.666666%)]
+                projects" 
+            > 
+                {% include "classrooms/_projects.html" with projects=unit.get_starters %}
+            </div>   
+        </div>
+        {% endif %}
+
+        {% if unit.get_projects %}
+        <div class="mt-8">
+            <h2>Projects</h2>
+            <div class="container mx-auto
+                sm:grid 
+                sm:grid-cols-[repeat(auto-fit,_50%)]
+                md:grid-cols-[repeat(auto-fit,_33.3333%)]
+                lg:grid-cols-[repeat(auto-fit,_25%)]
+                xl:grid-cols-[repeat(auto-fit,_16.666666%)]
+                projects" 
+            > 
+                {% include "classrooms/_projects.html" with projects=unit.get_projects %}
+            </div>   
+        </div>
+        {% endif %}
+
+    </div>
+    {% endfor %}    
+
+</div>
+{% endblock %}

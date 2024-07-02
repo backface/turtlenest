@@ -1,0 +1,66 @@
+services:
+
+  caddy:
+    image: lucaslorentz/caddy-docker-proxy:ci-alpine
+    ports:
+      - 80:80
+      - 443:443
+    environment:
+      - CADDY_INGRESS_NETWORKS=public_proxy
+    networks:
+      - public_proxy
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${APP_DATA_DIR?./app-data}/caddy_data:/data
+      - ${APP_DATA_DIR?./app-data}/media:/app/media
+      - ./static:/app/static
+      - ../turtlestitch:/app/guis/turtlestitch
+      - ../snap:/app/guis/snap
+    restart: unless-stopped
+    labels:
+      caddy.log: ""
+      caddy.log.output: "file ${APP_DATA_DIR?./app-data}/logs/access.log"
+
+  db:
+    restart: "no"
+    ports:
+      - "5432:5432"
+
+  django:
+    command: >
+      gunicorn -b 0.0.0.0:$PORT
+       --access-logfile -        
+       --reload
+       $extra_files
+       --workers 2
+       --timeout $TIMEOUT
+       turtlenest.wsgi:application  
+    #command: python manage.py runserver 
+    volumes:
+      - ./:/app
+    ports:
+      - "8000:8000"
+    labels:
+      caddy: ${DOMAIN} http://${DOMAIN}      
+
+
+
+ # caddy:
+ #   extra_hosts: #only for docker!
+ #     - "host.docker.internal:host-gateway" 
+    #ports: !override
+    #  - 8080:80
+    #  - 4433:443
+
+  # flower:
+  #   ports:
+  #     - 8888:8888 # docker will expose this ports
+
+volumes:
+  caddy_data:
+
+networks:
+  public_proxy:
+    name: public_proxy  
+    # For local dev, don't expect an external network
+    external: false

@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% block content %}
+
+
+<div class="my-16 container mx-auto blog">
+    <h1 class="text-5xl mb-10">How To Make </h1>
+
+    {% if tag %} 
+    <p class="text-2xl mb-10">
+        tagged with {{tag.name }} 
+    </p>
+    {% else %}
+    <p class="text-2xl mb-10">
+        Ideas and descriptions about physical creations.
+    </p>
+    {% endif %}
+
+    {% if post_list %}
+        
+        <div class="lg:grid lg:grid-cols-3 lg:gap-5 text-left">
+            {% for post in post_list %}
+            <div class="my-8 ">
+                <a href="{% url 'blog:post_detail' post.slug %}" class="hover:opacity-70">
+                    <div class="bg-primary text-white py-2 h-full flex flex-col">
+                        <h3 class="normal-case mt-1 mb-2 px-2">{{post.title}}</h3>
+                        <h4 class="normal-case px-2 mb-4">{{ post.modified|naturaltime }} </h4>
+                        {% if post.featured_media.media_details.sizes.large %}
+                        <img src={{ post.featured_media.media_details.sizes.large.source_url }}" class="object-cover w-full h-48" />
+                        {% else %}
+                        <img src={{ post.featured_media.media_details.sizes.medium.source_url }}" class="object-cover w-full h-48" />
+                        {% endif %}
+                        <div class="bg-white text-black w-full py-2 mt-1 grow">
+                            {{ post.excerpt|safe}}
+                        </div>
+                        <div class="bg-white text-black w-full py-2">
+                            <p class="text-primary text-sm text-right">Read more...</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+
+        {% if page_obj.paginator.num_pages > 1 %}
+            <div class="pagination mt-8">
+                <span class="step-links">
+                    {% if page_obj.has_previous %}
+                        <a class="text-primary" href="?page=1">&laquo; first</a> |
+                        <a class="text-primary" href="?page={{ page_obj.previous_page_number }}">previous</a> | 
+                    {% endif %}
+            
+                    <span class="current">
+                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                    </span>
+            
+                    {% if page_obj.has_next %}
+                        |
+                        <a href="?page={{ page_obj.next_page_number }}" class="text-primary">next</a> | 
+                        <a href="?page={{ page_obj.paginator.num_pages }}" class="text-primary">last &raquo;</a>
+                    {% endif %}
+                </span>
+            </div>
+        {% endif %}
+    {% else %}
+        <p>No posts are available.</p>
+    {% endif %}
+</div>
+
+
+{% endblock %}
+
+

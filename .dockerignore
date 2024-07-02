@@ -1,0 +1,12 @@
+postgres-*
+local_settings.py
+media
+.git*
+*cache.json
+celerybeat-schdule
+**/.env*
+node_modules
+.terraform*
+deploy
+app-data*
+.venv

@@ -1,0 +1,24 @@
+{
+  "name": "turtlenest",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "tailwindcss -i ./input.css -o ./static/css/tw.css --watch",
+    "build": "tailwindcss -i ./input.css -o ./static/css/tw.css --minify"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@iconify-json/carbon": "^1.1.31",
+    "@iconify/json": "^2.2.196",
+    "@iconify/tailwind": "^0.1.4",
+    "daisyui": "^4.10.5",
+    "tailwindcss": "^3.4.3"
+  },
+  "dependencies": {
+    "@fontsource-variable/noto-sans": "^5.0.5"
+  }
+}

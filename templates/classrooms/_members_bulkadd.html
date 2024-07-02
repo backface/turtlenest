@@ -1,0 +1,20 @@
+
+<h3>Bulk add and create user</h3>
+
+<form method="POST" action="{% url 'groups:bulk_add' group.id %}">
+    <div>
+        {% csrf_token %}
+        {{ bulkAddForm}}
+
+        <p>
+        Bulk created usernames will be prefixed with group111. They will automatically be confirmed. 
+        However they do not have contact data - Your are responsible for your own name space.</p>
+        <p>Users who already exist in your namespace will silently be overriden with the given new password.
+        All (white) spaces will be trimmed </p>
+
+    </div>
+
+    <button type="submit">
+        <i class="icon-[ion--person-add] mr-1"></i>Create and add users
+    </button>
+</form>

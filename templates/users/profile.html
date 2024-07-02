@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load tailwind_filters %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+
+<div class="container mx-auto">
+    <h1>My profile</h1>
+
+    {% if user.is_authenticated %}
+        <p>Welcome {{ user.username }} !!!</p>
+
+        <div>
+            <p>You have <span>{{ user.project_set.all.count }}</span> projects</p>
+        </div>
+
+        <div class="my-8">         
+            <button>
+                <a href="{% url 'account_email' %}">Change your email</a> ({{ user.email }})
+            </button>
+            <button>
+                <a href="{% url 'socialaccount_connections' %}">Edit your social connections</a>
+            </button>
+            <button>
+                <a href="{% url 'account_change_password' %}">Change your password</a>
+            </button>
+        </div>
+     
+        <h2>Profile Info</h2>
+        <form class="form" method="post" action="{% url 'users:profile' %}" enctype="multipart/form-data">{% csrf_token %}
+            <div class="text-left">
+                
+                
+                <!-- {{ form|crispy }} -->
+
+                {% crispy form %}
+            </div>
+
+
+            <div>
+                <button>
+                    <i class="icon--[ion--save]"></i> Save
+                </button>
+            </div>
+        </form>
+
+
+    {% else %}
+
+        <a href="/login">Login</a> or <a href="/auth/signup">Signup</a>
+
+    {% endif %}
+
+</div>
+
+
+
+{% endblock %}

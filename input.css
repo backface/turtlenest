@@ -1,0 +1,150 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@layer base {
+  body {
+    @apply grid grid-cols-1 grid-rows-layout
+  }      
+  h1 {
+    @apply text-4xl lg:text-5xl my-8;
+  }
+  h2 {
+    @apply text-3xl lg:text-4xl my-4;
+  }
+  h3 {
+    @apply text-2xl lg:text-3xl my-2 uppercase;
+  }    
+  img {
+      @apply inline-block
+  }
+  .alert-success {
+    @apply bg-green-300 text-green-700;
+  }
+  .alert-error {
+    @apply bg-red-300 text-red-700;
+  }
+  .alert-warning {
+    @apply bg-yellow-300 text-yellow-700;
+  }    
+  button {
+    @apply bg-secondary hover:bg-primary text-white hover:text-white font-bold py-2 px-4 rounded my-2;
+  }
+  textarea, input[type="text"] {
+    @apply border border-gray-300 rounded;
+  }
+  nav a { 
+    @apply inline-block py-3 px-2
+  }
+  .navlinks a {
+    @apply hover:text-secondary
+  }
+  nav input[type="text"] {
+    @apply border-secondary border-b-2 border-t-0 border-l-0 border-r-0
+  }
+  footer a { 
+    @apply hover:text-primary
+  }
+  .page h2 {
+    @apply mb-8
+  }
+  input[type="checkbox"]  {
+    @apply accent-tertiary mr-12
+  }
+  label {
+    @apply mr-2
+  }
+  a {
+    @apply hover:text-secondary
+  }
+}
+
+
+  
+@layer utilities {
+  .font-thin {
+      font-variation-settings: 'wght' 100;
+  }
+  .font-extralight {
+      font-variation-settings: 'wght' 200;
+  }
+  .font-light {
+      font-variation-settings: 'wght' 300;
+  }
+  .font-normal {
+      font-variation-settings: 'wght' 400;
+  }
+  .font-medium {
+      font-variation-settings: 'wght' 500;
+  }
+  .font-semibold {
+      font-variation-settings: 'wght' 600;
+  }
+  .font-bold {
+      font-variation-settings: 'wght' 700;
+  }
+  .font-extrabold {
+      font-variation-settings: 'wght' 800;
+  }
+  .font-black {
+      font-variation-settings: 'wght' 900;
+  }
+}
+
+
+.toots {
+  @apply grid grid-cols-1 lg:grid-cols-3 gap-8
+}
+
+.toot {
+  @apply border-t-4 border-primary pt-2 bg-white mx-2
+}
+
+.toot .boost {
+  @apply text-xs text-gray-500 mb-2 pb-2
+}
+
+.toot .attachment {
+  @apply rounded mt-1
+}
+
+.toot a {
+  @apply text-tertiary hover:text-primary
+}
+
+.search button {
+  @apply hover:text-blue bg-blue text-white hover:bg-white
+}
+.search button.active {
+  @apply text-blue hover:bg-blue hover:text-white bg-white
+}
+.search input {
+  @apply text-blue text-left placeholder:text-blue
+}
+
+.textarea {
+  @apply border border-gray-300 rounded;
+}  
+
+.alert-success {
+  @apply bg-primary text-white
+}
+.alert-error {
+  @apply bg-red-700 text-white
+}
+.alert-warning {
+  @apply bg-orange-700 text-white
+}
+
+.asteriskField {
+  @apply hidden
+}
+
+nav .menu a { 
+  @apply text-white h-auto
+}
+
+.menu {
+  @apply shadow-2xl
+}

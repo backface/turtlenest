@@ -1,0 +1,104 @@
+postgres-*
+app-data*
+*.cache.json
+GeoLite2*
+tmp
+docker-compose.override.yml
+
+# Django #
+*.log
+*.pot
+*.pyc
+__pycache__
+*.sqlite3
+media/*
+migrations?*
+local_settings.py
+celerybeat-schedule
+.kolo
+
+# Backup files #
+*.bak
+
+# Python #
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+.Python build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+*.manifest
+*.spec
+.ruff_cache
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+.pytest_cache/
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# pyenv
+.python-version
+
+# celery
+celerybeat-schedule.*
+
+# SageMath parsed files
+*.sage.py
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak
+
+
+# Node and NPM
+node_modules/
+pnpm-lock.yaml
+
+# terraform
+.terraform*
+*.tfstate*
+
+#ansible
+inventory
+
+# webhook
+webhook.conf
+
+#poetry
+.venv
+poetry.lock
+
+audit.json
+

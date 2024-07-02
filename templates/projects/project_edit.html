@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load tailwind_filters crispy_forms_tags  %}
+{% load i18n %} 
+
+
+{% block title %}Edit "{{ project.name }}" {{ block.super }}{% endblock %}
+{% block content %}
+
+<div class="mx-auto container text-center my-10"">
+    <h2><a href="{{ project.get_absolute_url }}">{{ project.name }}</a></h2>
+
+    <div class="mx-auto w-2/3">
+
+    <form class="form" method="post" action="{% url 'projects:edit' project.id %}" enctype="multipart/form-data">{% csrf_token %}
+      <div class="text-left">
+        <!-- <style> 
+          me { background-color: #eee }
+          textarea { width: 100%; border:1px solid rgb(98, 98, 98); padding: 8px }
+          .markdownx-preview { border-top:1px solid black; padding:10px; margin-top: 20px }
+        </style> -->
+          {% crispy form %}
+          <button type="submit"><i class="icon--[ion-save] mr-1"></i> Save</button>
+      </div>
+      <div>
+        
+      </div>
+    </form>
+  
+    <h3>media</h3>
+
+    {% if  project.image_set.all.count %}
+    <ul>
+    {% for image in project.image_set.all %}
+      <li>
+        {% if image.title %}{{ image.title }}<br>{% endif %}
+        <img class="mx-auto" src="{{ image.file.url }}" alt="{{ image.title }}" /><br>
+        {% if image.caption %}{{ image.caption }}<br>{% endif %}
+        <a href="{% url 'projects:delete_media' image.id %}">
+          <button type="button"><i class="icon--[ion--trash] mr-1"></i> Delete Media</button>
+        </a>
+        {% if project.image_is_featured == image.id %}
+          This is the featured image
+        {% else %}
+          <a href="{% url 'projects:feature_media' image.id %}">
+            <button type="button"><i class="icon--[ion--star] mr-1"></i> Feature Media</button>
+          </a>
+        {% endif %}
+        <br>
+       
+      </li>
+    {% endfor %}
+    </ul>
+    {% endif %}
+   
+    <form class="form" method="post" action="{% url 'projects:upload_media' project.id %}" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="text-left">
+          {{ uploadMediaForm|crispy }}
+      <div class="form-group">
+        <button type="submit"><i class="icon--[ion--attach] mr-1"></i> Upload</button>
+      </div>
+    </form>
+
+    </div>
+  </div>
+</div>
+
+
+
+{% endblock %}

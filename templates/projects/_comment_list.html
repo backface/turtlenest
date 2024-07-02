@@ -1,0 +1,3 @@
+{% for comment in project.comment_set.all %}
+    {% include "projects/_comment.html" %}
+{% endfor %}

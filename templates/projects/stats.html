@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container mx-auto text-left">
+<h1>Stats</h1>
+
+<div class="grid grid-cols-1 lg:grid-cols-4">
+{% for section in stats %}
+    <div class="mb-8">
+        <h3>{{ section.label }}</h3>
+        {% for item in section.items %}
+        <span class="w-48">{{ item.label }}:</span> {{ item.value }}<br>
+        {% endfor %}
+    </div>
+{% endfor %}
+</div>
+
+</div>
+
+{% endblock %}

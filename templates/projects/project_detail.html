@@ -1,0 +1,299 @@
+{% extends 'base.html' %}
+{% load i18n tags humanize static %}
+{% load tailwind_filters crispy_forms_tags  %}
+
+{% block title %}{{ project.name }} - {{ block.super }}{% endblock %}
+
+{% block sharing %}
+<meta property="og:title" content="{{ project.name }} / TurtleStitch - Coded Embroidery" />
+<meta property="og:description" content="{{ project.notes }}"/>
+<meta property="og:url" content="{{ request.build_absolute_uri }}" />
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="TurtleStitch - Coded Embroidery" />
+<meta property="og:image" content="{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}{{ project.featured_image.url }}" />
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:site" content="@turtlestitch">
+<meta name="twitter:title" content="{{ project.name }} / TurtleStitch - Coded Embroidery" />
+<meta name="twitter:description" content="{{ project.notes }}"/>
+<meta name="twitter:domain" content="turtlestitch.org" />
+<meta name="twitter:image" content="{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}{{ project.featured_image.url }}" />
+{% endblock %}   
+
+
+{% block css %}
+{{ block.super }}
+<link rel="stylesheet" type="text/css" href="{% static 'css/fancybox.css' %}" />
+{% endblock %}
+
+
+{% block content %}
+
+<div class="container mx-auto my-16">
+    <h1><a href="{{ project.get_absolute_url }}">{{ project.name }}</a></h1>
+</div>
+
+<div class="container mx-auto mt-10 text-center grid lg:grid-cols-2">
+    <div class="lg:text-right">
+
+        <div class="mb-8 w-auto grid grid-cols-1 items-end">
+            <a href="{{ project.featured_image.url }}" data-fancybox="gallery" data-caption="{{ project.featured_caption }}""  class="hover:opacity-80">
+                <img 
+                    src="{{ project.featured_image.url }}" 
+                    alt="{{ project.featured_caption }}" 
+                    loading="lazy"
+                    class="w-full max-w-full aspect-[4/3] object-cover border border-rounded border-light shadow"
+                />
+            </a>
+
+            {% if project.image_is_featured %}
+            <div class="mt-2 h-16 w-auto">
+                {% if project.thumbnail and project.image_is_featured %}
+                    <a href="{{ project.thumbnail.url }}" data-fancybox="gallery" data-caption="{{ project.name}}"  class="hover:opacity-80">
+                        <img class="h-full" 
+                            src="{{ project.thumbnail.url }}" 
+                            alt="{{ project.name }}" 
+                        />
+                    </a>
+                {% endif %}
+                {% for image in project.image_set.all %}
+                    {% if project.image_is_featured == image.id or forloop.counter == project.image_is_featured %}
+                    {% else %}  
+                    <a href="{{ image.file.url }}" data-fancybox="gallery" data-caption="{{ image.caption }}"  class="hover:opacity-80">
+                        <img 
+                            src="{{ image.file.url }}" 
+                            alt="{{ project.name }}" 
+                            loading="lazy"                        
+                            class="h-24"
+                        />  
+                    </a>                
+                    {% endif %}
+                {% endfor %}
+            </div>
+            {% endif %}
+
+        </div>
+            
+
+
+    </div>
+
+    <div class="mx-10 lg:text-left">       
+        <p class="text-lg mb-10">
+            by 
+            <a href="{% url 'users:detail' project.user.username %}" 
+                class="underline hover:text-primary text-tertiary">
+            {{ project.user.username }}</a>
+        </p>        
+
+        <div>
+            <div class="mt-1">
+                <a href="/run#cloud:Username={{ project.user.username }}&ProjectName={{ project.name }}">
+                    <button ><i class="icon--[ion--play] mr-1"></i> Open in TurtleStitch</button>
+                </a>
+                <a href="/snap/snap.html#cloud:Username={{ project.user.username }}&ProjectName={{ project.name }}">
+                    <button><i class="icon--[ion--play] mr-1"></i> Open in Snap!</button>
+                </a>
+            </div>   
+        </div>
+
+        {% if project.notes %}
+        <div class="mt-10 mb-10">
+            <p>{{ project.notes|linebreaksbr|link_uris|linktags }}</p>
+        </div>
+        {% endif %}        
+
+        <div class="mt-10 mb-10">
+            {% if project.tags.all %}
+            <div class="mt-5 p-1">
+                <h4 class="inline">{% trans "Tags" %}:</h4>
+                {% for tag in project.tags.all %}
+                    <a href="{% url 'projects:list_by_tag' tag.slug %}" class="text-tertiary hover:text-primary">#{{ tag }}</a>
+                {% endfor %}
+            </div>
+            {% endif %}
+            <div class="text-slate-600 text-xs border-b border-slate-800 p-1 mt-10">  
+                {% if project.date_created %}
+                <i class="icon-[gridicons--create] text-lg align-middle"></i> 
+                <span class="pr-3">
+                    Created: {{ project.date_created|naturaltime }}
+                </span>
+                {% endif %}
+
+                {% if project.date_updated %}
+                    <i class="icon-[eos-icons--content-modified] text-lg align-middle"></i> Last modified: {{ project.date_updated|naturaltime }}<br>
+                {% endif %}               
+            </div>
+            <div class="text-xl pt-1">
+                {% include "projects/_project_stats.html" %}
+            </div>
+            
+        </div>
+        <div class="mt-5 text-green-800">
+            {% if request.user == project.user or request.user.is_superuser or request.user.is_moderator %}
+           
+            <a href="{% url 'projects:edit' project.id %}">
+                <button><i class="icon-[ion--edit] mr-1"></i> Edit</button>
+            </a>
+            <a 
+                hx-confirm="Are you sure?"
+                hx-get="{% url 'projects:delete' project.id %}">
+                <button class="bg-red-600"><i class="icon-[ion--trash] mr-1"></i> Delete</button>
+            </a>
+            {% endif %}
+                
+            {% if group.host == request.user %}
+            <a href="{% url 'groups:addstarter' group.id project.id %}">
+                <button><i class="icon-[mdi--plus] mr-1"></i>Add as Starter to current Group/Unit</button>
+            </a>
+            {% endif %}
+    
+            {% if request.user.is_authenticated and request.user != project.user %}
+            <a href="{% url 'projects:flag' project.id %}">
+                <button class="bg-orange-600"><i class="icon-[ion--flag] mr-1"></i> Report as inappropriate</button>
+            </a>
+            {% endif %}
+            {% if request.user.is_superuser or request.user.is_editor %}
+                <button class="bg-primary" x-on:click="htmx.find('#categoryform').classList.toggle('hidden')" x-data>
+                    <i class="icon-[ion--save] mr-1"></i> Edit Categories
+                </button>
+            {% endif %}
+        </div>
+
+        <div>
+
+            {% if request.user.is_superuser or request.user.is_moderator %}
+            <div class="" >
+                <form class="mt-8 hidden" id="categoryform" class="hidden" method="post" action="{% url 'projects:update_categories' project.id %}">
+                    {% csrf_token %}
+                    {{ categories_form|crispy}}
+                    <button type="submit"><i class="icon-[ion--save] mr-1"></i> Update Categories</button>
+                </form>
+            </div>
+            {% endif %}
+
+        </div>
+        
+    </div>
+</div>
+
+<div class="mx-auto container mt-10">
+
+    
+
+
+
+
+</div>
+
+<div class="mx-auto container mt-16">
+    {% if remixed_from.all %}
+    <div class="mt-5">
+        <h3><i class="icon-[fa--rotate-left] text-xl mr-1 "></i> {% trans "Remixed from" %}</h3>
+        <div class="container mx-auto flex items-center justify-center">
+        {% for remix in remixed_from.all %}
+            {% include "projects/_remix_list_item.html" with project=remix.original_project only %}      
+        {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    {% if remixed_to.all %}
+    <div class="mt-8 mb-8">
+        <h3><i class="icon-[fa--rotate-right] text-xl mr-1 "></i> {% trans "Remixed by" %} ({{ remixed_to.all.count }})</h3>
+        <div class="container mx-auto px-24
+        sm:grid 
+        sm:grid-cols-[repeat(auto-fit,_50%)]
+        md:grid-cols-[repeat(auto-fit,_33.3333%)]
+        lg:grid-cols-[repeat(auto-fit,_25%)]
+        xl:grid-cols-[repeat(auto-fit,_16.666666%)]
+        justify-center projects" 
+        >   
+            {% for remix in remixed_to.all %}
+                {% if forloop.counter > 6 %}
+                    {% include "projects/_remix_list_item.html" with project=remix.remixed_project addclass="hidden" only %}  
+                {% else %} 
+                    {% include "projects/_remix_list_item.html" with project=remix.remixed_project only %}  
+                {% endif %}
+            {% endfor %}
+        </div>
+        {% if remixed_to.all.count > 6 %}
+        <a hx-on:click="[...document.querySelectorAll('.remixedproject')].map(x => x.classList.remove('hidden'));this.classList.toggle('hidden');"
+            class="underline hover:cursor-pointer mb-8">
+            <button>show all remixes</button>
+        </a>
+        {% endif %}
+    </div>
+    {% endif %}     
+    
+    {% if similar_projects.all %}
+    <div class="container mx-auto mt-8">
+        <h3><i class="icon-[mdi--family] text-xl"></i> {% trans "Similar" %} ({{ similar_projects.all.count }})</h3>
+            <div class="container mx-auto px-24
+        sm:grid 
+        sm:grid-cols-[repeat(auto-fit,_50%)]
+        md:grid-cols-[repeat(auto-fit,_33.3333%)]
+        lg:grid-cols-[repeat(auto-fit,_25%)]
+        xl:grid-cols-[repeat(auto-fit,_16.666666%)]
+        justify-center projects" 
+            >   
+            {% for project in similar_projects.all %}
+                {% include "projects/_remix_list_item.html" with project=project only %}      
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}     
+
+    <div class="container mx-auto mt-8 px-4 lg:px-0 lg:w-1/2">
+
+        <div 
+            class="mt-5 comments"
+            hx-on::after-swap="document.getElementById('contents').value = '';"
+        >
+            <h3><i class="icon-[fa--comments] text-xl mr-1"></i> {% trans "Comments" %} ({{project.comment_set.all.count}})</h3>
+            {% if project.comment_set.all %}
+                {% include "projects/_comment_list.html" %}
+            {% else %}
+                <p>No comments yet</p>
+            {% endif %}
+        </div>
+
+        {% if request.user.is_authenticated %}
+        <div class="mt-5">
+            <form class="form" 
+                method="post" 
+                action="{% url 'projects:add_comment' project.id %}" 
+                enctype="multipart/form-data">
+                
+                <div class="form-group">
+                    <textarea 
+                        name="contents" 
+                        id="contents"
+                        cols="30" 
+                        rows="10" 
+                        required="" 
+                        aria-invalid="true" 
+                        id="id_contents" 
+                        class="h-36 w-full"></textarea>
+                    <input type="hidden" name="author" value="{{ request.user.id }}" id="id_author">
+                    <input type="hidden" name="project" value="{{ project.id}}" id="id_project">
+                </div>
+
+                <button 
+                    hx-post="{% url 'projects:add_comment' project.id %}"
+                    hx-trigger="click" 
+                    hx-swap="beforeend" 
+                    hx-target=".comments"                   
+                >
+                    <i class="icon-[fa--comment] mr-1"></i>Add a Comment
+                </button>
+                
+            </form>
+
+        </div>
+        {% endif %}
+    </div>
+    
+</div>
+
+
+{% endblock %}

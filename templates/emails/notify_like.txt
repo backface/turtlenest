@@ -1,0 +1,12 @@
+{% autoescape off %}Dear {{ like.project.user.username }}!
+
+Your project {{ like.project.name }} has been liked by {{ like.liker.username }}.
+Visit your project and see all likes here: 
+https://turtlestitch.org/{% url "projects:detail_by_id" like.project.id %}
+
+Happy Stitching!
+
+Your TurtleStitch Team
+http://www.turtlestitch.org
+
+{% endautoescape %}
