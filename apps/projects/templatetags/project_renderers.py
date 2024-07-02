@@ -27,7 +27,7 @@ def render_tagcloud(context):
         )
     )
     projects = projects.filter(count__gte=2).order_by("-count")
-    maxima = projects.first().count if projects.count else 1
+    maxima = projects.first().count if projects.first() else 1
 
     return {"tags": projects, "scale": 100 / maxima, "basename": "projects:collection"}
 
