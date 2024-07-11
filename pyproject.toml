@@ -53,6 +53,7 @@ django-browser-reload = "^1.12.1"
 django-debug-toolbar = "^4.3.0"
 django-template-partials = "^24.2"
 numpy = "<2"
+pymemcache = "^4.0.0"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.4.2"

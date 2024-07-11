@@ -182,6 +182,13 @@ DATABASES = {
 DATABASE_ROUTERS = ["apps.legacydb.dbrouters.LegacyDbRouter"]
 
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.PyMemcacheCache',
+        'LOCATION': 'memcached:11211',
+    }
+}
+
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 
@@ -215,8 +222,6 @@ AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
     "allauth.account.auth_backends.AuthenticationBackend",
 ]
-
-
 
 MESSAGE_TAGS = {
     messages.DEBUG: "alert",

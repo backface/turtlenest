@@ -118,8 +118,6 @@ def sync_posts():
             post.save()
 
             post.tags.clear()
-            print(obj["tags"])
             for tag_id in obj["tags"]:
-                print(tag_id)
                 tag = Tag.objects.get(id=tag_id)
                 post.tags.add(tag.name)

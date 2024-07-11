@@ -17,6 +17,7 @@ from django.db.models import Q, Count, Case, Sum, When, IntegerField
 from django.db.models.functions import Length
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.http import require_http_methods
+from django.views.decorators.cache import cache_page
 
 from pgvector.django import L2Distance, CosineDistance
 from bs4 import BeautifulSoup
@@ -46,6 +47,7 @@ PRIVATE_COLLECTIONS = [
 ]
 
 
+@cache_page(60 * 15)
 def index(request):
     featured = Project.objects.filter(categories__slug__in=["featured"]).order_by("?")
     if featured:
@@ -319,6 +321,7 @@ def detail_by_id(request, id):
     )
 
 
+@cache_page(60 * 15)
 def project_stats(request, id):
     project = get_object_or_404(Project, pk=id)
     return render(
