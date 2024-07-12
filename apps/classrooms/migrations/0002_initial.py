@@ -6,48 +6,64 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
-        ('classrooms', '0001_initial'),
-        ('projects', '0001_initial'),
+        ("classrooms", "0001_initial"),
+        ("projects", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='selectedproject',
-            name='project',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='projects.project'),
+            model_name="selectedproject",
+            name="project",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to="projects.project"
+            ),
         ),
         migrations.AddField(
-            model_name='group',
-            name='projects',
-            field=models.ManyToManyField(blank=True, through='classrooms.SelectedProject', to='projects.project'),
+            model_name="group",
+            name="projects",
+            field=models.ManyToManyField(
+                blank=True, through="classrooms.SelectedProject", to="projects.project"
+            ),
         ),
         migrations.AddField(
-            model_name='trainerrequest',
-            name='user',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
+            model_name="trainerrequest",
+            name="user",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL
+            ),
         ),
         migrations.AddField(
-            model_name='unit',
-            name='group',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='units', to='classrooms.group'),
+            model_name="unit",
+            name="group",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="units",
+                to="classrooms.group",
+            ),
         ),
         migrations.AddField(
-            model_name='unit',
-            name='projects',
-            field=models.ManyToManyField(blank=True, through='classrooms.SelectedProject', to='projects.project'),
+            model_name="unit",
+            name="projects",
+            field=models.ManyToManyField(
+                blank=True, through="classrooms.SelectedProject", to="projects.project"
+            ),
         ),
         migrations.AddField(
-            model_name='selectedproject',
-            name='unit',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='classrooms.unit'),
+            model_name="selectedproject",
+            name="unit",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="classrooms.unit",
+            ),
         ),
         migrations.AlterUniqueTogether(
-            name='membership',
-            unique_together={('group', 'user')},
+            name="membership",
+            unique_together={("group", "user")},
         ),
     ]

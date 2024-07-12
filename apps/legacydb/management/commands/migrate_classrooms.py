@@ -3,7 +3,6 @@ from django.utils import timezone
 from django.db.utils import IntegrityError
 from django.core.management.base import BaseCommand
 from django.utils.text import slugify
-from django.db import migrations
 from django.db import connection
 from django.apps import apps
 
@@ -16,16 +15,24 @@ class Command(BaseCommand):
     def handle(self, **options):
         migrate_classrooms()
         with connection.cursor() as cursor:
-            cursor.execute("SELECT setval(pg_get_serial_sequence('classrooms_group', 'id'), (select max(id) from classrooms_group) + 1);")
+            cursor.execute(
+                "SELECT setval(pg_get_serial_sequence('classrooms_group', 'id'), (select max(id) from classrooms_group) + 1);"
+            )
         migrate_members()
         with connection.cursor() as cursor:
-            cursor.execute("SELECT setval(pg_get_serial_sequence('classrooms_membership', 'id'), (select max(id) from classrooms_membership) + 1);")
+            cursor.execute(
+                "SELECT setval(pg_get_serial_sequence('classrooms_membership', 'id'), (select max(id) from classrooms_membership) + 1);"
+            )
         migrate_units()
         with connection.cursor() as cursor:
-            cursor.execute("SELECT setval(pg_get_serial_sequence('classrooms_unit', 'id'), (select max(id) from classrooms_unit) + 1);")
+            cursor.execute(
+                "SELECT setval(pg_get_serial_sequence('classrooms_unit', 'id'), (select max(id) from classrooms_unit) + 1);"
+            )
         migrate_projects()
         with connection.cursor() as cursor:
-            cursor.execute("SELECT setval(pg_get_serial_sequence('classrooms_selectedproject', 'id'), (select max(id) from classrooms_selectedproject) + 1);")
+            cursor.execute(
+                "SELECT setval(pg_get_serial_sequence('classrooms_selectedproject', 'id'), (select max(id) from classrooms_selectedproject) + 1);"
+            )
 
 
 def migrate_classrooms():
@@ -109,7 +116,8 @@ def migrate_units():
 
             try:
                 new_object, created = Unit.objects.get_or_create(
-                    id=old_object.id, group=Group.objects.get(id=old_object.classroom_id)
+                    id=old_object.id,
+                    group=Group.objects.get(id=old_object.classroom_id),
                 )
                 new_object.title = old_object.title
                 new_object.slug = slugify(old_object.title, allow_unicode=True)
@@ -118,9 +126,9 @@ def migrate_units():
                 new_object.date_modified = old_object.updated_at or timezone.now()
                 new_object.save()
             except IntegrityError:
-                print("error: duplicate entry?")                
+                print("error: duplicate entry?")
             except Group.DoesNotExist:
-                print("error: group does not exist")   
+                print("error: group does not exist")
 
     print("\ndone")
 
@@ -152,16 +160,18 @@ def migrate_projects():
                     group=Group.objects.get(id=old_object.classroom_id)
                     if old_object.classroom_id
                     else None,
-                    unit=Unit.objects.get(id=old_object.unit) if old_object.unit else None,
+                    unit=Unit.objects.get(id=old_object.unit)
+                    if old_object.unit
+                    else None,
                 )
                 new_object.date_created = old_object.created_at or timezone.now()
                 new_object.date_modified = old_object.updated_at or timezone.now()
                 new_object.save()
             except IntegrityError:
-                print("error: duplicate entry?")                
+                print("error: duplicate entry?")
             except Group.DoesNotExist:
-                print("error: group does not exist")   
+                print("error: group does not exist")
             except Unit.DoesNotExist:
-                print("error: unit does not exist") 
+                print("error: unit does not exist")
 
     print("\nDone.")

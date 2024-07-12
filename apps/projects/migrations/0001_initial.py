@@ -10,128 +10,349 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
-        ('taggit', '0006_rename_taggeditem_content_type_object_id_taggit_tagg_content_8fc721_idx'),
+        (
+            "taggit",
+            "0006_rename_taggeditem_content_type_object_id_taggit_tagg_content_8fc721_idx",
+        ),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         pgvector.django.VectorExtension(),
         migrations.CreateModel(
-            name='Category',
+            name="Category",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=255)),
-                ('slug', models.CharField(db_index=True, max_length=255, unique=True)),
-                ('description', models.TextField(blank=True, null=True)),
-                ('date_created', models.DateTimeField(default=django.utils.timezone.now, editable=False)),
-                ('date_updated', models.DateTimeField(default=django.utils.timezone.now, editable=False)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=255)),
+                ("slug", models.CharField(db_index=True, max_length=255, unique=True)),
+                ("description", models.TextField(blank=True, null=True)),
+                (
+                    "date_created",
+                    models.DateTimeField(
+                        default=django.utils.timezone.now, editable=False
+                    ),
+                ),
+                (
+                    "date_updated",
+                    models.DateTimeField(
+                        default=django.utils.timezone.now, editable=False
+                    ),
+                ),
             ],
             options={
-                'verbose_name_plural': 'categories',
-                'ordering': ['date_created'],
+                "verbose_name_plural": "categories",
+                "ordering": ["date_created"],
             },
         ),
         migrations.CreateModel(
-            name='Project',
+            name="Project",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(db_index=True, max_length=255)),
-                ('slug', models.SlugField(editable=False, max_length=255)),
-                ('notes', models.TextField(blank=True, help_text='You can add hashtags here!', null=True, verbose_name='Project notes')),
-                ('project_file', models.FileField(blank=True, null=True, upload_to=apps.projects.models.Project.project_upload_handler)),
-                ('thumbnail', models.ImageField(blank=True, null=True, upload_to=apps.projects.models.Project.thumbs_upload_handler)),
-                ('image_is_featured', models.IntegerField(default=0)),
-                ('is_public', models.BooleanField(default=True, verbose_name='is_shared')),
-                ('is_active', models.BooleanField(default=True, verbose_name='is_active')),
-                ('is_published', models.BooleanField(default=True, verbose_name='is_published')),
-                ('last_shared', models.DateTimeField(blank=True, null=True)),
-                ('first_published', models.DateTimeField(blank=True, null=True)),
-                ('views', models.IntegerField(default=0)),
-                ('embedding_project_meta', pgvector.django.VectorField(blank=True, dimensions=384, null=True)),
-                ('date_updated', models.DateTimeField(default=django.utils.timezone.now, editable=False)),
-                ('date_created', models.DateTimeField(default=django.utils.timezone.now, editable=False)),
-                ('categories', models.ManyToManyField(blank=True, related_name='projects', to='projects.category')),
-                ('tags', taggit.managers.TaggableManager(blank=True, help_text='A comma-separated list of tags.', through='taggit.TaggedItem', to='taggit.Tag', verbose_name='Tags')),
-                ('user', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(db_index=True, max_length=255)),
+                ("slug", models.SlugField(editable=False, max_length=255)),
+                (
+                    "notes",
+                    models.TextField(
+                        blank=True,
+                        help_text="You can add hashtags here!",
+                        null=True,
+                        verbose_name="Project notes",
+                    ),
+                ),
+                (
+                    "project_file",
+                    models.FileField(
+                        blank=True,
+                        null=True,
+                        upload_to=apps.projects.models.Project.project_upload_handler,
+                    ),
+                ),
+                (
+                    "thumbnail",
+                    models.ImageField(
+                        blank=True,
+                        null=True,
+                        upload_to=apps.projects.models.Project.thumbs_upload_handler,
+                    ),
+                ),
+                ("image_is_featured", models.IntegerField(default=0)),
+                (
+                    "is_public",
+                    models.BooleanField(default=True, verbose_name="is_shared"),
+                ),
+                (
+                    "is_active",
+                    models.BooleanField(default=True, verbose_name="is_active"),
+                ),
+                (
+                    "is_published",
+                    models.BooleanField(default=True, verbose_name="is_published"),
+                ),
+                ("last_shared", models.DateTimeField(blank=True, null=True)),
+                ("first_published", models.DateTimeField(blank=True, null=True)),
+                ("views", models.IntegerField(default=0)),
+                (
+                    "embedding_project_meta",
+                    pgvector.django.VectorField(blank=True, dimensions=384, null=True),
+                ),
+                (
+                    "date_updated",
+                    models.DateTimeField(
+                        default=django.utils.timezone.now, editable=False
+                    ),
+                ),
+                (
+                    "date_created",
+                    models.DateTimeField(
+                        default=django.utils.timezone.now, editable=False
+                    ),
+                ),
+                (
+                    "categories",
+                    models.ManyToManyField(
+                        blank=True, related_name="projects", to="projects.category"
+                    ),
+                ),
+                (
+                    "tags",
+                    taggit.managers.TaggableManager(
+                        blank=True,
+                        help_text="A comma-separated list of tags.",
+                        through="taggit.TaggedItem",
+                        to="taggit.Tag",
+                        verbose_name="Tags",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'ordering': ('-date_updated',),
+                "ordering": ("-date_updated",),
             },
         ),
         migrations.CreateModel(
-            name='Like',
+            name="Like",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('date_created', models.DateTimeField(blank=True, default=django.utils.timezone.now, editable=False, null=True)),
-                ('liker', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
-                ('project', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='likes', to='projects.project')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "date_created",
+                    models.DateTimeField(
+                        blank=True,
+                        default=django.utils.timezone.now,
+                        editable=False,
+                        null=True,
+                    ),
+                ),
+                (
+                    "liker",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "project",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="likes",
+                        to="projects.project",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Image',
+            name="Image",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('file', models.ImageField(upload_to='projects/images/%Y/%m/%d/')),
-                ('title', models.CharField(blank=True, max_length=255, null=True)),
-                ('caption', models.CharField(blank=True, default='', max_length=255, null=True)),
-                ('order', models.IntegerField(default=0)),
-                ('date_created', models.DateTimeField(auto_now_add=True)),
-                ('date_updated', models.DateTimeField(auto_now=True)),
-                ('project', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='projects.project')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("file", models.ImageField(upload_to="projects/images/%Y/%m/%d/")),
+                ("title", models.CharField(blank=True, max_length=255, null=True)),
+                (
+                    "caption",
+                    models.CharField(blank=True, default="", max_length=255, null=True),
+                ),
+                ("order", models.IntegerField(default=0)),
+                ("date_created", models.DateTimeField(auto_now_add=True)),
+                ("date_updated", models.DateTimeField(auto_now=True)),
+                (
+                    "project",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="projects.project",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='FlaggedProject',
+            name="FlaggedProject",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('reason', models.TextField(verbose_name='Reason')),
-                ('date_created', models.DateTimeField(auto_now_add=True)),
-                ('date_updated', models.DateTimeField(auto_now=True)),
-                ('flagged_by', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
-                ('project', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='projects.project')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("reason", models.TextField(verbose_name="Reason")),
+                ("date_created", models.DateTimeField(auto_now_add=True)),
+                ("date_updated", models.DateTimeField(auto_now=True)),
+                (
+                    "flagged_by",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "project",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="projects.project",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Comment',
+            name="Comment",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('contents', models.TextField()),
-                ('date_created', models.DateTimeField(default=django.utils.timezone.now, editable=False)),
-                ('date_updated', models.DateTimeField(default=django.utils.timezone.now, editable=False)),
-                ('author', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
-                ('project', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='projects.project')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("contents", models.TextField()),
+                (
+                    "date_created",
+                    models.DateTimeField(
+                        default=django.utils.timezone.now, editable=False
+                    ),
+                ),
+                (
+                    "date_updated",
+                    models.DateTimeField(
+                        default=django.utils.timezone.now, editable=False
+                    ),
+                ),
+                (
+                    "author",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "project",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="projects.project",
+                    ),
+                ),
             ],
             options={
-                'ordering': ['date_created'],
+                "ordering": ["date_created"],
             },
         ),
         migrations.CreateModel(
-            name='Remix',
+            name="Remix",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('date_created', models.DateTimeField(default=django.utils.timezone.now, editable=False)),
-                ('original_project', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='remixed_from', to='projects.project')),
-                ('remixed_project', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='remixed_to', to='projects.project')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "date_created",
+                    models.DateTimeField(
+                        default=django.utils.timezone.now, editable=False
+                    ),
+                ),
+                (
+                    "original_project",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="remixed_from",
+                        to="projects.project",
+                    ),
+                ),
+                (
+                    "remixed_project",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="remixed_to",
+                        to="projects.project",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'remix',
-                'verbose_name_plural': 'remixes',
+                "verbose_name": "remix",
+                "verbose_name_plural": "remixes",
             },
         ),
         migrations.AddIndex(
-            model_name='project',
-            index=models.Index(fields=['user', 'name'], name='user_project_idx'),
+            model_name="project",
+            index=models.Index(fields=["user", "name"], name="user_project_idx"),
         ),
         migrations.AlterUniqueTogether(
-            name='project',
-            unique_together={('user', 'name')},
+            name="project",
+            unique_together={("user", "name")},
         ),
         migrations.AlterUniqueTogether(
-            name='like',
-            unique_together={('liker', 'project')},
+            name="like",
+            unique_together={("liker", "project")},
         ),
     ]

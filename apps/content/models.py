@@ -5,7 +5,6 @@ from wagtail.admin.panels import FieldPanel, InlinePanel
 from wagtail.fields import RichTextField, StreamField
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.models import Orderable, Page
-from wagtail.search import index
 
 # import MultiFieldPanel:
 from wagtail.admin.panels import MultiFieldPanel
@@ -32,7 +31,9 @@ class HomePage(Page):
         help_text="Code feature image",
     )
     feature_code_text = models.CharField(
-        blank=True, max_length=255, help_text="Write an brief intro for the code feature block"
+        blank=True,
+        max_length=255,
+        help_text="Write an brief intro for the code feature block",
     )
     feature_code_link = models.CharField(
         blank=True, max_length=255, help_text="Link for the code feature block"
@@ -47,7 +48,9 @@ class HomePage(Page):
         help_text="Make feature image",
     )
     feature_make_text = models.CharField(
-        blank=True, max_length=255, help_text="Write an brief intro for the Make feature block"
+        blank=True,
+        max_length=255,
+        help_text="Write an brief intro for the Make feature block",
     )
     feature_make_link = models.CharField(
         blank=True, max_length=255, help_text="Link to make feature "
@@ -62,8 +65,10 @@ class HomePage(Page):
         help_text="Make feature image",
     )
     feature_project_text = models.CharField(
-        blank=True, max_length=255, help_text="Write an brief intro for the featured project"
-    )    
+        blank=True,
+        max_length=255,
+        help_text="Write an brief intro for the featured project",
+    )
     feature_project_link = models.CharField(
         blank=True, max_length=255, help_text="Link to featured project"
     )
@@ -77,16 +82,13 @@ class HomePage(Page):
                 FieldPanel("feature_code_image"),
                 FieldPanel("feature_code_text"),
                 FieldPanel("feature_code_link"),
-
                 FieldPanel("feature_make_image"),
                 FieldPanel("feature_make_text"),
                 FieldPanel("feature_make_link"),
-
                 FieldPanel("feature_project_image"),
                 FieldPanel("feature_project_text"),
                 FieldPanel("feature_project_link"),
             ],
-
             heading="Feature Blocks",
         ),
         FieldPanel("body"),
@@ -124,7 +126,6 @@ class ContentPage(BaseContentPage):
             return gallery_item.image
         else:
             return None
-
 
 
 class PageGalleryImage(Orderable):

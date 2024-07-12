@@ -6,7 +6,9 @@ from taggit.managers import TaggableManager
 
 class Author(models.Model):
     name = models.CharField(max_length=255)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True
+    )
 
     def __str__(self):
         return self.name
@@ -61,6 +63,6 @@ class Category(models.Model):
 
     class Meta:
         verbose_name_plural = "categories"
-        
+
     def __str__(self):
         return self.name

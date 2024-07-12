@@ -110,8 +110,14 @@ class Migration(migrations.Migration):
                 ),
                 ("timezone", models.CharField(blank=True, default="", max_length=100)),
                 ("language", models.CharField(default="en", max_length=10)),
-                ("notify_comment", models.BooleanField(blank=True, null=True, default=True)),
-                ("notify_like", models.BooleanField(blank=True, null=True, default=True)),
+                (
+                    "notify_comment",
+                    models.BooleanField(blank=True, null=True, default=True),
+                ),
+                (
+                    "notify_like",
+                    models.BooleanField(blank=True, null=True, default=True),
+                ),
                 ("is_mentor", models.BooleanField(default=False)),
                 ("bad_flags", models.IntegerField(default=0)),
                 (

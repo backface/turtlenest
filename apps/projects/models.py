@@ -11,13 +11,16 @@ from fastembed import TextEmbedding as Embedding
 from markdownx.utils import markdownify
 from pgvector.django import VectorField
 
+from .templatetags.tags import removetags
 
-EMBEDDING_MODEL = "BAAI/bge-small-en-v1.5"  # "BAAI/bge-small-en" #"all-minilm"
 
 def create_embeddings(text):
+    text = removetags(text)
     cache_dir = settings.MEDIA_ROOT / "models"
     embedding_model = Embedding(
-        model_name=EMBEDDING_MODEL, max_length=512, cache_dir=str(cache_dir)
+        model_name=settings.TEXT_EMBEDDING_MODEL,
+        max_length=512,
+        cache_dir=str(cache_dir),
     )
     embeddings_generator = embedding_model.embed(text)  # reminder this is a generator
     return list(embeddings_generator)[0]
@@ -150,7 +153,7 @@ class Project(models.Model):
 
     def update_embeddings(self):
         self.embedding_project_meta = create_embeddings(f"{self.name} \n{self.notes}")
-        
+
     def description_as_markdown(self):
         return mark_safe(markdownify(self.description or ""))
 

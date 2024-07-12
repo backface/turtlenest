@@ -4,20 +4,24 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('users', '0001_initial'),
+        ("users", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='user',
-            name='notify_comment',
-            field=models.BooleanField(default=True, verbose_name='Notify me when someone comments on my project'),
+            model_name="user",
+            name="notify_comment",
+            field=models.BooleanField(
+                default=True,
+                verbose_name="Notify me when someone comments on my project",
+            ),
         ),
         migrations.AlterField(
-            model_name='user',
-            name='notify_like',
-            field=models.BooleanField(default=True, verbose_name='Notify me when someone likes my project'),
+            model_name="user",
+            name="notify_like",
+            field=models.BooleanField(
+                default=True, verbose_name="Notify me when someone likes my project"
+            ),
         ),
     ]

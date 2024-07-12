@@ -58,8 +58,7 @@ class CategoriesForm(forms.ModelForm):
         fields = ["categories"]
 
     categories = forms.ModelMultipleChoiceField(
-        queryset=Category.objects.all(),
-        widget=forms.CheckboxSelectMultiple
+        queryset=Category.objects.all(), widget=forms.CheckboxSelectMultiple
     )
 
     def __init__(self, *args, **kwargs):

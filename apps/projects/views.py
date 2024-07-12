@@ -24,8 +24,23 @@ from bs4 import BeautifulSoup
 
 from apps.users.models import User
 from apps.classrooms.models import Group
-from .models import Project, Category, Comment, Remix, Like, FlaggedProject, Image, create_embeddings
-from .forms import ProjectForm, CommentForm, FlagProjectForm, UploadMediaForm, CategoriesForm
+from .models import (
+    Project,
+    Category,
+    Comment,
+    Remix,
+    Like,
+    FlaggedProject,
+    Image,
+    create_embeddings,
+)
+from .forms import (
+    ProjectForm,
+    CommentForm,
+    FlagProjectForm,
+    UploadMediaForm,
+    CategoriesForm,
+)
 
 
 COLLECTIONS = [
@@ -52,7 +67,7 @@ def index(request):
     featured = Project.objects.filter(categories__slug__in=["featured"]).order_by("?")
     if featured:
         featured = featured[0]
-    else: 
+    else:
         featured = None
     return render(request, "index.html", {"featured": featured})
 
@@ -452,23 +467,24 @@ def stats(request):
             "projects total": Project.objects.count(),
             "users total": User.objects.count(),
         },
-        "project interactions": {
-            "projects with notes": Project.objects
-                .annotate(text_len=Length("notes"))
-                .filter(text_len__gt=0)
-                .count(),
+        "project interactions I": {
+            "projects with notes": Project.objects.annotate(text_len=Length("notes"))
+            .filter(text_len__gt=0)
+            .count(),
             "projects with tags": Project.objects.filter(tags__isnull=False).count(),
             "projects with likes": Project.objects.filter(likes__isnull=False).count(),
-            "projects with comments": Project.objects.filter(comment__isnull=False).count()           
+            "projects with comments": Project.objects.filter(
+                comment__isnull=False
+            ).count(),
         },
-        "project interactions": {
+        "project interactions II": {
             "categories": Category.objects.count(),
             "tags": Project.tags.count(),
             "likes": Like.objects.count(),
             "views": Project.objects.aggregate(Sum("views"))["views__sum"],
             "comments": Comment.objects.count(),
-            "remixes": Remix.objects.count()
-        },  
+            "remixes": Remix.objects.count(),
+        },
         "project creations": {
             "projects created last 24h": Project.objects.filter(
                 date_created__gte=timezone.now() - timezone.timedelta(hours=24)
@@ -497,7 +513,7 @@ def stats(request):
                 date_updated__gte=timezone.now() - timezone.timedelta(weeks=52)
             ).count(),
         },
-        "project sharing": {            
+        "project sharing": {
             "projects shared last 24h": Project.objects.filter(
                 last_shared__gte=timezone.now() - timezone.timedelta(hours=24)
             ).count(),
@@ -511,7 +527,7 @@ def stats(request):
                 last_shared__gte=timezone.now() - timezone.timedelta(weeks=52)
             ).count(),
         },
-        "users joined" : {
+        "users joined": {
             "users joined last 24h": User.objects.filter(
                 date_joined__gte=timezone.now() - timezone.timedelta(hours=24)
             ).count(),
@@ -528,7 +544,7 @@ def stats(request):
                 expire_date__gte=timezone.now()
             ).count(),
         },
-        "users signed in" : {
+        "users signed in": {
             "users signed in this week": User.objects.filter(
                 last_login__gte=timezone.now() - timezone.timedelta(days=7)
             ).count(),
@@ -538,16 +554,14 @@ def stats(request):
             "users signed in last year": User.objects.filter(
                 last_login__gte=timezone.now() - timezone.timedelta(weeks=52)
             ).count(),
-        }
-}
+        },
+    }
     stats = []
     for key, value in stats_data.items():
         sub_items = []
         for k, v in value.items():
-            sub_items.append({"label": k,"value": v }
-            )
-        stats.append({ "label": key,"items": sub_items }
-        )
+            sub_items.append({"label": k, "value": v})
+        stats.append({"label": key, "items": sub_items})
     print(stats)
     return render(request, "projects/stats.html", {"stats": stats})
 
@@ -616,7 +630,7 @@ def update_categories(request, id):
     project = get_object_or_404(Project, pk=id)
     if not request.user.is_superuser and not request.user.editor:
         raise (PermissionDenied)
-    
+
     if request.method == "POST":
         categories_form = CategoriesForm(request.POST, instance=project)
         if categories_form.is_valid():
@@ -691,7 +705,11 @@ def feature_media(request, id):
 @login_required
 def delete(request, id):
     project = get_object_or_404(Project, pk=id)
-    if not request.user == project.user or request.user.is_superuser or request.user.is_moderator:
+    if (
+        not request.user == project.user
+        or request.user.is_superuser
+        or request.user.is_moderator
+    ):
         raise (PermissionDenied)
 
     messages.success(request, _("Project successfully deleted"))
@@ -729,7 +747,11 @@ def like(request, id):
 @require_http_methods(["DELETE"])
 def delete_comment(request, id):
     comment = get_object_or_404(Comment, pk=id)
-    if not request.user == comment.author and not request.user.is_moderator and not request.user.is_superuser:
+    if (
+        not request.user == comment.author
+        and not request.user.is_moderator
+        and not request.user.is_superuser
+    ):
         raise (PermissionDenied)
     else:
         comment.delete()

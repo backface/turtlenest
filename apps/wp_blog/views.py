@@ -1,6 +1,4 @@
-import requests
-from django.shortcuts import render, get_object_or_404
-from django.conf import settings
+from django.shortcuts import get_object_or_404
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 
@@ -24,9 +22,11 @@ from .models import Post, Tag
 def index(request):
     return list(request)
 
+
 class BlogDetailView(DetailView):
     model = Post
     template_name = "blog/blog_detail.html"
+
 
 class BlogListView(ListView):
     model = Post
@@ -35,6 +35,7 @@ class BlogListView(ListView):
 
     # def get_queryset(self):
     #     return Post.objects.filter(members=self.request.user)
+
 
 class TagListView(DetailView):
     model = Tag
@@ -48,10 +49,10 @@ class TagPostListView(ListView):
         context = super().get_context_data(**kwargs)
         context["tag"] = self.tag
         return context
-    
+
     def get_queryset(self):
         self.tag = get_object_or_404(Tag, slug=self.kwargs["tag"])
-        return Post.objects.filter(tags__slug__in=[self.kwargs["tag"]]) 
+        return Post.objects.filter(tags__slug__in=[self.kwargs["tag"]])
 
 
 # def list(request, tag=0):

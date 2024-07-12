@@ -31,7 +31,7 @@ def linktags(value):
     # regex = "#([a-zA-Z0-9_]+)"
     return mark_safe(
         re.sub(
-            #r"#(?P<ht>(\w+))",
+            # r"#(?P<ht>(\w+))",
             r"#(?P<ht>([a-zA-Z0-9_\-])+)",
             r"<a href='/projects/tag/\g<ht>' class='text-tertiary'>#\g<ht></a>",
             re.sub(
@@ -44,6 +44,25 @@ def linktags(value):
 
 
 linktags.mark_safe = True
+
+
+register.filter(name="removetags")
+
+
+def removetags(value):
+    """Replace #tags with links to tag site using reverse"""
+    # regex = "#([a-zA-Z0-9_]+)"
+    return mark_safe(
+        re.sub(
+            # r"#(?P<ht>(\w+))",
+            r"#(?P<ht>([a-zA-Z0-9_\-])+)",
+            r"",
+            value,
+        )
+    )
+
+
+removetags.mark_safe = True
 
 
 @register.filter(name="link_uris")
@@ -60,9 +79,10 @@ def link_uris(value):
         )
     )
 
+
 @register.simple_tag
 def scale_tag(value, min_out, max_out, max_in):
     print(value, min_out, max_out, max_in)
-    size = max(min_out, (value/max_in * max_out))
+    size = max(min_out, (value / max_in * max_out))
     print(size)
     return f"{size}"

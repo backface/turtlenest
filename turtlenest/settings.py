@@ -89,7 +89,6 @@ INSTALLED_APPS = [
     "hijack.contrib.admin",
     "crispy_forms",
     "crispy_tailwind",
-    
     "apps.users.apps.UserConfig",
     "apps.projects",
     # "apps.pages",
@@ -97,7 +96,6 @@ INSTALLED_APPS = [
     "apps.wp_blog",
     "apps.content",
     "apps.legacydb",
-
     "django_cleanup.apps.CleanupConfig",
 ]
 
@@ -183,9 +181,9 @@ DATABASE_ROUTERS = ["apps.legacydb.dbrouters.LegacyDbRouter"]
 
 
 CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.PyMemcacheCache',
-        'LOCATION': 'memcached:11211',
+    "default": {
+        "BACKEND": "django.core.cache.backends.memcached.PyMemcacheCache",
+        "LOCATION": "memcached:11211",
     }
 }
 
@@ -343,15 +341,14 @@ EMAIL_FROM_ADDRESS = os.environ.get("EMAIL_FROM_ADDRESS", DEFAULT_FROM_EMAIL)
 ###################
 # Celery
 ###################
-
-REDIS_URL = os.environ.get("REDIS_URL", False)
-CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL", REDIS_URL)
-
+#
+# REDIS_URL = os.environ.get("REDIS_URL", False)
+# CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL", REDIS_URL)
+#
 
 ###################
 # grappelli and admins
 ###################
-
 
 GRAPPELLI_ADMIN_TITLE = "TurtleStitch Nest Administration"
 GRAPPELLI_SWITCH_USER = True
@@ -389,11 +386,17 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"
 CRISPY_TEMPLATE_PACK = "tailwind"
 CRISPY_CLASS_CONVERTERS = {"textinput": "border-gray-800"}
 
+
 ###################
 # OTHER
 ###################
 
+TEXT_EMBEDDING_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
+# BAAI/bge-small-en-v1.5
+# BAAI/bge-small-en
+
 SYNC_NOTES_ON_SAVE = True
+
 WORDPRESS_API = "https://make.turtlestitch.org/wp-json/wp/v2"
 
 

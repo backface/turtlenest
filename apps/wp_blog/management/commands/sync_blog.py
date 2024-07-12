@@ -17,15 +17,14 @@ class Command(BaseCommand):
         print("Syncing WP Categories..")
         sync_categories()
         print("Syncing WP Media..")
-        sync_media()        
+        sync_media()
         print("Syncing WP Blog post..")
         sync_posts()
 
 
-
-def sync_authors():    
+def sync_authors():
     response = requests.get(f"{settings.WORDPRESS_API}/users")
-    for i in range(1, int(response.headers['x-wp-total'])+1):
+    for i in range(1, int(response.headers["x-wp-total"]) + 1):
         if i > 1:
             response = requests.get(f"{settings.WORDPRESS_API}/users?page={i}")
         objects = response.json()
@@ -37,9 +36,9 @@ def sync_authors():
             author.save()
 
 
-def sync_tags():    
+def sync_tags():
     response = requests.get(f"{settings.WORDPRESS_API}/tags")
-    for i in range(1, int(response.headers["X-WP-TotalPages"])+1):
+    for i in range(1, int(response.headers["X-WP-TotalPages"]) + 1):
         if i > 1:
             response = requests.get(f"{settings.WORDPRESS_API}/tags?page={i}")
         objects = response.json()
@@ -54,9 +53,9 @@ def sync_tags():
             tag.save()
 
 
-def sync_categories():    
+def sync_categories():
     response = requests.get(f"{settings.WORDPRESS_API}/categories")
-    for i in range(1, int(response.headers["X-WP-TotalPages"])+1):
+    for i in range(1, int(response.headers["X-WP-TotalPages"]) + 1):
         if i > 1:
             response = requests.get(f"{settings.WORDPRESS_API}/categories?page={i}")
         objects = response.json()
@@ -71,9 +70,9 @@ def sync_categories():
             cat.save()
 
 
-def sync_media():    
+def sync_media():
     response = requests.get(f"{settings.WORDPRESS_API}/media")
-    for i in range(1, int(response.headers["X-WP-TotalPages"])+1):
+    for i in range(1, int(response.headers["X-WP-TotalPages"]) + 1):
         if i > 1:
             response = requests.get(f"{settings.WORDPRESS_API}/media?page={i}")
         objects = response.json()
@@ -96,9 +95,9 @@ def sync_media():
             print(response.status_code, objects)
 
 
-def sync_posts():    
+def sync_posts():
     response = requests.get(f"{settings.WORDPRESS_API}/posts")
-    for i in range(1, int(response.headers["X-WP-TotalPages"])+1):
+    for i in range(1, int(response.headers["X-WP-TotalPages"]) + 1):
         if i > 1:
             response = requests.get(f"{settings.WORDPRESS_API}/posts?page={i}")
         objects = response.json()

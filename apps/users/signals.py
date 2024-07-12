@@ -1,7 +1,3 @@
-from django.dispatch import receiver
-from allauth.account.signals import user_logged_in, user_logged_out
-
-
 # @receiver(user_logged_in)
 # def my_callback(request, user, **kwargs):
 #     print(request, user, [k for k in kwargs])

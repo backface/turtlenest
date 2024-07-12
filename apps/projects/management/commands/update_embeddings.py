@@ -1,10 +1,7 @@
 import math
 from django.core.management.base import BaseCommand
-from django.conf import settings
-from bs4 import BeautifulSoup
 
 from apps.projects.models import Project
-from apps.projects.models import create_embeddings
 
 
 class Command(BaseCommand):
@@ -21,6 +18,7 @@ class Command(BaseCommand):
 
         if not options["target"] or (options["target"] and options["target"] == "meta"):
             update_embeddings(replace)
+
 
 def update_embeddings(replace=False):
     print("updating  project embedding.")

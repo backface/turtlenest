@@ -1,7 +1,5 @@
 import json
 import math
-from datetime import datetime
-from django.core.exceptions import ValidationError
 from django.core.management.base import BaseCommand
 from django.core.serializers.json import DjangoJSONEncoder
 from django.apps import apps
@@ -26,6 +24,7 @@ class Command(BaseCommand):
 
     def handle(self, **options):
         migrate_pages()
+
 
 def migrate_pages():
     print("Migrating old pages..")

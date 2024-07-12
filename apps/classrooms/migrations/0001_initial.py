@@ -7,7 +7,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -16,85 +15,227 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='TrainerRequest',
+            name="TrainerRequest",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('full_name', models.CharField(max_length=255, verbose_name='Full Name')),
-                ('phone_number', models.CharField(blank=True, max_length=255, verbose_name='Phone Number')),
-                ('organization', models.CharField(max_length=255, verbose_name='Organization')),
-                ('role', models.CharField(max_length=255, verbose_name='Role')),
-                ('type', models.CharField(max_length=255, verbose_name='Type of organization')),
-                ('website', models.URLField(max_length=255, verbose_name='Website')),
-                ('tos', models.BooleanField(default=False, verbose_name='I agree to the terms of service (stated below)')),
-                ('date_created', models.DateTimeField(default=django.utils.timezone.now, editable=False)),
-                ('date_modified', models.DateTimeField(default=django.utils.timezone.now, editable=False)),
-                ('approved', models.BooleanField(default=False)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "full_name",
+                    models.CharField(max_length=255, verbose_name="Full Name"),
+                ),
+                (
+                    "phone_number",
+                    models.CharField(
+                        blank=True, max_length=255, verbose_name="Phone Number"
+                    ),
+                ),
+                (
+                    "organization",
+                    models.CharField(max_length=255, verbose_name="Organization"),
+                ),
+                ("role", models.CharField(max_length=255, verbose_name="Role")),
+                (
+                    "type",
+                    models.CharField(
+                        max_length=255, verbose_name="Type of organization"
+                    ),
+                ),
+                ("website", models.URLField(max_length=255, verbose_name="Website")),
+                (
+                    "tos",
+                    models.BooleanField(
+                        default=False,
+                        verbose_name="I agree to the terms of service (stated below)",
+                    ),
+                ),
+                (
+                    "date_created",
+                    models.DateTimeField(
+                        default=django.utils.timezone.now, editable=False
+                    ),
+                ),
+                (
+                    "date_modified",
+                    models.DateTimeField(
+                        default=django.utils.timezone.now, editable=False
+                    ),
+                ),
+                ("approved", models.BooleanField(default=False)),
             ],
         ),
         migrations.CreateModel(
-            name='Unit',
+            name="Unit",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=255)),
-                ('slug', models.SlugField(editable=False, max_length=200)),
-                ('number', models.IntegerField(default=0)),
-                ('description', models.TextField(blank=True, null=True)),
-                ('date_modified', models.DateTimeField(default=django.utils.timezone.now, editable=False)),
-                ('date_created', models.DateTimeField(default=django.utils.timezone.now, editable=False)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("title", models.CharField(max_length=255)),
+                ("slug", models.SlugField(editable=False, max_length=200)),
+                ("number", models.IntegerField(default=0)),
+                ("description", models.TextField(blank=True, null=True)),
+                (
+                    "date_modified",
+                    models.DateTimeField(
+                        default=django.utils.timezone.now, editable=False
+                    ),
+                ),
+                (
+                    "date_created",
+                    models.DateTimeField(
+                        default=django.utils.timezone.now, editable=False
+                    ),
+                ),
             ],
             options={
-                'ordering': ('number',),
+                "ordering": ("number",),
             },
         ),
         migrations.CreateModel(
-            name='Group',
+            name="Group",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=200)),
-                ('slug', models.SlugField(editable=False, max_length=200)),
-                ('description', models.TextField(blank=True, null=True)),
-                ('image', models.TextField(blank=True, null=True)),
-                ('current_unit', models.IntegerField(default=0)),
-                ('introduction', models.TextField(blank=True, null=True)),
-                ('date_modified', models.DateTimeField(default=django.utils.timezone.now, editable=False)),
-                ('date_created', models.DateTimeField(default=django.utils.timezone.now, editable=False)),
-                ('host', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='host', to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("title", models.CharField(max_length=200)),
+                ("slug", models.SlugField(editable=False, max_length=200)),
+                ("description", models.TextField(blank=True, null=True)),
+                ("image", models.TextField(blank=True, null=True)),
+                ("current_unit", models.IntegerField(default=0)),
+                ("introduction", models.TextField(blank=True, null=True)),
+                (
+                    "date_modified",
+                    models.DateTimeField(
+                        default=django.utils.timezone.now, editable=False
+                    ),
+                ),
+                (
+                    "date_created",
+                    models.DateTimeField(
+                        default=django.utils.timezone.now, editable=False
+                    ),
+                ),
+                (
+                    "host",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="host",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'ordering': ('-date_modified',),
+                "ordering": ("-date_modified",),
             },
         ),
         migrations.CreateModel(
-            name='Membership',
+            name="Membership",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('is_hosting', models.BooleanField(default=False)),
-                ('date_modified', models.DateTimeField(default=django.utils.timezone.now, editable=False)),
-                ('date_created', models.DateTimeField(default=django.utils.timezone.now, editable=False)),
-                ('group', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='classrooms.group')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='membership', to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("is_hosting", models.BooleanField(default=False)),
+                (
+                    "date_modified",
+                    models.DateTimeField(
+                        default=django.utils.timezone.now, editable=False
+                    ),
+                ),
+                (
+                    "date_created",
+                    models.DateTimeField(
+                        default=django.utils.timezone.now, editable=False
+                    ),
+                ),
+                (
+                    "group",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="classrooms.group",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="membership",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'ordering': ('-date_modified',),
+                "ordering": ("-date_modified",),
             },
         ),
         migrations.AddField(
-            model_name='group',
-            name='members',
-            field=models.ManyToManyField(through='classrooms.Membership', to=settings.AUTH_USER_MODEL),
+            model_name="group",
+            name="members",
+            field=models.ManyToManyField(
+                through="classrooms.Membership", to=settings.AUTH_USER_MODEL
+            ),
         ),
         migrations.CreateModel(
-            name='SelectedProject',
+            name="SelectedProject",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('is_starter', models.BooleanField(default=False)),
-                ('order', models.IntegerField(default=0)),
-                ('date_modified', models.DateTimeField(default=django.utils.timezone.now, editable=False)),
-                ('date_created', models.DateTimeField(default=django.utils.timezone.now, editable=False)),
-                ('group', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='classrooms.group')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("is_starter", models.BooleanField(default=False)),
+                ("order", models.IntegerField(default=0)),
+                (
+                    "date_modified",
+                    models.DateTimeField(
+                        default=django.utils.timezone.now, editable=False
+                    ),
+                ),
+                (
+                    "date_created",
+                    models.DateTimeField(
+                        default=django.utils.timezone.now, editable=False
+                    ),
+                ),
+                (
+                    "group",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="classrooms.group",
+                    ),
+                ),
             ],
             options={
-                'ordering': ('order',),
+                "ordering": ("order",),
             },
         ),
     ]

@@ -8,7 +8,6 @@ from django.core.management.base import BaseCommand
 from django.core.files.base import ContentFile
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.text import slugify
-from django.db import migrations
 from django.db import connection
 from django.apps import apps
 
@@ -20,7 +19,6 @@ from apps.projects.models import Project, Category, Like, Comment, Remix
 from apps.projects.models import Image as ProjectImage
 
 
-
 class Command(BaseCommand):
     help = "Migrate old project data"
 
@@ -28,13 +26,17 @@ class Command(BaseCommand):
         migrate_projects()
 
         with connection.cursor() as cursor:
-            cursor.execute('SELECT setval(pg_get_serial_sequence(\'"projects_project"\',\'id\'), coalesce(max("id"), 1), max("id") IS NOT null) FROM "projects_project";')
-            #cursor.execute("SELECT setval(pg_get_serial_sequence('projects_project', 'id'), (select max(id) from projects_project) + 1);")
-        
+            cursor.execute(
+                'SELECT setval(pg_get_serial_sequence(\'"projects_project"\',\'id\'), coalesce(max("id"), 1), max("id") IS NOT null) FROM "projects_project";'
+            )
+            # cursor.execute("SELECT setval(pg_get_serial_sequence('projects_project', 'id'), (select max(id) from projects_project) + 1);")
+
         migrate_likes()
 
         with connection.cursor() as cursor:
-            cursor.execute("SELECT setval(pg_get_serial_sequence('projects_like', 'id'), (select max(id) from projects_like) + 1);")
+            cursor.execute(
+                "SELECT setval(pg_get_serial_sequence('projects_like', 'id'), (select max(id) from projects_like) + 1);"
+            )
 
         migrate_comments()
         migrate_project_images()
@@ -54,20 +56,37 @@ def migrate_projects():
             progress = ((ii * 100 + i) / count) * 100
             counter = (ii * 100 + i) + 1
             print(f"\r  .. {(progress):.1f}% ({counter})..", end="", flush=True)
-            print( old_project.updated, old_project.created, old_project.id)
 
             new_project, created = Project.objects.get_or_create(id=old_project.id)
 
             if len(old_project.projectname) > 255:
-                print(f"  .. truncating {old_project.projectname} to 255 chars")
+                print(f" - truncating {old_project.projectname} to 255 chars ..")
                 old_project.projectname = old_project.projectname[:255]
 
-            new_project.name = old_project.projectname.replace("\n", "-")
+            # if len(old_project.projectname.strip()) < 1:
+            #     print("- setting empty name to noname")
+            #     old_project.projectname = "no name - " + shortuuid.uuid()[:6]
+
+            # old_project.projectname = old_project.projectname.replace("\n", "-")
+
+            # if old_project.projectname.endswith(
+            #     " "
+            # ) or old_project.projectname.startswith(" "):
+            #     if old_project.projectname.startswith(" "):
+            #         print(old_project.projectname, " - starts with whitespace")
+            #     else:
+            #         print(old_project.projectname, " - ends with whitespace")
+            #     old_project.projectname = (
+            #         old_project.projectname.strip() + " - " + shortuuid.uuid()[:6]
+            #     )
+
+            new_project.name = old_project.projectname
+
             new_project.slug = slugify(old_project.projectname, allow_unicode=True)
             new_project.notes = old_project.notes
             new_project.date_created = old_project.created or old_project.updated
             new_project.date_updated = old_project.updated or old_project.created
-            
+
             new_project.is_public = old_project.ispublic
             new_project.is_published = old_project.ispublic
             new_project.image_is_featured = old_project.imageisfeatured or False
@@ -75,11 +94,11 @@ def migrate_projects():
             new_project.views = old_project.views or 0
             new_project.user = User.objects.get(username=old_project.username)
 
-            #new_project.update_embeddings()
+            # new_project.update_embeddings()
             new_project.project_file.save(
                 new_project.slug + ".xml", ContentFile(old_project.contents)
             )
-            new_project.date_updated = old_project.updated or old_project.created      
+            new_project.date_updated = old_project.updated or old_project.created
 
             if old_project.thumbnail is not None and old_project.thumbnail != "":
                 imgformat, imgstr = old_project.thumbnail.split(";base64,")
@@ -144,8 +163,9 @@ def migrate_projects():
                         tag_name = t.strip().lower()
                         tag_slugged = slugify(tag_name, allow_unicode=True)
                         t, created = Tag.objects.get_or_create(
-                           # name=tag_name, slug=slugify(tag_name, allow_unicode=True)
-                            name=tag_slugged, slug=tag_slugged
+                            # name=tag_name, slug=slugify(tag_name, allow_unicode=True)
+                            name=tag_slugged,
+                            slug=tag_slugged,
                         )
                         tagged_items, created = TaggedItem.objects.get_or_create(
                             content_type_id=ct.id, object_id=new_project.id, tag=t
@@ -181,10 +201,10 @@ def migrate_likes():
                     ),
                 )
             except IntegrityError:
-                print("error: duplicate like?")                
+                print("error: duplicate like?")
             except Project.DoesNotExist:
                 print("error: project does not exist")
-                
+
             new_object.liker = User.objects.get(username=old_object.liker)
 
     print("\nDone.")
@@ -203,7 +223,7 @@ def migrate_comments():
             progress = ((ii * 100 + i) / count) * 100
             counter = (ii * 100 + i) + 1
             print(f"\r  .. {(progress):.1f}% ({counter})..", end="")
-            
+
             try:
                 new_object, created = Comment.objects.get_or_create(
                     author=User.objects.get(username=old_object.author),
@@ -217,10 +237,10 @@ def migrate_comments():
                 new_object.date_modified = old_object.date
                 new_object.save()
             except IntegrityError:
-                print("error: duplicate comment?")                
+                print("error: duplicate comment?")
             except Project.DoesNotExist:
-                print("error: project does not exist")   
-                             
+                print("error: project does not exist")
+
     print("\nDone.")
 
 

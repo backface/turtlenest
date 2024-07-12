@@ -2,7 +2,7 @@
 <div class="grid grid-cols-1 content-center sm:p-3 lg:p-4 mt-2">
     <div class="text-sm flex items-end justify-center">
          <h2 class="text-lg m-0 p-0 pb-1 truncate">
-             <a href="{{ project.get_absolute_url }}">{{ project.name }}</a>
+             <a href="{{ project.get_absolute_url }}">{{ project.name }}</a>&nbsp; 
          </h2>
      </div>
      <a href="{{ project.get_absolute_url }}" class="hover:opacity-80">
@@ -25,6 +25,8 @@
         {% endif %}
         <!-- <p class="text-slate-500">{{ project.date_created }}</p> -->
         <p class="text-xs text-slate-600">{{ project.date_updated|naturaltime }}</p>
+        {% if project.l2_distance %} <p class="text-xs text-slate-600">l2: {{ project.l2_distance }} </p> {% endif %}
+        {% if project.cos_distance %} <p class="text-xs text-slate-600">COS: {{ project.cos_distance }} </p> {% endif %}
     </div>
 
     

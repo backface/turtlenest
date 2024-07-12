@@ -10,59 +10,184 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
-        ('wagtailcore', '0093_uploadedfile'),
-        ('wagtailimages', '0026_delete_uploadedimage'),
+        ("wagtailcore", "0093_uploadedfile"),
+        ("wagtailimages", "0026_delete_uploadedimage"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='ContentPage',
+            name="ContentPage",
             fields=[
-                ('page_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='wagtailcore.page')),
-                ('social_image', models.ImageField(blank=True, null=True, upload_to='')),
-                ('body', wagtail.fields.StreamField([('paragraph', wagtail.blocks.RichTextBlock()), ('image', wagtail.images.blocks.ImageChooserBlock()), ('caption', apps.content.blocks.CaptionBlock()), ('html', wagtail.blocks.RawHTMLBlock())])),
+                (
+                    "page_ptr",
+                    models.OneToOneField(
+                        auto_created=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        parent_link=True,
+                        primary_key=True,
+                        serialize=False,
+                        to="wagtailcore.page",
+                    ),
+                ),
+                (
+                    "social_image",
+                    models.ImageField(blank=True, null=True, upload_to=""),
+                ),
+                (
+                    "body",
+                    wagtail.fields.StreamField(
+                        [
+                            ("paragraph", wagtail.blocks.RichTextBlock()),
+                            ("image", wagtail.images.blocks.ImageChooserBlock()),
+                            ("caption", apps.content.blocks.CaptionBlock()),
+                            ("html", wagtail.blocks.RawHTMLBlock()),
+                        ]
+                    ),
+                ),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
-            bases=('wagtailcore.page',),
+            bases=("wagtailcore.page",),
         ),
         migrations.CreateModel(
-            name='HomePage',
+            name="HomePage",
             fields=[
-                ('page_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='wagtailcore.page')),
-                ('feature_code_text', models.CharField(blank=True, help_text='Write an brief intro for the code feature block', max_length=255)),
-                ('feature_code_link', models.CharField(blank=True, help_text='Link for the code feature block', max_length=255)),
-                ('feature_make_text', models.CharField(blank=True, help_text='Write an brief intro for the Make feature block', max_length=255)),
-                ('feature_make_link', models.CharField(blank=True, help_text='Link to make feature ', max_length=255)),
-                ('feature_project_text', models.CharField(blank=True, help_text='Write an brief intro for the featured project', max_length=255)),
-                ('feature_project_link', models.CharField(blank=True, help_text='Link to featured project', max_length=255)),
-                ('body', wagtail.fields.RichTextField(blank=True)),
-                ('feature_code_image', models.ForeignKey(blank=True, help_text='Code feature image', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to='wagtailimages.image')),
-                ('feature_make_image', models.ForeignKey(blank=True, help_text='Make feature image', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to='wagtailimages.image')),
-                ('feature_project_image', models.ForeignKey(blank=True, help_text='Make feature image', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to='wagtailimages.image')),
+                (
+                    "page_ptr",
+                    models.OneToOneField(
+                        auto_created=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        parent_link=True,
+                        primary_key=True,
+                        serialize=False,
+                        to="wagtailcore.page",
+                    ),
+                ),
+                (
+                    "feature_code_text",
+                    models.CharField(
+                        blank=True,
+                        help_text="Write an brief intro for the code feature block",
+                        max_length=255,
+                    ),
+                ),
+                (
+                    "feature_code_link",
+                    models.CharField(
+                        blank=True,
+                        help_text="Link for the code feature block",
+                        max_length=255,
+                    ),
+                ),
+                (
+                    "feature_make_text",
+                    models.CharField(
+                        blank=True,
+                        help_text="Write an brief intro for the Make feature block",
+                        max_length=255,
+                    ),
+                ),
+                (
+                    "feature_make_link",
+                    models.CharField(
+                        blank=True, help_text="Link to make feature ", max_length=255
+                    ),
+                ),
+                (
+                    "feature_project_text",
+                    models.CharField(
+                        blank=True,
+                        help_text="Write an brief intro for the featured project",
+                        max_length=255,
+                    ),
+                ),
+                (
+                    "feature_project_link",
+                    models.CharField(
+                        blank=True, help_text="Link to featured project", max_length=255
+                    ),
+                ),
+                ("body", wagtail.fields.RichTextField(blank=True)),
+                (
+                    "feature_code_image",
+                    models.ForeignKey(
+                        blank=True,
+                        help_text="Code feature image",
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="+",
+                        to="wagtailimages.image",
+                    ),
+                ),
+                (
+                    "feature_make_image",
+                    models.ForeignKey(
+                        blank=True,
+                        help_text="Make feature image",
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="+",
+                        to="wagtailimages.image",
+                    ),
+                ),
+                (
+                    "feature_project_image",
+                    models.ForeignKey(
+                        blank=True,
+                        help_text="Make feature image",
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="+",
+                        to="wagtailimages.image",
+                    ),
+                ),
             ],
             options={
-                'abstract': False,
+                "abstract": False,
             },
-            bases=('wagtailcore.page',),
+            bases=("wagtailcore.page",),
         ),
         migrations.CreateModel(
-            name='PageGalleryImage',
+            name="PageGalleryImage",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('sort_order', models.IntegerField(blank=True, editable=False, null=True)),
-                ('caption', models.CharField(blank=True, max_length=250)),
-                ('image', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='+', to='wagtailimages.image')),
-                ('page', modelcluster.fields.ParentalKey(on_delete=django.db.models.deletion.CASCADE, related_name='gallery_images', to='content.contentpage')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "sort_order",
+                    models.IntegerField(blank=True, editable=False, null=True),
+                ),
+                ("caption", models.CharField(blank=True, max_length=250)),
+                (
+                    "image",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="+",
+                        to="wagtailimages.image",
+                    ),
+                ),
+                (
+                    "page",
+                    modelcluster.fields.ParentalKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="gallery_images",
+                        to="content.contentpage",
+                    ),
+                ),
             ],
             options={
-                'ordering': ['sort_order'],
-                'abstract': False,
+                "ordering": ["sort_order"],
+                "abstract": False,
             },
         ),
     ]
