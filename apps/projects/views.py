@@ -62,7 +62,7 @@ PRIVATE_COLLECTIONS = [
 ]
 
 
-@cache_page(60 * 15)
+# @cache_page(60 * 15)
 def index(request):
     featured = Project.objects.filter(categories__slug__in=["featured"]).order_by("?")
     if featured:
