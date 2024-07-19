@@ -391,9 +391,10 @@ CRISPY_CLASS_CONVERTERS = {"textinput": "border-gray-800"}
 # OTHER
 ###################
 
-TEXT_EMBEDDING_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
+TEXT_EMBEDDING_MODEL = "BAAI/bge-small-en-v1.5"
 # BAAI/bge-small-en-v1.5
 # BAAI/bge-small-en
+# "sentence-transformers/all-MiniLM-L6-v2"
 
 SYNC_NOTES_ON_SAVE = True
 
