@@ -262,7 +262,8 @@ def tags(request, mine=False):
         {
             #'tags': Project.tags.annotate(count=Count('project')).order_by("-count")
             "tags": projects,
-            "scale": 150 / maxima,
+            "scale": 100 / maxima,
+            "maxima": maxima,
             "mine": mine,
             "collections": COLLECTIONS,
             "collection": "tags",
@@ -563,7 +564,6 @@ def stats(request):
         for k, v in value.items():
             sub_items.append({"label": k, "value": v})
         stats.append({"label": key, "items": sub_items})
-    print(stats)
     return render(request, "projects/stats.html", {"stats": stats})
 
 
