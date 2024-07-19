@@ -369,7 +369,8 @@ def search(request, target="all"):
                     cos_distance=CosineDistance("embedding_project_meta", q_vector)
                 )
             )
-            objects = objects.filter(cos_distance__lte=0.2).distinct()
+            # objects = objects.filter(cos_distance__lte=0.5).distinct()
+            objects = objects.distinct()
         elif target == "projects":
             objects = (
                 Project.objects.filter(is_published=True)
