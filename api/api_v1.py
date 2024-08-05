@@ -22,7 +22,7 @@ from allauth.account.forms import ResetPasswordForm
 from allauth.account.utils import send_email_confirmation
 
 from apps.projects.models import Project
-from apps.classrooms.models import Group, Unit
+from apps.classrooms.models import Group, SelectedProject
 
 
 api = NinjaAPI(
@@ -414,13 +414,20 @@ def save_project(request, username: str, projectname: str):
 
     if "group" in request.session:
         group = Group.objects.get(id=request.session["group"])
-        if group.current_unit:
-            unit = Unit.objects.get(id=group.current_unit)
-            unit.projects.add(project)
-            unit.save()
-        else:
-            group.projects.add(project)
-            group.save()
+        newproject = SelectedProject(
+            group=group,
+            project=project,
+            is_starter=False,
+            unit_id=group.current_unit or "",
+        )
+        newproject.save()
+        # if group.current_unit:
+        #     unit = Unit.objects.get(id=group.current_unit)
+        #     unit.projects.add(project)
+        #     unit.save()
+        # else:
+        #     group.projects.add(project)
+        #     group.save()
 
     return Message(message=f"project {projectname} saved")
 

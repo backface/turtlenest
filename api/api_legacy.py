@@ -15,7 +15,7 @@ from bs4 import BeautifulSoup
 import base64
 
 from apps.projects.models import Project
-from apps.classrooms.models import Group, Unit
+from apps.classrooms.models import Group, SelectedProject
 
 
 # TODO:
@@ -239,20 +239,19 @@ def save_project(
 
     if "group" in request.session:
         group = Group.objects.get(id=request.session["group"])
-        if group.current_unit:
-            unit = Unit.objects.get(id=group.current_unit)
-            unit.projects.add(project)
-            unit.save()
-        else:
-            group.projects.add(project)
-            group.save()
+        newproject = SelectedProject(
+            group=group,
+            project=project,
+            is_starter=False,
+            unit_id=group.current_unit or "",
+        )
+        newproject.save()
+        # if group.current_unit:
+        #     unit = Unit.objects.get(id=group.current_unit)
+        #     unit.projects.add(project)
+        #     unit.save()
+        # else:
+        #     group.projects.add(project)
+        #     group.save()
 
     return {"text": f"project {projectname} {'created' if created else 'updated'}"}
-
-
-@api.get("hello")
-def hello_world(request):
-    """
-    Just a Test
-    """
-    return {"msg": "Hello, World!"}
