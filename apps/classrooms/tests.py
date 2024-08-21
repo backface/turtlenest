@@ -4,9 +4,12 @@ from django.urls import reverse
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group as AuthGroup
 from .models import Group, Unit, Membership, TrainerRequest
-from .forms import TrainerRequestForm
 
 User = get_user_model()
+
+
+# created with Claude Sonnet
+# TODO: unit test for units!
 
 class GroupViewTests(TestCase):
     def setUp(self):
