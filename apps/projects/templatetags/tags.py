@@ -20,8 +20,6 @@ def twittify(value):
             ),
         )
     )
-
-
 twittify.mark_safe = True
 
 
@@ -41,14 +39,9 @@ def linktags(value):
             ),
         )
     )
-
-
 linktags.mark_safe = True
 
-
 register.filter(name="removetags")
-
-
 def removetags(value):
     """Replace #tags with links to tag site using reverse"""
     # regex = "#([a-zA-Z0-9_]+)"
@@ -60,8 +53,6 @@ def removetags(value):
             value,
         )
     )
-
-
 removetags.mark_safe = True
 
 
@@ -82,7 +73,5 @@ def link_uris(value):
 
 @register.simple_tag
 def scale_tag(value, min_out, max_out, max_in):
-    print(value, min_out, max_out, max_in)
     size = max(min_out, (value / max_in * max_out))
-    print(size)
     return f"{size}"

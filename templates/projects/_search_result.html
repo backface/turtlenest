@@ -1,7 +1,7 @@
 
 {% load i18n %}
 
-<div class="container mx-auto pt-2 pb-10 bg-blue text-white mb-4 search">
+<div class="container mx-auto pt-1 pb-10 bg-slate-50 text-white mb-4 search">
     <button class="{% if target == 'projects' or not target %}active{% endif %}">
         <a href="{% url 'projects:search' 'projects' %}?q={{ q }}" class="text-sm px-2 py-1">
         projects</a> 

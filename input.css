@@ -114,13 +114,16 @@
 }
 
 .search button {
-  @apply hover:text-blue bg-blue text-white hover:bg-white
+  @apply text-black bg-transparent hover:bg-primary hover:text-white
 }
 .search button.active {
-  @apply text-blue hover:bg-blue hover:text-white bg-white
+  @apply text-white hover:bg-primary hover:text-white bg-primary
+}
+.search button a {
+  @apply hover:text-white
 }
 .search input {
-  @apply text-blue text-left placeholder:text-blue
+  @apply text-black text-left placeholder:text-slate-300 border-b-2 border-primary border-t-0 border-l-0 border-r-0
 }
 
 .textarea {
