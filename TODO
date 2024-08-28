@@ -1,10 +1,12 @@
-* strip linebreaks from project names
+* MIGRATION:
+  strip linebreaks and empty values from project names.
+  needs also fix for linked items (likes, comments)
 
 * more unit tests
 
 * tags suggestions?
 
-* meta tags
+* meta tags?
 
 
 more:

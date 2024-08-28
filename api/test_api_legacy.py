@@ -65,6 +65,13 @@ class LegacyAPITests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertFalse(response.json()["ispublic"])
 
+        self.client.logout()
+        response = self.client.get(
+            reverse("api-legacy:get_users_projects", args=["testuser"])
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.json()), 0)          
+
     def test_delete_project(self):
         self.client.login(username="testuser", password="testpassword")
         response = self.client.get(
@@ -87,3 +94,9 @@ class LegacyAPITests(TestCase):
         self.assertEqual(
             response.json()["contents"], "<xml><notes>some notes #tagged</notes></xml>"
         )
+
+        response = self.client.get(
+            reverse("api-legacy:get_users_projects", args=["testuser"])
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.json()), 2)        

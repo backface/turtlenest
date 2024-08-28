@@ -61,6 +61,7 @@ class Project(models.Model):
     notes = models.TextField(
         blank=True,
         null=True,
+        default="",
         verbose_name="Project notes",
         help_text="You can add hashtags here!",
     )

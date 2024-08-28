@@ -83,7 +83,6 @@ class GroupViewTests(TestCase):
         self.assertEqual(response.status_code, 302)  # Check for redirect
         self.assertFalse(self.group.members.filter(username='member').exists())  # Check if member left
 
-
     def tearDown(self):
         User.objects.all().delete()
         Group.objects.all().delete()

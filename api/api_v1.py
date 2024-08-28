@@ -20,6 +20,8 @@ from ninja import Schema
 from ninja.errors import HttpError
 from allauth.account.forms import ResetPasswordForm
 from allauth.account.utils import send_email_confirmation
+from allauth.account.forms import SignupForm
+from allauth.account.adapter import DefaultAccountAdapter
 
 from apps.projects.models import Project
 from apps.classrooms.models import Group, SelectedProject
@@ -33,25 +35,8 @@ api = NinjaAPI(
 )
 
 # TODO
-# * API rate lmiting/api/v1/projects/mash/test
+# * API rate lmiting?
 
-# TODO
-# @api.post("/users/{username}?email=&password=&password_repeat="))
-# @api.post("/users/{username}/newpassword?oldpwassword=&password_repeat=&newpassword=")
-
-
-# questions:
-# - what is ?updatenotes (loading projects) XXX
-# - what is ?persist
-# - what is ?upublished
-
-# - what is "media" in snap-data / project file format
-
-# - password hashing?
-# - why image in base64?
-
-# - rate limiting
-# - securing emailing endpoints?
 
 
 ###################################
@@ -173,12 +158,7 @@ def signup_user(
 
     try:
         user = User.objects.get(username=username)
-        print(user)
-        return 400, Errors(
-            errors=[
-                f"User {username} already exists",
-            ]
-        )
+        return 400, Errors(errors=[f"User {username} already exists",])
     except User.DoesNotExist:
         pass
 
@@ -188,6 +168,17 @@ def signup_user(
     except User.DoesNotExist:
         pass
 
+    # form = SignupForm(
+    #     {
+    #         "username": username,
+    #         "email": email,
+    #         "password1": password1,
+    #         "password2": password2,
+    #     })
+    # if not form.is_valid():
+    #     return 400, Errors(errors=form.errors)
+    # form.save(request)
+        
     user = User(username=username, email=email, password=password)
     user.set_password(password)
     user.save()
@@ -291,7 +282,8 @@ def logout_user(request):
 
 @api.get("/projects/{username}", response=ProjectList, summary="Get a user's projects.")
 def get_users_projects(request, username: str):
-    """
+    """)
+        # for project in 
     Get a user's projects.
     """
     if request.user.is_authenticated and request.user.username == username:
@@ -383,10 +375,11 @@ def save_project(request, username: str, projectname: str):
     notes = data["notes"]
     thumbnail = data["thumbnail"]
     soup = BeautifulSoup(contents, "xml")
+
     # # we look for the first instances (less elegant but it might be nested)
-    thumbnail = (
-        soup.find_all("pentrails")[0].text if soup.find_all("thumbnail") else None
-    )
+    # thumbnail = soup.find_all("thumbnail")[0].text if soup.find_all("thumbnail") else thumbnail
+    thumbnail = soup.find_all("pentrails")[0].text if soup.find_all("pentrails") else thumbnail
+          
     # notes = soup.find_all("notes")[0].text if soup.find_all("notes") else None
     # # tag = soup.find_all("tags")[0].text if soup.find_all("notes") else None
 
@@ -411,6 +404,7 @@ def save_project(request, username: str, projectname: str):
         project.thumbnail.save(
             f"{project.slug}.{ext}", ContentFile(base64.b64decode(imgstr)), save=True
         )
+    project.save()
 
     if "group" in request.session:
         group = Group.objects.get(id=request.session["group"])
