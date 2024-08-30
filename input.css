@@ -151,3 +151,7 @@ nav .menu a {
 .menu {
   @apply shadow-2xl
 }
+
+summary::marker {
+  @apply hidden
+}

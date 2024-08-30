@@ -1,5 +1,5 @@
 
-        
+{% load static %}
 {% for project in page_obj %}
     {% if forloop.last and page_obj.has_next and not target == "all" %}
     <div
@@ -30,10 +30,16 @@
         images.forEach(function (img) {
             img.src = img.dataset.src;
         });
-    } else {
+    } else { // for safari and possible other browsers
         console.log("no loading")
         var script = document.createElement("script");
-        script.src = "/link/to/lazyload.js";
+        script.src = "{% static 'js/lazyload.min.js' %}";
+        script.type = "text/javascript"
         document.body.appendChild(script);
+        window.setTimeout(function () {
+            var lazyLoadInstance = new LazyLoad({
+                // Your custom settings go here
+            });
+        }, 1000)
     }
 </script>

@@ -57,3 +57,8 @@ svg:hover .st2 {fill: var(--secondary);}
 /* img {
   display: inline
 } */
+
+summary::marker {
+  display:none;
+  color: var(--primary);
+}
