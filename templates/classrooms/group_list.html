@@ -7,7 +7,7 @@
 
     <div class="container mx-auto" >
         
-    {% if user.is_teacher %}
+    {% if user.is_teacher or user.is_superuser %}
     <div class="my-4 text-center">
         <a href="{% url 'groups:group_create' %}">
             <button><i class="icon-[ion--add] mr-1"></i>Create a New Group</button>

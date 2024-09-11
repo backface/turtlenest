@@ -44,7 +44,7 @@ class TeacherRequiredMixin(UserPassesTestMixin):
 
     def test_func(self):
         try:
-            return self.request.user.is_teacher
+            return self.request.user.is_teacher or self.request.user.is_superuser
         except AttributeError:
             return False
 
