@@ -2,6 +2,7 @@ services:
 
   memcached:
     image: memcached
+    restart: unless-stopped
     
   db:
     #image: postgres:16
