@@ -33,7 +33,7 @@ def linktags(value):
             r"#(?P<ht>([a-zA-Z0-9_\-])+)",
             r"<a href='/projects/tag/\g<ht>' class='text-tertiary'>#\g<ht></a>",
             re.sub(
-                r"@(?P<ut>(\w+))",
+                r"@(?P<ut>[a-zA-Z0-9_\-]+)",
                 r"<a href='/user/\g<ut>' class='text-tertiary'>@\g<ut></a>",
                 value,
             ),

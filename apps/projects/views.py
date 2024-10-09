@@ -761,6 +761,48 @@ def delete_comment(request, id):
 
 
 @login_required
+def share_project(request, id):
+    project = get_object_or_404(Project, pk=id)
+    if (
+        not request.user == project.user
+        and not request.user.is_moderator
+        and not request.user.is_superuser
+    ):
+        raise (PermissionDenied)
+    else:
+        project.is_public = True
+        project.is_published = True
+        project.last_shared = timezone.now()
+        project.save()
+        messages.success(request, "Project shared")
+        if request.META.get("HTTP_HX_REQUEST") or request.htmx:
+            return render(request, "projects/_is_shared.html", {"project": project})
+        else:
+            return redirect("projects:project_detail", id=project.id)
+
+
+@login_required
+def unshare_project(request, id):
+    project = get_object_or_404(Project, pk=id)
+    if (
+        not request.user == project.user
+        and not request.user.is_moderator
+        and not request.user.is_superuser
+    ):
+        raise (PermissionDenied)
+    else:
+        project.is_public = False
+        project.is_published = False
+        project.last_shared = None
+        project.save()
+        messages.success(request, "Project unshared")
+        if request.META.get("HTTP_HX_REQUEST") or request.htmx:
+            return render(request, "projects/_is_unshared.html", {"project": project})
+        else:
+            return redirect("projects:project_detail", id=project.id)
+
+
+@login_required
 def add_comment(request, id):
     if request.method == "POST":
         if not request.user.id == int(request.POST["author"]):

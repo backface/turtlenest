@@ -34,6 +34,8 @@ urlpatterns = [
     path("project/flag/<int:id>", views.flag, name="flag"),
     path("project/like/<int:id>", views.like, name="like"),
     path("project/<int:id>/comment/add", views.add_comment, name="add_comment"),
+    path("project/<int:id>/share", views.share_project, name="share"),
+    path("project/<int:id>/unshare", views.unshare_project, name="unshare"),
     path("project/comment/delete/<id>", views.delete_comment, name="delete_comment"),
     path("projects/g/<str:collection>", views.collection_redirect),
     path("projects/tag/<str:tag>", views.list_by_tag, name="list_by_tag"),

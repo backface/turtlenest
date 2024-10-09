@@ -1,0 +1,22 @@
+{% load static %}
+<div id="sharing">
+    <div class="text-sm">
+        This project is shared under the <br>
+        <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="underline color-primary">
+            Creative Commons Attribution-NonCommercial-ShareAlike (CC BY-NC-SA) license
+        </a>.
+        <br>
+        <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+            <img src="{% static 'img/by-nc-sa.png' %}" class="h-6 mt-1" />
+        </a><br>
+    </div>
+
+    {% if request.user == project.user or request.user.is_superuser or request.user.is_moderator %}
+        <a 
+            hx-target="#sharer"
+            hx-swap="innerHTML"
+            hx-get="{% url 'projects:unshare' project.id %}">
+            <button><i class="icon-[ion--share] mr-1"></i>Unshare</button>
+        </a>
+    {% endif %}
+</div>

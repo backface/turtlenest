@@ -1,0 +1,13 @@
+<div id="sharing">
+    <div></div>
+    {% if request.user == project.user or request.user.is_superuser or request.user.is_moderator %}       
+        This project is private.<br>
+        <a 
+        hx-target="#sharer"
+        hx-swap="innerHTML"
+            hx-get="{% url 'projects:share' project.id %}"
+        >
+            <button><i class="icon-[ion--share] mr-1"></i>Share</button>
+        </a>            
+    {% endif %}
+</div>

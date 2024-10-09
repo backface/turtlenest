@@ -1,4 +1,11 @@
 {
     "reportMissingImports": false,
-    "reportMissingModuleSource": false
+    "reportMissingModuleSource": false,
+    "reportAttributeAccessIssue": false,
+    "reportFunctionMemberAccess": false,
+    "reportOptionalMemberAccess": false,
+
+    "reportArgumentType": false,
+    "reportCallIssue": false,
+    "reportPossiblyUnboundVariable": false
 }
