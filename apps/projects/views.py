@@ -778,7 +778,7 @@ def share_project(request, id):
         if request.META.get("HTTP_HX_REQUEST") or request.htmx:
             return render(request, "projects/_is_shared.html", {"project": project})
         else:
-            return redirect("projects:project_detail", id=project.id)
+            return redirect("projects:detail_by_id", id=project.id)
 
 
 @login_required
@@ -799,7 +799,7 @@ def unshare_project(request, id):
         if request.META.get("HTTP_HX_REQUEST") or request.htmx:
             return render(request, "projects/_is_unshared.html", {"project": project})
         else:
-            return redirect("projects:project_detail", id=project.id)
+            return redirect("projects:detail_by_id", id=project.id)
 
 
 @login_required
