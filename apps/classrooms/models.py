@@ -19,7 +19,7 @@ class Group(models.Model):
     title = models.CharField(max_length=200)
     slug = models.SlugField(max_length=200, editable=False, db_index=True)
     description = models.TextField(blank=True, null=True)
-    image = models.TextField(blank=True, null=True)
+    #image = models.TextField(blank=True, null=True)
     current_unit = models.IntegerField(default=0)
     # current_unit = models.ForeignKey("Unit", on_delete=models.SET_NULL, blank=True, null=True, related_name="current_unit")
     introduction = models.TextField(blank=True, null=True)
