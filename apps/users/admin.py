@@ -74,6 +74,7 @@ class UserAdmin(UserAdmin):
         "is_active",
         "date_joined",
         "last_login",
+        "num_projects"
     )
     list_filter = UserAdmin.list_filter + (
         "date_joined",
@@ -91,3 +92,13 @@ class UserAdmin(UserAdmin):
     )
     raw_id_fields = ("mentor",)
     inlines = (ProjectInline,)
+
+    # def get_queryset(self, request):
+    #     qs = super(UserAdmin, self).get_queryset(request)
+    #     qs = qs.annotate(UserAdmin.Count('projects'))
+    #     return qs
+    
+    @admin.display(description="Projects")
+    def num_projects(self, obj):
+        return obj.project_set.all().count()
+    #num_projects.admin_order_field = 'project__count'     
