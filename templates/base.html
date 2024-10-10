@@ -46,9 +46,15 @@ for designers to experiment with generative aesthetics and precision
 <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}" />
 {% endblock %}
 
+{% if request.META.HTTP_HOST in "www.turtlestitch.org, turtlestitch.org, turtlenest.backface.org" %}
+<script defer src="https://umami.turtlestitch.org/script.js" data-website-id="453f8d54-aed4-43ce-9deb-3cce10a5d646"></script>
+{% endif %}
+
 </head>
 
 <body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+
+
 
   {% include "nav.html" %}
 
@@ -75,6 +81,7 @@ for designers to experiment with generative aesthetics and precision
   {% block "toast" %}
     <div class="toast toast-top toast-end"></div>
   {% endblock %} 
+  
 
 </body>
 
