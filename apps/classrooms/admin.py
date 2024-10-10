@@ -25,7 +25,7 @@ class GroupAdmin(admin.ModelAdmin):
 class MembershipAdmin(admin.ModelAdmin):
     list_display = ("id", "user", "group")
     search_fields = ("group__title", "user__username")
-    raw_id_fields = ["host", "user"]
+    raw_id_fields = ["user"]
 
 @admin.register(Unit)
 class UnitAdmin(admin.ModelAdmin):
