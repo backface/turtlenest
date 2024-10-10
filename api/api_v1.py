@@ -445,7 +445,9 @@ def set_project_visibility(
                 project.last_shared = timezone.now()
             else:
                 project.last_shared = None
-        if not ispublished is not None:
+        
+        # we set is published but it is ignored for now!
+        if ispublished is not None:
             project.is_published = ispublished
 
         project.save()

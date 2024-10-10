@@ -11,7 +11,7 @@
         </a><br>
     </div>
 
-    {% if request.user == project.user or request.user.is_superuser or request.user.is_moderator %}
+    {% if request.user == project.user %}
         <a 
             hx-target="#sharer"
             hx-swap="innerHTML"

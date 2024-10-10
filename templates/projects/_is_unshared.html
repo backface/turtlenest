@@ -1,6 +1,6 @@
 <div id="sharing">
     <div></div>
-    {% if request.user == project.user or request.user.is_superuser or request.user.is_moderator %}       
+    {% if request.user == project.user %}       
         This project is private.<br>
         <a 
         hx-target="#sharer"

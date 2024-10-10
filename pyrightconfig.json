@@ -5,6 +5,7 @@
     "reportFunctionMemberAccess": false,
     "reportOptionalMemberAccess": false,
 
+    "reportAssignmentType": false,
     "reportArgumentType": false,
     "reportCallIssue": false,
     "reportPossiblyUnboundVariable": false
