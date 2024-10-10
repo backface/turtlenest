@@ -356,6 +356,7 @@ def search(request, target="all"):
                 | Q(first_name__icontains=q)
                 | Q(last_name__icontains=q)
             ).order_by("-username")
+
         elif target == "semantic":
             q_vector = create_embeddings(q)
             objects = (
@@ -372,6 +373,7 @@ def search(request, target="all"):
             )
             # objects = objects.filter(cos_distance__lte=0.5).distinct()
             objects = objects.distinct()
+
         elif target == "projects":
             objects = (
                 Project.objects.filter(is_published=True)
@@ -393,10 +395,12 @@ def search(request, target="all"):
                 .filter(search=q)
             )
         else:
-            objects = Project.objects.filter(
-                Q(name__icontains=q) | Q(notes__icontains=q)
-            ).select_related("user")
-
+            objects = (
+                Project.objects.filter(is_published=True)
+                .filter(
+                    Q(name__icontains=q) | Q(notes__icontains=q)
+                ).select_related("user")
+            )
             users = User.objects.filter(
                 Q(username__icontains=q)
                 | Q(first_name__icontains=q)
