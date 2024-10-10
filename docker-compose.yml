@@ -36,7 +36,7 @@ services:
     restart: unless-stopped
 
   django:
-    image: backface/turtlenest:latest
+    image: backface/turtlenest:0.2
     build:
       context:  ./
       dockerfile: Dockerfile

@@ -2,6 +2,14 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import Group
 from .models import User
+from apps.projects.models import Project
+
+class ProjectInline(admin.TabularInline):
+    model = Project
+    max_num = 0
+    can_delete = False
+    fields = ["name", "is_published", "is_public", "date_created"]   
+    readonly_fields =["name", "is_published", "is_public", "date_created"] 
 
 
 class IsModerator(admin.SimpleListFilter):
@@ -82,3 +90,4 @@ class UserAdmin(UserAdmin):
         ),
     )
     raw_id_fields = ("mentor",)
+    inlines = (ProjectInline,)
