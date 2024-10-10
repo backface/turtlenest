@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.db import models
 from .models import Group, Membership, Unit, SelectedProject, TrainerRequest
 
 
@@ -14,11 +15,21 @@ class MemberInline(admin.TabularInline):
 
 @admin.register(Group)
 class GroupAdmin(admin.ModelAdmin):
-    list_display = ("title", "slug", "id", "host", "date_created", "current_unit")
+    list_display = ("title", "host", "date_created", "current_unit", "num_users")
     search_fields = ("title", "slug", "host")
     list_filter = ("host",)
     inlines = [MemberInline]
     raw_id_fields = ["host"]
+
+    def get_queryset(self, request):
+        qs = super(GroupAdmin, self).get_queryset(request)
+        qs = qs.annotate(models.Count('members'))
+        return qs
+    
+    @admin.display(description="Users")
+    def num_users(self, obj):
+        return obj.members.count()
+    num_users.admin_order_field = 'members__count' 
 
 
 @admin.register(Membership)
