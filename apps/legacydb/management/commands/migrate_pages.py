@@ -1,56 +1,27 @@
-import json
 import math
+from django.utils import timezone
 from django.core.management.base import BaseCommand
-from django.core.serializers.json import DjangoJSONEncoder
+from django.db import migrations
 from django.apps import apps
-from wagtail.models import Page, Site
 
-from apps.content.models import ContentPage
-
-
-def _text_to_stream_value(text):
-    return json.dumps([{"type": "paragraph", "value": text}], cls=DjangoJSONEncoder)
-
-
-def save_page(index_page, page):
-    index_page.add_child(instance=page)
-    page.save()
-    revision = page.save_revision()
-    revision.publish()
+from apps.pages.models import Page
+from apps.users.models import User
 
 
 class Command(BaseCommand):
     help = "Migrate old accounts "
 
     def handle(self, **options):
-        migrate_pages()
-
-
-def migrate_pages():
-    print("Migrating old pages..")
-
-    root_page = Page.objects.get(slug="root").specific
-    try:
-        landing_page = ContentPage.objects.get(slug="content")
-        print("Using existing content homepage...")
-    except ContentPage.DoesNotExist:
-        print("Creating your content homepage...")
-        landing_page = ContentPage(
-            slug="content",
-            title="Welcome to your content area!",
-            body=_text_to_stream_value(
-                "This is where your content pages will live. You can create more pages here. "
-                'Everything here can be edited in <a href="/cms">the content admin</a>.'
-            ),
+        migrate_data()
+        migrations.RunSQL(
+            'SELECT setval(pg_get_serial_sequence(\'"pages_page"\',\'id\'), coalesce(max("id"), 1), max("id") IS NOT null) FROM "pages_page";'
         )
-        root_page.add_child(instance=landing_page)
-        landing_page.save()
 
-    site = Site.objects.get()
-    site.root_page = landing_page
-    site.save()
 
+def migrate_data():
+    print("Migrating old pages..")
     OldPage = apps.get_model("legacydb", "Pages")
+
     count = OldPage.objects.using("legacydb").count()
     pages = math.ceil(count / 100)
     print(f"  .. total objects: {count} ({pages})..", end="\n")
@@ -62,17 +33,19 @@ def migrate_pages():
             progress = ((ii * 100 + i + 1) / count) * 100
             counter = (ii * 100 + i) + 1
             print(f"\r  .. {(progress):.1f}% ({counter})..", end="")
-
+            new_object, created = Page.objects.get_or_create(id=old_object.id)
+            new_object.title = old_object.title
+            new_object.slug = old_object.slug
+            new_object.date_created = old_object.last_edit_at or timezone.now()
+            new_object.date_modified = old_object.last_edit_at or timezone.now()
             try:
-                new_page = ContentPage.objects.get(slug=old_object.slug)
-            except ContentPage.DoesNotExist:
-                print("Creating new page...")
-                new_page = ContentPage(
-                    slug=old_object.slug,
-                    title=old_object.title,
-                    body=_text_to_stream_value(old_object.content),
+                new_object.last_editor = User.objects.get(
+                    username=old_object.last_edit_by
                 )
+            except User.DoesNotExist:
+                new_object.last_editor = None
 
-                save_page(landing_page, new_page)
+            new_object.content = old_object.content
+            new_object.save()
 
     print("\nDone.")

@@ -17,17 +17,24 @@
      <div class="pt-1 mb-1">
        
     </div>     
-     <div class="text-sm pt-1">
+     <div class="text-sm pt-1 relative">
         {% if not mine %}
         <p>
            by <a href="{% url 'users:detail' project.user.username %}" class="text-primary">{{ project.user.username }}</a>
         </p>
         {% endif %}
         <!-- <p class="text-slate-500">{{ project.date_created }}</p> -->
-        <p class="text-xs text-slate-600">{{ project.date_updated|naturaltime }}</p>
-        {% if not project.is_public %}
-        <i class="ri:git-repository-private-line"></i>private
-        {% endif %}
+        <p class="text-xs text-slate-600">
+            {{ project.date_updated|naturaltime }} 
+            {% if not project.is_published and not project.is_public %}
+                <span class="absolute right-0 text-lg" title="private"><i class="icon-[ri--git-repository-private-line]"></i></span>
+            {% elif not project.is_published and project.is_public %}
+                <span class="absolute right-0 text-lg"  title="unlisted"><i class="icon-[pepicons-pop--list-off]"></i></span>
+            {% endif %}
+        </p>
+        
+        
+        
     </div>
 
     

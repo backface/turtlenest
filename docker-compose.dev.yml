@@ -31,7 +31,6 @@ services:
       gunicorn -b 0.0.0.0:$PORT
        --access-logfile -        
        --reload
-       $extra_files
        --workers 2
        --timeout $TIMEOUT
        turtlenest.wsgi:application  

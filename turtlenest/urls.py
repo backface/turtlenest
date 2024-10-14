@@ -39,23 +39,32 @@ urlpatterns = [
     # path('users/:username/projects/:projetname', include('projects.urls')),
     # path('user?', include('users.urls')), # snap
     # path('project?', include('projects.urls')), # snap
+
     path("grappelli/", include("grappelli.urls")),  # grappelli URLS
     path("admin/", admin.site.urls),
     path("hijack/", include("hijack.urls")),
+    path('summernote/', include('django_summernote.urls')),
+
     path("cms/login/", RedirectView.as_view(pattern_name="account_login")),
     path("cms/", include(wagtailadmin_urls)),
     path("documents/", include(wagtaildocs_urls)),
-    path("page/", include(wagtail_urls)),
     path("content/", include(wagtail_urls)),
+    #path("page/", include(wagtail_urls)),
+    
+    path("page/", include("apps.pages.urls")),
     path("make/", include("apps.wp_blog.urls")),
     path("user/", include("apps.users.urls")),
     path("group/", include("apps.classrooms.urls")),
     path("mygroups", GroupListView.as_view(), name="my_groups"),
     path("tos", RedirectView.as_view(url="/page/tos")),
     path("", include("apps.projects.urls")),
+    
+
     # path('', include(wagtail_urls)),
     path("api/", api_legacy.urls),
     path("api/v1/", api_v1.urls),
+
+    path("__reload__/", include("django_browser_reload.urls")),
 ]
 
 if not settings.TESTING:
@@ -68,3 +77,4 @@ if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += static("run", document_root=f"{settings.STATIC_ROOT}/run")
+    

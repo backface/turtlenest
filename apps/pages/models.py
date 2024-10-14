@@ -23,6 +23,9 @@ class Page(models.Model):
     class Meta:
         ordering = ("-date_created",)
 
+    def __str__(self):
+        return f"{self.title}"
+    
     def save(self, *args, **kwargs):
         self.date_modified = timezone.now()
         if self.slug == "":
