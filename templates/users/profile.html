@@ -36,20 +36,19 @@
         <h2>Profile Info</h2>
         <form class="form" method="post" action="{% url 'users:profile' %}" enctype="multipart/form-data">{% csrf_token %}
             <div class="text-left">
-                
-                
-                <!-- {{ form|crispy }} -->
-
                 {% crispy form %}
             </div>
-
-
             <div>
                 <button>
                     <i class="icon--[ion--save]"></i> Save
                 </button>
             </div>
         </form>
+
+        <h1>Danger Zone</h1>
+        <button class="danger">
+            <a href="{% url 'users:delete_account' %}">Delete my account</a>
+        </button>
 
 
     {% else %}

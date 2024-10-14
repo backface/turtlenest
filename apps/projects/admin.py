@@ -17,6 +17,7 @@ class ProjectAdmin(admin.ModelAdmin):  # MarkdownxModelAdmin):
         "user",
         "tag_list",
         "is_public",
+        "is_published",
         "views",
         "date_created",
         "date_updated",

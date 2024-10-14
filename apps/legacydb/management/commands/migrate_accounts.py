@@ -44,10 +44,17 @@ def migrate_userdata():
             counter = (ii * 100 + i) + 1
             print(f"\r  .. {(progress):.1f}% ({counter})..", end="")
 
-            new_user, created = User.objects.get_or_create(username=person.username)
-            new_user.email = (
-                person.email if person.email else f"{person.username}@turtlestitch.org"
+
+            print(person.email, person.username)
+            new_user, created = User.objects.get_or_create(
+                username=person.username,
+                email=person.email.lower() if person.email else f"{person.username}@turtlestitch.org".lower()
             )
+
+            # new_user.email = (
+            #     person.email if person.email else f"{person.username}@turtlestitch.org"
+            # )
+
             new_user.password = "crypt$21$" + person.password
             new_user.date_joined = person.joined
             new_user.last_login = person.last_active
@@ -59,7 +66,8 @@ def migrate_userdata():
             new_user.is_mentor = person.is_teacher
 
             new_account, created = EmailAddress.objects.get_or_create(
-                user=new_user, email=new_user.email
+                user=new_user,
+                email=new_user.email
             )
             new_account.verified = person.confirmed
             new_account.primary = True

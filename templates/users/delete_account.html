@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load tailwind_filters crispy_forms_tags  %}
+{% block content %}
+
+<div class="my-10 mx-auto">
+
+    {% if done %}
+        <h2 class="text-5xl mb-10">Your Account Deletetion Request</h2>
+        <p>
+            Your account has been deactivated and your request will be reviewed by an Administrator.<br>
+            You will be notified via email when the review is complete and the account permanently deleted.<br>
+            If you have any questions, please contact us.<br>
+        </p>
+
+    {% else %}
+
+    <h2 class="text-5xl mb-10">Request Account Deletion</h2>
+
+    <form class="form max-w-[640px] text-left mx-auto" method="post" action="{% url 'users:delete_account' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            {{ form|crispy }}
+        </div>
+            <button class="danger">
+                <i class="icon--[fa-save]"></i> Delete my account
+            </button>
+        </div>
+    </form>
+
+    {% endif %}
+    
+</div>
+{% endblock %}

@@ -4,6 +4,9 @@
 
 
 @layer base {
+  *:not(button) a {
+    @apply hover:text-secondary
+  }
   body {
     @apply grid grid-cols-1 grid-rows-layout
   }      
@@ -31,6 +34,12 @@
   button {
     @apply bg-secondary hover:bg-primary text-white hover:text-white font-bold py-2 px-4 rounded my-2;
   }
+  button a {
+    @apply text-white;
+  }
+  button.danger {
+    @apply bg-red-500 hover:bg-red-900 text-white hover:text-white font-bold py-2 px-4 rounded my-2;
+  }
   textarea, input[type="text"] {
     @apply border border-gray-300 rounded;
   }
@@ -55,9 +64,7 @@
   label {
     @apply mr-2
   }
-  a {
-    @apply hover:text-secondary
-  }
+
 }
 
 

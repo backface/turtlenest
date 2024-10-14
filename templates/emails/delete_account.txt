@@ -1,0 +1,19 @@
+{% autoescape off %}Dear TurtleStitch Admin,
+
+There user  {{ request.user.username }} has requested to delete his account!
+
+Please check the user and delete it if necessary.
+
+User: {{ request.user.username }}
+Email: {{ request.user.email }}
+
+Userlink: {{ request.scheme }}://{{ request.get_host }}/user/{{ request.user.username }}
+
+--
+
+Your TurtleStitch Platform,
+Happy Stitching!
+http://www.turtlestitch.org
+
+
+{% endautoescape %}

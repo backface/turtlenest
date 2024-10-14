@@ -11,7 +11,6 @@ from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 from django.shortcuts import get_object_or_404
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-
 # from django.template.response import TemplateResponse
 # from django.views import View
 from django.template.loader import render_to_string
@@ -300,7 +299,7 @@ def trainer_request(request):
             )
             message.send()
             messages.success(request, _("Your trainer request has been sent."))
-            return redirect(request.META["HTTP_REFERER"])
+            return redirect("users:profile")
         else:
             messages.error(request, _("Please correct the following errors:"))
             return render(request, "classrooms/trainer_request.html", {"form": form})

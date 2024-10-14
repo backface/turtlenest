@@ -62,3 +62,7 @@ summary::marker {
   display:none;
   color: var(--primary);
 }
+
+button a:hover {
+  color: white
+}

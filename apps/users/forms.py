@@ -5,6 +5,7 @@ from allauth.account.forms import SignupForm
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Fieldset
 from crispy_tailwind.tailwind import CSSContainer
+from django.core.exceptions import ValidationError
 
 from .models import User
 
@@ -19,6 +20,13 @@ helper.css_container = CSSContainer(
         # "checkbox": "accent-primary mr-4 ml-1"
     }
 )
+
+def validate_confirmation(value):
+    if not value:
+        raise ValidationError(
+            _("You must agree to this!"),
+            params={"value": value},
+        )
 
 
 class TurtleStitchSignupForm(SignupForm):
@@ -76,3 +84,29 @@ class ProfileForm(forms.ModelForm):
         # self.helper.form_method = 'post'
         # self.helper.form_action = 'submit_survey'
         # self.helper.add_input(Submit('submit', 'Submit'))
+
+
+class AccountDeletionForm(forms.Form):
+    class Meta:
+        model = User
+
+    sure = forms.BooleanField(
+        label='Are you sure, you want to delete your account?', 
+        help_text='I confirm I want to delete my account and all associated data.',
+        required=True,
+        validators=[validate_confirmation]
+        )
+
+    email = forms.EmailField(
+        label="E-mail",
+        help_text='Please confirm and enter your e-mail address.',
+        required=True,
+    )  
+
+    password = forms.CharField(
+        widget=forms.PasswordInput,
+        label="Password",
+        help_text='Please confirm your password.',
+        required=True,
+    )    
+    

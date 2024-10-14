@@ -1,6 +1,6 @@
 {% autoescape off %}Dear TurtleStitch Admin,
 
-There is was a new trainer account request:
+There user  {{ request.user.username }} has requested to become a trainer.
 
 User: {{ request.user.username }}
 Full Name:  {{ trainer_request.full_name }}
