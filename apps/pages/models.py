@@ -31,9 +31,10 @@ class Page(models.Model):
         if self.slug == "":
             self.slug = slugify(self.title, allow_unicode=True)
         try:
-            Page.objects.get(slug=self.slug)
+            page = Page.objects.get(slug=self.slug)
             s = shortuuid.encode(uuid.uuid4())[:5]
-            self.slug = slugify(self.title, allow_unicode=True) + "-" + s
+            if page.id != self.id:
+                self.slug = slugify(self.title, allow_unicode=True) + "-" + s
         except Page.DoesNotExist:
             pass
 
