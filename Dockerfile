@@ -13,6 +13,7 @@ RUN --mount=type=cache,target=/var/cache/apt \
   
 RUN --mount=type=cache,target=/var/cache/apt \
   apt-get install -y \
+  build-essential \
   postgresql-client-common postgresql-client \
   gettext libpq-dev \
   libmaxminddb0 libmaxminddb-dev mmdb-bin
