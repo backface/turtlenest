@@ -26,18 +26,18 @@ class TurtleStitchSignupForm(SignupForm):
         model = User
 
     toc = forms.BooleanField(
-        label='Terms of Service', 
-        help_text='I have read and agree to the <a href="/page/tos" class="underline">Terms of Service</a>'
+        label='Terms of Service and Privacy Agreement', 
+        help_text='I have read and agree to the <a href="/page/tos">Terms of Service</a> and the \
+            <a href="/page/privacy">Privacy Policy</a>'
         )
-    dmca = forms.BooleanField(
-        label='DMCA Disclaimer', 
-        help_text='I have read and agree to the <a href="/page/dmca" class="underline">DMCA Disclaimer</a>'
-        )    
+    # dmca = forms.BooleanField(
+    #     label='DMCA Disclaimer', 
+    #     help_text='I have read and agree to the <a href="/page/dmca" class="underline">DMCA Disclaimer</a>'
+    #     )    
     age_confirm = forms.BooleanField(
-        label='Age and Privacy Policy',
-        help_text=mark_safe(_("By signing up, you confirm that you are at least 16 years old (or the minimum age required by your country’s laws) and consent to the processing of your personal \
-            data in accordance with our <a href=\"/page/privacy\" class=\"underline\">Privacy Policy</a>. \
-            If you are under the required age, a parent or legal guardian must create and manage the account on your behalf."))
+        label='Age confirmation',
+        help_text=mark_safe(_("I confirm that I am at least 16 years old, or I am being signed in by \
+            an adult or teacher who is supervising my use of Turtlestitch.org."))
     )
     # def save(self, user):
     #     user.gender = self.cleaned_data['gender']
