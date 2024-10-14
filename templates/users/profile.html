@@ -26,9 +26,11 @@
                 <a href="{% url 'account_change_password' %}">Change your password</a>
             </button>
 
+            {% if not user.is_teacher %}
             <button>
                 <a href="{% url 'groups:trainer_request' %}">Request Trainer Account</a>
             </button>
+            {% endif %}
         </div>
      
         <h2>Profile Info</h2>
