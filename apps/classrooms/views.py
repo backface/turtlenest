@@ -288,7 +288,10 @@ def trainer_request(request):
                 _("New Trainer Request!"),
                 render_to_string(
                     "emails/trainer_request.txt",
-                    {"trainer_request": trainer_request, "request": request},
+                    {
+                        "trainer_request": trainer_request, 
+                        "request": request
+                    },
                 ),
                 settings.EMAIL_FROM_ADDRESS,
                 request.user.get_superusers(),

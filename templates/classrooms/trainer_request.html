@@ -1,22 +1,23 @@
 {% extends 'base.html' %}
-
+{% load tailwind_filters crispy_forms_tags  %}
 {% block content %}
 
 <div class="my-10 mx-auto">
+
     <h2 class="text-5xl mb-10">Request Trainer Accesss</h2>
 
-    <form class="form" method="post" action="{% url 'classrooms:trainer_request' %}" enctype="multipart/form-data">{% csrf_token %}
+    <form class="form max-w-[640px] text-left mx-auto" method="post" action="{% url 'groups:trainer_request' %}" enctype="multipart/form-data">{% csrf_token %}
         <div class="form-group">
-            {{ form }}
+            {{ form|crispy }}
         </div>
-        <div><p>
+        <!-- <div><p>
             As a host of a group and regular registered user you have accepted our <a href="/tos">Terms of Service</a>
             It is in your responsibility that your group members follow this TOS during the period of this’ group’s activities. 
             If you are aware of offensive content in one of your member projects and you need help to handle it, 
             we are happy to assist. We reserve the right to revoke the shared status of anything that, in our sole judgment, 
             is offensive to our community standards. </p></div>
-        <div class="form-group">
-            <button class="btn btn-success">
+        <div class="form-group"> -->
+            <button class="">
                 <i class="icon--[fa-save]"></i> Save
             </button>
         </div>

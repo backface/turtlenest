@@ -32,8 +32,18 @@ class UnitForm(forms.ModelForm):
 
 
 class TrainerRequestForm(forms.ModelForm):
-    website = forms.CharField(validators=[URLValidator])
-    tos = forms.BooleanField(validators=[validate_tos])
+    website = forms.CharField(validators=[URLValidator])    
+    tos = forms.BooleanField(validators=[validate_tos], 
+        required=True,
+        label='I agree to the Terms of Service',
+        help_text='As a host of a group and regular registered user you have accepted our \
+        <a href="/page/tos"> Terms of Service</a> It is in your responsibility that your \
+        group members follow this TOS during the period of this’ group’s activities. \
+        If you are aware of offensive content in one of your member projects \
+        and you need help to handle it, we are happy to assist. \
+        We reserve the right to revoke the shared status of anything that, \
+        in our sole judgment, is offensive to our community standards.'
+    )
     referer = forms.CharField(widget=forms.HiddenInput(), required=False)
 
     class Meta:
