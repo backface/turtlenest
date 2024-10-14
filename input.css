@@ -155,3 +155,11 @@ nav .menu a {
 summary::marker {
   @apply hidden
 }
+
+input[type="checkbox"] {
+  @apply mr-0
+}
+
+form a {
+  @apply underline text-primary
+}

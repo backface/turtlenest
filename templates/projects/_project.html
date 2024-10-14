@@ -25,8 +25,9 @@
         {% endif %}
         <!-- <p class="text-slate-500">{{ project.date_created }}</p> -->
         <p class="text-xs text-slate-600">{{ project.date_updated|naturaltime }}</p>
-        {% if project.l2_distance %} <p class="text-xs text-slate-600">l2: {{ project.l2_distance }} </p> {% endif %}
-        {% if project.cos_distance %} <p class="text-xs text-slate-600">COS: {{ project.cos_distance }} </p> {% endif %}
+        {% if not project.is_public %}
+        <i class="ri:git-repository-private-line"></i>private
+        {% endif %}
     </div>
 
     

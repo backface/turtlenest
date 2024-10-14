@@ -231,14 +231,19 @@ MESSAGE_TAGS = {
 
 
 # Allauth settings
+# ----------------------------------------------------------
 
 ACCOUNT_EMAIL_REQUIRED = True
 # ACCOUNT_EMAIL_VERIFICATION = True
 SOCIALACCOUNT_EMAIL_VERIFICATION = "none"
 ACCOUNT_AUTHENTICATION_METHOD = "username_email"
+#ACCOUNT_SIGNUP_FORM_CLASS = "apps.users.forms.MySignupForm"
 ACCOUNT_EMAIL_SUBJECT_PREFIX = ""
 ACCOUNT_SESSION_REMEMBER = True
 ACCOUNT_CHANGE_EMAIL=True
+ACCOUNT_FORMS = {
+    'signup': 'apps.users.forms.TurtleStitchSignupForm',
+}
 
 LOGIN_REDIRECT_URL = "/myprojects"
 ACCOUNT_ADAPTER = "apps.users.allauth.AccountAdapter"
