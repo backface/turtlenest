@@ -59,7 +59,7 @@ def migrate_userdata():
             new_user.date_joined = person.joined
             new_user.last_login = person.last_active
             new_user.about = person.about
-            new_user.location = person.location
+            new_user.location = person.location.replace("Click to edit your location.", "")
             new_user.notify_comment = person.notify_comment
             new_user.notify_like = person.notify_like
             new_user.verified = person.confirmed

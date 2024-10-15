@@ -4976,6 +4976,10 @@ details.collapse summary::-webkit-details-marker {
   top: 1rem;
 }
 
+.left-0 {
+  left: 0px;
+}
+
 .z-\[1\] {
   z-index: 1;
 }
@@ -5785,6 +5789,11 @@ details.collapse summary::-webkit-details-marker {
   padding-bottom: 2rem;
 }
 
+.px-1 {
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
+}
+
 .pb-1 {
   padding-bottom: 0.25rem;
 }
@@ -6370,11 +6379,20 @@ form a {
   .md\:grid-cols-\[repeat\(auto-fit\2c _33\.3333\%\)\] {
     grid-template-columns: repeat(auto-fit, 33.3333%);
   }
+
+  .md\:text-center {
+    text-align: center;
+  }
 }
 
 @media (min-width: 1024px) {
   .lg\:order-none {
     order: 0;
+  }
+
+  .lg\:mx-10 {
+    margin-left: 2.5rem;
+    margin-right: 2.5rem;
   }
 
   .lg\:mt-0 {
@@ -6387,6 +6405,10 @@ form a {
 
   .lg\:mt-\[50px\] {
     margin-top: 50px;
+  }
+
+  .lg\:block {
+    display: block;
   }
 
   .lg\:inline {
@@ -6407,6 +6429,10 @@ form a {
 
   .lg\:w-2\/3 {
     width: 66.666667%;
+  }
+
+  .lg\:w-1\/3 {
+    width: 33.333333%;
   }
 
   .lg\:max-w-\[200px\] {
@@ -6454,6 +6480,10 @@ form a {
   .lg\:px-8 {
     padding-left: 2rem;
     padding-right: 2rem;
+  }
+
+  .lg\:pt-0 {
+    padding-top: 0px;
   }
 
   .lg\:text-left {

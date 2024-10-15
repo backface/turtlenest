@@ -1,13 +1,13 @@
 {% load static %}
 
-<footer class="relative lg:mt-24 py-8 text-left text-white border-black border-t bg-dark" >
+<footer class="relative lg:mt-24 py-8 px-4 text-left text-white border-black border-t bg-dark" >
   <div class="container mx-auto lg:grid lg:grid-cols-3">
     <div class="mx-10 md:mx-0 text-3xl">
       <img src="{% static 'img/turtle-b-on-w-on-b.png' %}" alt="TurtleStitch" width="54" height="54" />
       <a href="/" class="ml-2 font-medium">TurtleStitch</a>
     </div>
 
-    <div class="mx-10">
+    <div class="lg:mx-10 pt-4 lg:pt-0">
       <a href="/page/dmca">DMCA</a><br />
       <a href="/page/privacy"></a>Privacy</a><br />
       <a href="/page/tos">Terms of Service</a><br />
@@ -23,7 +23,7 @@
       </div>
     </div>
 
-    <div class="mx-10 relative">
+    <div class="lg:mx-10 relative pt-4 lg:pt-0">
       <a href="https://en.wikipedia.org/wiki/Turtlestitch">Wikipedia</a><br>
       
       <a href="/page/offlineuse">Offline Usage</a><br />
@@ -31,14 +31,14 @@
       <a class="custom-dbox-popup" href="https://donorbox.org/turtlestitch" target="_new">Donate!</a><br />
       <a href="/page/contact">Contact</a><br>	
 
-      <div class="award absolute rotate-[30deg] -top-[120px] -right-[30px]">
+      <div class="award absolute rotate-[30deg] -top-[120px] -right-[30px] hidden md:block">
         <a href="https://open-educational-resources.de/veranstaltungen/17/award/oer-award-2017-laudatio-bildungsbereich-great-wide-open/" title="OER-Award 2017">
           <img width="150" src="/static/img/badge_preistraeger_2017.png" alt="OER-Award 2017" title="OER-Award 2017">
         </a>
       </div>
     </div>
   </div>
-  <div class="text-xs text-slate-300 text-center mt-10">
+  <div class="text-xs text-slate-300 text-left md:text-center mt-10">
     &copy; 2014-2024 OSEDA -Verein zur Förderung von Open Source Software in Lehre, Gestaltung und Kunst
     / Association for Development of Open Source Software in Education, Design and Art
   </div>

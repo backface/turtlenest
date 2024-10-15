@@ -10,3 +10,7 @@ class PageAdmin(SummernoteModelAdmin):
         "title", "content", "last_editor.username"
     ]
     raw_id_fields = ["last_editor",]
+
+    def save_model(self, request, obj, form, change):
+        obj.last_editor = request.user
+        super().save_model(request, obj, form, change)

@@ -585,13 +585,13 @@ JAZZMIN_SETTINGS = {
     "navigation_expanded": True,
 
     # Hide these apps when generating side menu e.g (auth)
-    "hide_apps": ["legacydb", "auth", "wp_blog"],
+    "hide_apps": ["legacydb", "wp_blog", "socialaccount",],
 
     # Hide these models when generating side menu (e.g auth.user)
     "hide_models": [],
 
     # List of apps (and/or models) to base side menu ordering off of (does not need to contain all apps/models)
-    "order_with_respect_to": ["users", "auth", "pages", "projects"],
+    "order_with_respect_to": ["pages", "users", "projects", "classrooms", "taggit", "auth", "account", "django_summernote", ],
 
     # Custom links to append to app groups, keyed on app name
     # "custom_links": {

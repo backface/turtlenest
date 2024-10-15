@@ -66,3 +66,11 @@ summary::marker {
 button a:hover {
   color: white
 }
+
+.search button a {
+  color: var(--primary);
+}
+
+iframe { 
+  max-width: 100%;
+}
