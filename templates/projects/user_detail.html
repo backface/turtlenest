@@ -44,9 +44,19 @@
 <div class="my-14 mx-10">
     <h2>Projects</h2>
     <div>{{ projects.count }} public projects</div>
-    <div class="mt-4 container mx-auto grid grid-cols-[repeat(auto-fit,_16.666666%)] justify-center projects" >        
-        {% include "projects/_project_list.html" with page_obj=page_obj %}
+    <div class="mb-10">
+        <div class="container mx-auto 
+            sm:grid 
+            sm:grid-cols-[repeat(auto-fit,_50%)]
+            md:grid-cols-[repeat(auto-fit,_33.3333%)]
+            lg:grid-cols-[repeat(auto-fit,_25%)]
+            xl:grid-cols-[repeat(auto-fit,_16.666666%)]
+            justify-center projects" 
+        >        
+            {% include "projects/_project_list.html" with page_obj=page_obj %}
+        </div>
     </div>
+    
 </div>
 
 {% endblock %}
