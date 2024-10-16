@@ -37,7 +37,7 @@ class ProjectAdmin(admin.ModelAdmin):  # MarkdownxModelAdmin):
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ("name", "slug", "date_updated")
+    list_display = ("name", "slug", "date_updated", "order")
     search_fields = [
         "name",
     ]

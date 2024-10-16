@@ -222,13 +222,13 @@ class Category(models.Model):
     name = models.CharField(max_length=255)
     slug = models.CharField(max_length=255, unique=True, db_index=True)
     description = models.TextField(null=True, blank=True)
-
+    order = models.IntegerField(default=0)
     date_created = models.DateTimeField(default=timezone.now, editable=False)
     date_updated = models.DateTimeField(default=timezone.now, editable=False)
 
     class Meta:
         verbose_name_plural = "categories"
-        ordering = ["name"]
+        ordering = ["order", "name"]
 
     def save(self, *args, **kwargs):
         self.date_updated = timezone.now()
