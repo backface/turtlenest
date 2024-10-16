@@ -92,6 +92,7 @@ class UserAdmin(UserAdmin):
     )
     raw_id_fields = ("mentor",)
     inlines = (ProjectInline,)
+    ordering = ("-date_joined",)
 
     # def get_queryset(self, request):
     #     qs = super(UserAdmin, self).get_queryset(request)

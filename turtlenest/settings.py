@@ -243,6 +243,9 @@ MESSAGE_TAGS = {
     messages.ERROR: "alert alert-error",
 }
 
+MIGRATION_MODULES = {
+    'django_summernote': 'turtlenest.additional_migrations.django_summernote_migrations',
+}
 
 # Allauth settings
 # ----------------------------------------------------------
