@@ -403,14 +403,13 @@ TAGGIT_CASE_INSENSITIVE = True
 WAGTAIL_SITE_NAME = "TurtleStitch"
 WAGTAILADMIN_BASE_URL = "http://localhost:8000"
 
-
 ###################
 # Crispy setup
 ###################
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"
 CRISPY_TEMPLATE_PACK = "tailwind"
-CRISPY_CLASS_CONVERTERS = {"textinput": "border-gray-800"}
+CRISPY_CLASS_CONVERTERS = {"textinput": "border-gray-300"}
 
 ###################
 # Summernote

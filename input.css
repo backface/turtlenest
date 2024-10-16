@@ -101,11 +101,11 @@
 
 
 .toots {
-  @apply grid grid-cols-1 lg:grid-cols-3 gap-8
+  @apply grid grid-cols-1 lg:grid-cols-3 gap-4
 }
 
 .toot {
-  @apply border-t-4 border-primary pt-2 bg-white mx-2
+  @apply border-t-4 border-primary pt-2 bg-white mx-2 my-2
 }
 
 .toot .boost {
