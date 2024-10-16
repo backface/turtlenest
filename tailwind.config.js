@@ -43,7 +43,12 @@ module.exports = {
   // corePlugins: {
   //     preflight: false,
   // },  
+  darkMode: ['selector', '[data-mode="light"]'],
+  daisyui: {
+    themes: ["light"],
+  },
   theme: {
+    
     fontFamily: {
       //sans: ['Graphik', 'sans-serif'],
       //serif: ['Merriweather', 'serif'],
@@ -71,7 +76,8 @@ module.exports = {
       gridTemplateRows: {
         'layout': 'auto 1fr auto',
         'creation': '1fr 100px 1fr',
-      }      
+      },
+      
    }
   },
   plugins: [

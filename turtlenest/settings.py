@@ -108,7 +108,7 @@ INSTALLED_APPS = [
     "apps.content",
     "apps.legacydb",
 
-    "django_browser_reload",
+    #"django_browser_reload",
     "django_cleanup.apps.CleanupConfig",
 ]
 
