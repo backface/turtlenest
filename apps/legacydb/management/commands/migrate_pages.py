@@ -14,7 +14,7 @@ class Command(BaseCommand):
     def handle(self, **options):
         migrate_data()
         migrations.RunSQL(
-            'SELECT setval(pg_get_serial_sequence(\'"pages_page"\',\'id\'), coalesce(max("id"), 1), max("id") IS NOT null) FROM "pages_page";'
+            "SELECT setval(pg_get_serial_sequence('pages_page','id'), (select max(id) from classrooms_group) + 1);"
         )
 
 
