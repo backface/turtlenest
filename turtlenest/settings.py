@@ -59,18 +59,6 @@ INSTALLED_APPS = [
     # "grappelli",
 
     "jazzmin",
-    "wagtail.contrib.forms",
-    "wagtail.contrib.redirects",
-    "wagtail.embeds",
-    "wagtail.sites",
-    "wagtail.users",
-    "wagtail.snippets",
-    "wagtail.documents",
-    "wagtail.images",
-    "wagtail.search",
-    "wagtail.admin",
-    "wagtail",
-    "modelcluster",
 
     "taggit",
 
@@ -104,8 +92,8 @@ INSTALLED_APPS = [
     "apps.projects",
     "apps.pages",
     "apps.classrooms.apps.ClassroomsConfig",
-    "apps.wp_blog",
-    "apps.content",
+    #"apps.wp_blog",
+    #"apps.content",
     "apps.legacydb",
 
     #"django_browser_reload",
@@ -124,7 +112,7 @@ MIDDLEWARE = [
     "django_browser_reload.middleware.BrowserReloadMiddleware",
     "django_htmx.middleware.HtmxMiddleware",
     "turtlenest.middleware.HtmxMessageMiddleware",
-    "wagtail.contrib.redirects.middleware.RedirectMiddleware",
+    # "wagtail.contrib.redirects.middleware.RedirectMiddleware",
     "hijack.middleware.HijackUserMiddleware",
     "allauth.account.middleware.AccountMiddleware",
 ]
@@ -403,8 +391,8 @@ TAGGIT_CASE_INSENSITIVE = True
 # Wagtail setup
 ###################
 
-WAGTAIL_SITE_NAME = "TurtleStitch"
-WAGTAILADMIN_BASE_URL = "http://localhost:8000"
+# WAGTAIL_SITE_NAME = "TurtleStitch"
+# WAGTAILADMIN_BASE_URL = "http://localhost:8000"
 
 ###################
 # Crispy setup

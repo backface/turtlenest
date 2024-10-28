@@ -9,7 +9,7 @@
         {% if tags %}
         {% for tag in tags %}
             <div class="mt-4">
-                <h3><a href="{% url 'blog:tag' tag.id %}">{{ tag.name }}</a></h3> 
+                <h3><a href="{% url 'blog:tag' tag.slug %}">{{ tag.name }}</a></h3> 
             </div>
         {% endfor %}
         {% else %}

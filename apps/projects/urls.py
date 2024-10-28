@@ -9,16 +9,25 @@ urlpatterns = [
     path("run", views.run, name="run"),
     path("categories", views.category_list, name="categories"),
     path("categories/<str:collection>", views.category_list, name="categories"),
-    path("projects", views.list, name="list"),
+
+    
+    
     path("myprojects", views.my_projects, name="my_projects"),
+    
     path("stats", views.stats, name="stats"),
+    
+   
     path("search", views.search),
     path("search/<str:target>/", views.search, name="search"),
+
+    path("users/search", views.search, { "target": "users"}),
     path(
         "users/<str:username>/projects/<path:projectname>", views.detail, name="detail"
     ),  # old style
     path("user/<str:username>", views.user_detail, name="user_detail"),
     path("users/<str:username>", views.user_detail),
+    
+
     path("project/<int:id>", views.detail_by_id, name="detail_by_id"),
     path("project/stats/<int:id>", views.project_stats, name="project_stats"),
     path("project/edit/<int:id>", views.edit, name="edit"),
@@ -37,6 +46,9 @@ urlpatterns = [
     path("project/<int:id>/share", views.share_project, name="share"),
     path("project/<int:id>/unshare", views.unshare_project, name="unshare"),
     path("project/comment/delete/<id>", views.delete_comment, name="delete_comment"),
+    
+    path("projects", views.list, name="list"),
+    path("projects/search", views.search),
     path("projects/g/<str:collection>", views.collection_redirect),
     path("projects/tag/<str:tag>", views.list_by_tag, name="list_by_tag"),
     path("projects/tags", views.tags, name="list_tags"),
@@ -44,6 +56,7 @@ urlpatterns = [
     path("projects/<str:collection>", views.collection, name="collection"),
     path("projects/<str:collection>/<str:arg>", views.collection, name="collection"),
     path("myprojects/tags", views.tags, {"mine": True}, name="mycollection"),
+    
     path("myprojects/tags/<str:collection>", views.tags, name="list_tags"),
     path(
         "myprojects/tag/<str:tag>",

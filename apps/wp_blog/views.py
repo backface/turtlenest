@@ -1,8 +1,9 @@
 from django.shortcuts import get_object_or_404
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
+from django.shortcuts import get_object_or_404, render, redirect
 
-from .models import Post, Tag
+from .models import Post, Tag, Category
 
 # def list(request):
 #     url = settings.WORDPRESS_API + '/posts'
@@ -22,6 +23,17 @@ from .models import Post, Tag
 def index(request):
     return list(request)
 
+def tag_list(request):
+    tags = Post.tags.all()
+    print(tags)
+    return render(request, 'blog/blog_tags.html', {'tags': tags})
+    
+def category_list(request):
+    categories = Category.objects.all()
+    print(categories)
+    return render(request, 'blog/blog_categories.html', {'categories': categories})
+    
+
 
 class BlogDetailView(DetailView):
     model = Post
@@ -37,10 +49,6 @@ class BlogListView(ListView):
     #     return Post.objects.filter(members=self.request.user)
 
 
-class TagListView(DetailView):
-    model = Tag
-    template_name = "blog/tag_list.html"
-
 
 class TagPostListView(ListView):
     template_name = "blog/blog_list.html"
@@ -54,6 +62,18 @@ class TagPostListView(ListView):
         self.tag = get_object_or_404(Tag, slug=self.kwargs["tag"])
         return Post.objects.filter(tags__slug__in=[self.kwargs["tag"]])
 
+
+class CategoryPostListView(ListView):
+    template_name = "blog/blog_list.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["tag"] = self.category
+        return context
+
+    def get_queryset(self):
+        self.category = get_object_or_404(Category, slug=self.kwargs["category"])
+        return Post.objects.filter(category__slug__in=[self.kwargs["category"]])
 
 # def list(request, tag=0):
 #     if tag:

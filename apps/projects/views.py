@@ -5,7 +5,7 @@ from django.core.files.base import ContentFile
 from django.core.exceptions import PermissionDenied
 from django.utils import timezone
 from django.shortcuts import get_object_or_404, render, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.decorators import login_required
@@ -93,6 +93,11 @@ def collection(request, collection="newest", mine=False, arg=None):
     """returns a collection of projects"""
     arg_str = arg or ""
 
+    collections = COLLECTIONS + PRIVATE_COLLECTIONS if mine else COLLECTIONS
+
+    if collection not in collections:
+        raise Http404("Collection not found")
+    
     # pre-filter
     if mine:
         if request.user.is_authenticated:
