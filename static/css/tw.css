@@ -4806,10 +4806,6 @@ details.collapse summary::-webkit-details-marker {
   width: 100%;
 }
 
-.w-1\/2 {
-  width: 50%;
-}
-
 .max-w-\[640px\] {
   max-width: 640px;
 }
@@ -5324,10 +5320,6 @@ details.collapse summary::-webkit-details-marker {
   padding-top: 2rem;
 }
 
-.pb-6 {
-  padding-bottom: 1.5rem;
-}
-
 .text-left {
   text-align: left;
 }
@@ -5758,6 +5750,8 @@ form a {
 }
 
 .announcement a {
+  --tw-text-opacity: 1;
+  color: rgb(89 179 95 / var(--tw-text-opacity));
   text-decoration-line: underline;
 }
 
