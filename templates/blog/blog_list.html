@@ -10,6 +10,10 @@
     <p class="text-2xl mb-10">
         tagged with {{tag.name }} 
     </p>
+    {% elif category %}
+    <p class="text-2xl mb-10">
+        Category: {{category.name }} 
+    </p>
     {% else %}
     <p class="text-2xl mb-10">
         Ideas and descriptions about physical creations.

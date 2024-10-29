@@ -4806,6 +4806,10 @@ details.collapse summary::-webkit-details-marker {
   width: 100%;
 }
 
+.w-1\/2 {
+  width: 50%;
+}
+
 .max-w-\[640px\] {
   max-width: 640px;
 }
@@ -5970,6 +5974,10 @@ form a {
 }
 
 @media (min-width: 1280px) {
+  .xl\:w-1\/2 {
+    width: 50%;
+  }
+
   .xl\:grid-cols-6 {
     grid-template-columns: repeat(6, minmax(0, 1fr));
   }

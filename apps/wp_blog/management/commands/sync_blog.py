@@ -120,3 +120,8 @@ def sync_posts():
             for tag_id in obj["tags"]:
                 tag = Tag.objects.get(id=tag_id)
                 post.tags.add(tag.name)
+
+            post.categories.clear()
+            for cat_id in obj["categories"]:
+                cat = Category.objects.get(id=cat_id)
+                post.categories.add(cat.id)

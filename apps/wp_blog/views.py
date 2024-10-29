@@ -3,7 +3,7 @@ from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 from django.shortcuts import get_object_or_404, render, redirect
 
-from .models import Post, Tag, Category
+from .models import Post, Tag, Category, Author
 
 # def list(request):
 #     url = settings.WORDPRESS_API + '/posts'
@@ -48,6 +48,10 @@ class BlogListView(ListView):
     # def get_queryset(self):
     #     return Post.objects.filter(members=self.request.user)
 
+class AuthorListView(ListView):
+    model = Author
+    paginate_by = 9
+    template_name = "blog/blog_authors.html"
 
 
 class TagPostListView(ListView):
@@ -73,7 +77,7 @@ class CategoryPostListView(ListView):
 
     def get_queryset(self):
         self.category = get_object_or_404(Category, slug=self.kwargs["category"])
-        return Post.objects.filter(category__slug__in=[self.kwargs["category"]])
+        return Post.objects.filter(categories__slug__in=[self.kwargs["category"]])
 
 # def list(request, tag=0):
 #     if tag:

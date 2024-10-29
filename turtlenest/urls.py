@@ -59,7 +59,7 @@ urlpatterns = [
     path("group/", include("apps.classrooms.urls")),
     path("mygroups", GroupListView.as_view(), name="my_groups"),
     
-    # path("make/", include("apps.wp_blog.urls")),
+    path("make/", include("apps.wp_blog.urls")),
     
     path("tos", RedirectView.as_view(url="/page/tos")),
     path("", include("apps.projects.urls")),

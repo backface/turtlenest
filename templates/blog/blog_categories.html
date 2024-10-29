@@ -10,7 +10,7 @@
         {% if categories %}
         {% for category in categories %}
             <div class="mt-4">
-                <h2><a href="{% url 'blog:category' category.slug %}">{{ category }}</a></h2> 
+                <h2><a href="{% url 'blog:category' category.name %}">{{ category }}</a></h2> 
             </div>
         {% endfor %}
         {% else %}

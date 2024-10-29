@@ -3,17 +3,17 @@
 {% block content %}
 
 <div class="my-10 mx-auto">
-    <h2 class="text-5xl mb-10">Blog tags</h2>
+    <h2 class="text-5xl mb-10">Blog Authors</h2>
 
     <div class="container mx-auto" >
-        {% if tags %}
-        {% for tag in tags %}
+        {% if author_list %}
+        {% for author in author_list %}
             <div class="mt-2">                
-                <a href="{% url 'blog:tag' tag.slug %}">{{ tag.name }}</a>
+                <a href="">{{ author.name }}</a>
             </div>
         {% endfor %}
         {% else %}
-            <p>No tags are available.</p>
+            <p>No authors are available.</p>
         {% endif %}
     </div>
 

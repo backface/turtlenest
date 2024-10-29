@@ -5,24 +5,6 @@
 <div class="container mx-auto my-16 blog">
     <h2 class="text-5xl mb-8">{{ post.title }}</h2>
 
-    {% if post.tags.all %}
-    <div class="my-8">
-        tagged with: 
-        {% for tag in post.tags.all %}
-            <a href="{% url 'blog:tag' tag.slug %}" class="text-primary">{{ tag.name}}</a> &nbsp;&nbsp;
-        {% endfor %}
-    </div>
-    {% endif %}
-
-    {% if post.categorgy.all %}
-    <div class="my-8">
-        tagged with: 
-        {% for tag in post.tags.all %}
-            <a href="{% url 'blog:tag' tag.slug %}" class="text-primary">{{ tag.name}}</a> &nbsp;&nbsp;
-        {% endfor %}
-    </div>
-    {% endif %}
-
     <div class="text-xl mb-4">
         {{ post.modified }}
     </div>
@@ -33,7 +15,26 @@
     </div>
     {% endif %}
 
-    <div class="mt-12 pt-8 border-t border-primary-500 text-left">
+    {% if post.tags.all or post.catefories.all %}
+    <div class="my-8">
+        {% if post.tags.all %}
+            Tags: 
+            {% for tag in post.tags.all %}
+                <a href="{% url 'blog:tag' tag.slug %}" class="text-primary">{{ tag.name}}</a>{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+             <br>
+        {% endif %}
+        {% if post.categories.all %}
+            Categories: 
+            {% for tag in post.categories.all %}
+                <a href="{% url 'blog:category' tag.slug %}" class="text-primary">{{ tag.name}}</a>{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+        {% endif %}
+    </div>
+    {% endif %}
+
+
+    <div class="container mx-auto mt-12 pt-8 border-t border-primary-500 text-left xl:w-1/2">
         {{ post.content|safe}} 
     </div>
 

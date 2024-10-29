@@ -39,6 +39,8 @@ class Post(models.Model):
     featured_media = models.ForeignKey("Media", on_delete=models.SET_NULL, null=True)
     author = models.ForeignKey("Author", on_delete=models.SET_NULL, null=True)
 
+
+    categories = models.ManyToManyField("Category")
     tags = TaggableManager(blank=True)
 
     def __str__(self):
