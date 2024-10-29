@@ -4547,11 +4547,6 @@ details.collapse summary::-webkit-details-marker {
   margin-bottom: 4rem;
 }
 
-.my-2 {
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
-}
-
 .my-4 {
   margin-top: 1rem;
   margin-bottom: 1rem;
@@ -5244,11 +5239,6 @@ details.collapse summary::-webkit-details-marker {
   padding-bottom: 0.75rem;
 }
 
-.py-4 {
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-}
-
 .py-8 {
   padding-top: 2rem;
   padding-bottom: 2rem;
@@ -5314,10 +5304,6 @@ details.collapse summary::-webkit-details-marker {
   padding-top: 3rem;
 }
 
-.pt-16 {
-  padding-top: 4rem;
-}
-
 .pt-3 {
   padding-top: 0.75rem;
 }
@@ -5332,6 +5318,10 @@ details.collapse summary::-webkit-details-marker {
 
 .pt-8 {
   padding-top: 2rem;
+}
+
+.pb-6 {
+  padding-bottom: 1.5rem;
 }
 
 .text-left {
@@ -5419,28 +5409,12 @@ details.collapse summary::-webkit-details-marker {
   font-style: italic;
 }
 
-.leading-normal {
-  line-height: 1.5;
-}
-
-.leading-4 {
-  line-height: 1rem;
-}
-
-.leading-10 {
-  line-height: 2.5rem;
-}
-
-.leading-8 {
-  line-height: 2rem;
-}
-
-.leading-6 {
-  line-height: 1.5rem;
-}
-
 .leading-7 {
   line-height: 1.75rem;
+}
+
+.leading-normal {
+  line-height: 1.5;
 }
 
 .text-black {
@@ -5777,6 +5751,10 @@ form a {
 .announcement b {
   font-weight: 700;
   font-variation-settings: 'wght' 700;
+}
+
+.announcement a {
+  text-decoration-line: underline;
 }
 
 .hover\:cursor-pointer:hover {

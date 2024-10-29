@@ -174,3 +174,6 @@ form a {
 .announcement b  {
   @apply font-bold;
 }
+.announcement a  {
+  @apply underline;
+}
