@@ -28,7 +28,7 @@ celerybeat-schedule
 .Python build/
 develop-eggs/
 dist/
-downloads/
+# downloads/
 eggs/
 .eggs/
 lib/
