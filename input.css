@@ -170,3 +170,7 @@ input[type="checkbox"] {
 form a {
   @apply underline text-primary
 }
+
+.announcement b  {
+  @apply font-bold;
+}

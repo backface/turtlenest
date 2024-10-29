@@ -71,6 +71,12 @@ button a:hover {
   color: var(--primary);
 }
 
+
+.search button:hover a {
+  color: white;
+}
+
+
 iframe { 
   max-width: 100%;
 }

@@ -22,6 +22,7 @@ from django.views.decorators.cache import cache_page
 from pgvector.django import L2Distance, CosineDistance
 from bs4 import BeautifulSoup
 
+from apps.pages.models import Page
 from apps.users.models import User
 from apps.classrooms.models import Group
 from .models import (
@@ -65,11 +66,16 @@ PRIVATE_COLLECTIONS = [
 # @cache_page(60 * 15)
 def index(request):
     featured = Project.objects.filter(categories__slug__in=["featured"]).order_by("?")
+    try:
+        announcement = Page.objects.get(slug='announcement')
+    except Page.DoesNotExist:
+        announcement = None
+        pass
     if featured:
         featured = featured[0]
     else:
         featured = None
-    return render(request, "index.html", {"featured": featured})
+    return render(request, "index.html", {"featured": featured, "announcement": announcement})
 
 
 def list(request):

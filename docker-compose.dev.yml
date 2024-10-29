@@ -27,14 +27,14 @@ services:
       - "5432:5432"
 
   django:
-    command: >
-      gunicorn -b 0.0.0.0:$PORT
-       --access-logfile -        
-       --reload
-       --workers 2
-       --timeout $TIMEOUT
-       turtlenest.wsgi:application  
-    #command: python manage.py runserver 
+    # command: >
+    #   gunicorn -b 0.0.0.0:$PORT
+    #    --access-logfile -        
+    #    --reload
+    #    --workers 2
+    #    --timeout $TIMEOUT
+    #    turtlenest.wsgi:application  
+    command: python manage.py runserver 0.0.0.0:8000 
     volumes:
       - ./:/app
     ports:
