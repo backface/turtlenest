@@ -5,21 +5,17 @@ services:
     restart: unless-stopped
     
   db:
-    #image: postgres:16
     image: pgvector/pgvector:pg16
     env_file:
       - '.env'
     volumes:
       - ${APP_DATA_DIR?./app-data}/postgres-data:/var/lib/postgresql/data/
-      # - ./postgres-init:/docker-entrypoint-initdb.d/
     healthcheck:
       test: pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}
       interval: 30s
       retries: 10
       start_period: 10s
     restart: unless-stopped
-    #depends_on:
-    #  - legacy-db    
 
   legacy-db:
     image: postgres:16    
@@ -36,7 +32,7 @@ services:
     restart: unless-stopped
 
   django:
-    image: backface/turtlenest:0.2
+    image: backface/turtlenest:latest
     build:
       context:  ./
       dockerfile: Dockerfile
@@ -74,59 +70,6 @@ services:
       caddy.1_handle.5_file_server: ""
       caddy.2_handle.0_reverse_proxy: "{{upstreams 8000}}"
 
-
-  # redis:
-  #   image: redis:7-alpine 
-  #   volumes:
-  #     - redis-data:/data
-  #   healthcheck:
-  #     test: redis-cli ping | grep PONG
-  #     interval: 30s
-  #     retries: 10
-  #   restart: unless-stopped
-
-  # celery:
-  #   image: backface/turtlenest:latest
-  #   build:
-  #     context:  ./
-  #     dockerfile: Dockerfile
-  #   entrypoint: celery -A turtlenest worker -l INFO --beat --concurrency 2
-  #   volumes:
-  #     - ./:/app
-  #   env_file:
-  #     - ./.env
-  #   depends_on:
-  #     db:
-  #       condition: service_healthy
-  #     redis:
-  #       condition: service_healthy
-  #   restart: unless-stopped
-
-  # flower:
-  #   image: mher/flower:2.0
-  #   container_name: flower
-  #   command: celery flower --persisten=True
-  #   env_file:
-  #     - ./.env
-  #   ports:
-  #     - 8888:8888 # docker will expose this ports
-  #   volumes:
-  #    - APP_DATA_DIR/flower-data:/data 
-  #   restart: unless-stopped       
-
-  # memcached:
-  #   image: memcached:1.6-alpine
-  #   restart: unless-stopped
-  #   healthcheck:
-  #     test: echo "version" | nc -vn -w 1 127.0.0.1 11211
-  #     interval: 5s
-  #     retries: 10    
-  #     start_period: 20s
-
-#volumes:
-#  caddy_data:
-#   # redis-data:
-#   # flower-data:
 
 networks:
   public_proxy:

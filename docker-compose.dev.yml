@@ -20,6 +20,11 @@ services:
     labels:
       caddy.log: ""
       caddy.log.output: "file ${APP_DATA_DIR?./app-data}/logs/access.log"
+    # extra_hosts: #only for docker!
+    # - "host.docker.internal:host-gateway" 
+    # ports: !override
+    #  - 8080:80
+    #  - 4433:443
 
   db:
     restart: "no"
@@ -42,21 +47,53 @@ services:
     labels:
       caddy: ${DOMAIN} http://${DOMAIN}      
 
-
-
- # caddy:
- #   extra_hosts: #only for docker!
- #     - "host.docker.internal:host-gateway" 
-    #ports: !override
-    #  - 8080:80
-    #  - 4433:443
-
   # flower:
   #   ports:
   #     - 8888:8888 # docker will expose this ports
 
+# redis:
+  #   image: redis:7-alpine 
+  #   volumes:
+  #     - redis-data:/data
+  #   healthcheck:
+  #     test: redis-cli ping | grep PONG
+  #     interval: 30s
+  #     retries: 10
+  #   restart: unless-stopped
+
+  # celery:
+  #   image: backface/turtlenest:latest
+  #   build:
+  #     context:  ./
+  #     dockerfile: Dockerfile
+  #   entrypoint: celery -A turtlenest worker -l INFO --beat --concurrency 2
+  #   volumes:
+  #     - ./:/app
+  #   env_file:
+  #     - ./.env
+  #   depends_on:
+  #     db:
+  #       condition: service_healthy
+  #     redis:
+  #       condition: service_healthy
+  #   restart: unless-stopped
+
+  # flower:
+  #   image: mher/flower:2.0
+  #   container_name: flower
+  #   command: celery flower --persisten=True
+  #   env_file:
+  #     - ./.env
+  #   ports:
+  #     - 8888:8888 # docker will expose this ports
+  #   volumes:
+  #    - APP_DATA_DIR/flower-data:/data 
+  #   restart: unless-stopped       
+
 volumes:
   caddy_data:
+#   redis-data:
+#   flower-data:
 
 networks:
   public_proxy:
