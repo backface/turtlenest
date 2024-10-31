@@ -156,7 +156,7 @@
 
 <div class="container mx-auto text-center my-8 px-4">
     <h2>Featured</h2>
-    <div class="mb-10">
+    <div class="mb-12">
         <div class="container mx-auto 
             sm:grid 
             sm:grid-cols-[repeat(auto-fit,_50%)]
@@ -167,13 +167,16 @@
         > 
             {% render_collection "featured" %}
         </div>
+        <a href="/projects/featured" class="">
+            <button>View all featured projects</button>
+        </a>
     </div>
 </div>
 
 
 <div class="container mx-auto text-center my-8 px-4">
     <h2>Latest</h2>
-    <div class="mb-10">
+    <div class="mb-12">
         <div class="container mx-auto 
             sm:grid 
             sm:grid-cols-[repeat(auto-fit,_50%)]
@@ -184,7 +187,11 @@
         > 
             {% render_collection "newest" %}
         </div>
+        <a href="/projects/newest" class="">
+            <button>View all latest projects</button>
+        </a>
     </div>
+    
 </div>
 
 <!-- <div class="bg-slate-100 text-left pt-6 pb-12">
@@ -371,7 +378,7 @@
 
 <div class="bg-light py-16 pb-24">
    
-    <div class="container mx-auto px-4 text-left text-sm">
+    <div class="container mx-auto px-4 text-left text-sm h-max-500px">
         <h2 class="mb-8 px-2">Follow us into the Fediverse...</h2>
         <a class="mastodon-feed"
         href="https://fosstodon.org/@turtlestitch"

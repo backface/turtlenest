@@ -10,6 +10,9 @@
 .toot {
   border-bottom: 1px solid #ccc;
   padding: 1rem;
+  max-height: 620px;
+  overflow-y: scroll;
+  
 }
 
 /* Posting user. */
@@ -100,7 +103,7 @@
 .toot .attachment {
   display: block;
   width: 100%;
-  aspect-ratio: 16 / 9;
+  /* aspect-ratio: 16 / 9; */
   border-radius: 4px;
 }
 
