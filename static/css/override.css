@@ -44,9 +44,7 @@ svg:hover .st0 {fill: var(--secondary);}
 svg:hover .st1 {fill: var(--tertiary);}
 svg:hover .st2 {fill: var(--secondary);}
 
-.djhj-button  {
-  color:black
-}
+.djhj-button  {   color:black }
 
 .page a { text-decoration: underline; color: var(--tertiary)}
 .page a:hover { color: var(--primary);}
@@ -71,11 +69,9 @@ button a:hover {
   color: var(--primary);
 }
 
-
 .search button:hover a {
   color: white;
 }
-
 
 iframe { 
   max-width: 100%;

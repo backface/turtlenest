@@ -6,6 +6,8 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from apps.projects.models import Project
 from apps.classrooms.models import Group, SelectedProject
 from allauth.account.models import EmailAddress
+
+
 User = get_user_model()
 
 class APITestCase(TestCase):

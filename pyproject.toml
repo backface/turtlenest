@@ -1,64 +1,46 @@
-[tool.poetry]
+[project]
 name = "turtlenest"
 version = "0.1.0"
-description = ""
-authors = ["Michael <m@ash.to>"]
+description = "Add your description here"
 readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "beautifulsoup4>=4.12.3",
+    "celery>=5.4.0",
+    "crispy-tailwind>=1.0.3",
+    "django-allauth[socialaccount]>=65.1.0",
+    "django-browser-reload>=1.17.0",
+    "django-cleanup>=9.0.0",
+    "django-cors-headers>=4.6.0",
+    "django-crispy-forms>=2.3",
+    "django-debug-toolbar>=4.4.6",
+    "django-extensions>=3.2.3",
+    "django-filter>=24.3",
+    "django-hijack>=3.7.0",
+    "django-htmx>=1.21.0",
+    "django-jazzmin>=3.0.1",
+    "django-markdownx>=4.0.7",
+    "django-markup>=1.9",
+    "django-ninja>=1.3.0",
+    "django-ratelimit>=4.1.0",
+    "django-summernote>=0.8.20.0",
+    "django-taggit>=6.1.0",
+    "django-tailwind>=3.8.0",
+    "django-template-partials>=24.4",
+    "django>=5.1.2",
+    "fastembed>=0.4.1",
+    "gunicorn>=23.0.0",
+    "lxml>=5.3.0",
+    "pgvector>=0.3.6",
+    "psycopg>=3.2.3",
+    "pymemcache>=4.0.0",
+    "requests>=2.32.3",
+    "sentry-sdk>=2.17.0",
+    "shortuuid>=1.0.13",
+    "whitenoise>=6.8.2",
+]
 
-[tool.poetry.dependencies]
-python = ">=3.11,<3.13"
-django = "5.1.2"
-psycopg = {extras = ["binary"], version = "^3.2.3"}
-pgvector = "^0.3.5"
-gunicorn = "^23.0.0"
-uvicorn = {extras = ["standard"], version = "^0.31.0"}
-whitenoise = {extras = ["brotli"], version = "^6.7.0"}
-celery = "^5.4.0"
-celery-progress = "^0.4"
-flower = "^2.0.1"
-redis = "^5.1.1"
-django-extensions = "^3.2.3"
-django-allauth = "^64.1.0"
-django-hijack = "^3.6.1"
-django-cors-headers = "^4.4.0"
-django-markup = "^1.9"
-django-storages = "^1.14.4"
-django-filter = "^24.3"
-django-ninja = "^1.3.0"
-django-taggit = "^5.0.1"
-django-cleanup = "^9.0.0"
-django-ratelimit = "^4.1.0"
-django-markdownx = "^4.0.7"
-django-htmx = "^1.19.0"
-django-tailwind = "^3.8.0"
-django-crispy-forms = "^2.3"
-crispy-tailwind = "^1.0.3"
-sentry-sdk = "^2.16.0"
-pillow = "^10.4.0"
-requests = "^2.32.3"
-shortuuid = "^1.0.13"
-markdown = "^3.7"
-beautifulsoup4 = "^4.12.3"
-lxml = "^5.2.1"
-geoip2 = "^4.8.0"
-tqdm = "^4.66.5"
-better-profanity = "^0.7.0"
-fastembed = "0.3.6"
-ollama = "^0.3.3"
-django-browser-reload = "^1.15.0"
-django-debug-toolbar = "^4.3.0"
-django-template-partials = "^24.4"
-numpy = "<2"
-pymemcache = "^4.0.0"
-jwt = "^1.3.1"
-django-jazzmin = "^3.0.1"
-django-summernote = "^0.8.20.0"
-
-[tool.poetry.group.dev.dependencies]
-ruff = "^0.4.2"
-pre-commit = "^3.7.0"
-
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+[tool.uv]
+dev-dependencies = [
+    "ruff>=0.7.1",
+]

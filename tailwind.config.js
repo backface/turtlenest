@@ -9,7 +9,7 @@ const { spawnSync } = require('child_process');
 
 // Function to execute the Django management command and capture its output
 const getTemplateFiles = () => {
-  const command = 'poetry'; // Requires virtualenv to be activated.
+  const command = 'uv'; // Requires virtualenv to be activated.
   const args = ['run', 'python', 'manage.py', 'list_templates']; // Requires cwd to be set.
   const options = { cwd: projectRoot };
   const result = spawnSync(command, args, options);

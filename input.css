@@ -64,7 +64,12 @@
   label {
     @apply mr-2
   }
-
+  input[type="radio"] {
+    @apply appearance-auto
+  }
+  .messages {
+    @apply my-1
+  }  
 }
 
 

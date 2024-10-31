@@ -19,22 +19,20 @@ from django.contrib import messages
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get(
-    "SECRET_KEY", "django-insecure-n1q(gkmgn8unzo4vwvkko))uqa!p907-8gyeek@f6otn5i4+py"
-)
+SECRET_KEY = os.environ.get("SECRET_KEY", "django-insecure-n1q(gkmgn8unzo4vwvkko))uqa!p907-8gyeek@f6otn5i4+py")
+DEBUG = os.environ.get("DEBUG", "").upper() == "TRUE"
+ENABLE_DEBUG_TOOLBAR = True
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get("DEBUG", False)
 TESTING = "test" in sys.argv
 
 # APPEND_SLASH = False
 
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", ["*"])
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "*").split(" ")
+CORS_ALLOWED_ORIGINS = []
 CORS_ALLOWED_ORIGINS = []
 CSRF_TRUSTED_ORIGINS = [
     "https://turtlestitch.org",
@@ -43,8 +41,7 @@ CSRF_TRUSTED_ORIGINS = [
     "https://localhost",
 ]
 INTERNAL_IPS = ["127.0.0.1", "172.20.0.1"]
-
-ENABLE_DEBUG_TOOLBAR = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # secure defaults
 SESSION_COOKIE_SECURE = True
@@ -106,7 +103,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "django_browser_reload.middleware.BrowserReloadMiddleware",
+    #"django_browser_reload.middleware.BrowserReloadMiddleware",
     "django_htmx.middleware.HtmxMiddleware",
     "turtlenest.middleware.HtmxMessageMiddleware",
     # "wagtail.contrib.redirects.middleware.RedirectMiddleware",
@@ -427,6 +424,7 @@ SUMMERNOTE_CONFIG = {
 
 
 TEXT_EMBEDDING_MODEL = "BAAI/bge-small-en-v1.5"
+
 # BAAI/bge-small-en-v1.5
 # BAAI/bge-small-en
 # "sentence-transformers/all-MiniLM-L6-v2"
@@ -439,7 +437,12 @@ TEXT_EMBEDDING_MODEL = "BAAI/bge-small-en-v1.5"
 
 SYNC_NOTES_ON_SAVE = True
 
-WORDPRESS_API = "https://make.turtlestitch.org/wp-json/wp/v2"
+###################
+# Turtlenest specific settings
+###################
+
+
+WORDPRESS_API = os.environ.get("WORDPRESS_API","")
 
 
 ###################
@@ -454,7 +457,8 @@ if SENTRY_DSN:
     from sentry_sdk.integrations.django import DjangoIntegration
 
     sentry_sdk.init(
-        dsn=SENTRY_DSN, integrations=[DjangoIntegration()], environment=ENVIRONMENT
+        dsn=SENTRY_DSN, integrations=[DjangoIntegration()], 
+        environment=ENVIRONMENT
     )
 
 

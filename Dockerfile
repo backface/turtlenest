@@ -25,20 +25,21 @@ RUN apt-get clean && apt-get autoremove -y && rm -rf /var/cache/apt
 RUN mkdir /app
 WORKDIR /app
 
-# install python dependencies
-ENV POETRY_NO_INTERACTION=1 \
-  POETRY_VIRTUALENVS_IN_PROJECT=0 \
-  POETRY_VIRTUALENVS_CREATE=0 \
-  POETRY_CACHE_DIR=/tmp/poetry_cache
+# # install python dependencies
+# ENV POETRY_NO_INTERACTION=1 \
+#   POETRY_VIRTUALENVS_IN_PROJECT=0 \
+#   POETRY_VIRTUALENVS_CREATE=0 \
+#   POETRY_CACHE_DIR=/tmp/poetry_cache
 
-# use poetry ton install packges
-#################################
-# install poetry
-RUN pip install poetry
-COPY ./pyproject.toml /app/pyproject.toml
-RUN --mount=type=cache,target=/tmp/poetry_cache poetry install --with dev --no-root
-#RUN poetry install --without dev --no-root && rm -rf $POETRY_CACHE_DIR
-#RUN poetry install --with dev --no-root && rm -rf $POETRY_CACHE_DIR
+# # use poetry ton install packges
+# #################################
+# # install poetry
+# RUN pip install poetry
+# COPY ./pyproject.toml /app/pyproject.toml
+# RUN --mount=type=cache,target=/tmp/poetry_cache \
+#   poetry install --with dev --no-root
+# #RUN poetry install --without dev --no-root && rm -rf $POETRY_CACHE_DIR
+# #RUN poetry install --with dev --no-root && rm -rf $POETRY_CACHE_DIR
 
 # # use pip
 #################################
@@ -46,6 +47,15 @@ RUN --mount=type=cache,target=/tmp/poetry_cache poetry install --with dev --no-r
 # #COPY ./requirements.txt /app/requirements.txt
 # RUN pip install --no-cache-dir --upgrade -r requirements.txt
 
+# Install with UV in system's python!
+COPY pyproject.toml .
+COPY uv.lock .
+ENV UV_PROJECT_ENVIRONMENT=/usr/local
+RUN --mount=type=cache,target=/root/.cache/pip \
+  pip install --upgrade uv
+# Install the packages with uv using --mount=type=cache to cache the downloaded packages
+RUN --mount=type=cache,target=/root/.cache/uv \
+    uv sync --no-dev #--locked
 
 # copy files and create dirs 
 COPY . /app

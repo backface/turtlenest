@@ -719,6 +719,17 @@ label {
   margin-right: 0.5rem;
 }
 
+input[type="radio"] {
+  -webkit-appearance: auto;
+     -moz-appearance: auto;
+          appearance: auto;
+}
+
+.messages {
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+
 *, ::before, ::after {
   --tw-border-spacing-x: 0;
   --tw-border-spacing-y: 0;
