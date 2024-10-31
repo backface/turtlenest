@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load tailwind_filters %}
 {% load crispy_forms_tags %}
-
+{% load socialaccount account allauth %}
 {% block content %}
 
 
@@ -19,9 +19,14 @@
             <button>
                 <a href="{% url 'account_email' %}">Change your email</a> ({{ user.email }})
             </button>
-            <!-- <button>
+
+            {% get_providers as socialaccount_providers %}
+            {% if socialaccount_providers %}         
+            <button>
                 <a href="{% url 'socialaccount_connections' %}">Edit your social connections</a>
-            </button> -->
+            </button>
+            {% endif %}
+            
             <button>
                 <a href="{% url 'account_change_password' %}">Change your password</a>
             </button>
