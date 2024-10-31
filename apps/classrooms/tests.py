@@ -3,13 +3,14 @@ from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group as AuthGroup
-from .models import Group, Unit, Membership, TrainerRequest
+from .models import Group, Membership, TrainerRequest
+
 
 User = get_user_model()
 
-
 # created with Claude Sonnet
 # TODO: unit test for units!
+
 
 class GroupViewTests(TestCase):
     def setUp(self):

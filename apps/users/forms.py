@@ -6,7 +6,6 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Fieldset
 from crispy_tailwind.tailwind import CSSContainer
 from django.core.exceptions import ValidationError
-
 from .models import User
 
 

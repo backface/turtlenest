@@ -11,14 +11,11 @@ from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 from django.shortcuts import get_object_or_404
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-# from django.template.response import TemplateResponse
-# from django.views import View
 from django.template.loader import render_to_string
 from django.contrib import messages
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
-
 from apps.projects.models import Project
 from apps.users.models import User
 from .models import Group, TrainerRequest, Unit, SelectedProject, Membership

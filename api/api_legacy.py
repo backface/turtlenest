@@ -13,7 +13,6 @@ from typing import List
 from datetime import datetime
 from bs4 import BeautifulSoup
 import base64
-
 from apps.projects.models import Project
 from apps.classrooms.models import Group, SelectedProject
 

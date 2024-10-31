@@ -1,19 +1,12 @@
 from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
-from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.conf import settings
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.decorators import login_required
-from django.core.exceptions import ValidationError
 from django.contrib.auth.hashers import check_password
-
-
-# from django.template.response import TemplateResponse
-# from django.views import View
-
 from .forms import ProfileForm, AccountDeletionForm
 
 

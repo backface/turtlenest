@@ -4,10 +4,9 @@ from django.utils.translation import gettext_noop as _
 from django.contrib.auth.hashers import PBKDF2PasswordHasher
 import hashlib
 
+
 # copied from django.contrib.auth.hashers (Django 3.2)
 # Need for reading and upgrading legacy passwords (crypt)
-
-
 class SnapPBKDF2PasswordHasher(PBKDF2PasswordHasher):
     algorithm = "pbkdf2_snapped_sha512"
 

@@ -1,6 +1,6 @@
 from django.urls import path
-
 from ..projects import views
+
 
 app_name = "projects"
 
@@ -10,12 +10,9 @@ urlpatterns = [
     path("categories", views.category_list, name="categories"),
     path("categories/<str:collection>", views.category_list, name="categories"),
 
-    
-    
     path("myprojects", views.my_projects, name="my_projects"),
     
     path("stats", views.stats, name="stats"),
-    
    
     path("search", views.search),
     path("search/<str:target>/", views.search, name="search"),
@@ -27,7 +24,6 @@ urlpatterns = [
     path("user/<str:username>", views.user_detail, name="user_detail"),
     path("users/<str:username>", views.user_detail),
     
-
     path("project/<int:id>", views.detail_by_id, name="detail_by_id"),
     path("project/stats/<int:id>", views.project_stats, name="project_stats"),
     path("project/edit/<int:id>", views.edit, name="edit"),

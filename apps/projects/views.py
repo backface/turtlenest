@@ -18,10 +18,8 @@ from django.db.models.functions import Length
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.cache import cache_page
-
 from pgvector.django import L2Distance, CosineDistance
 from bs4 import BeautifulSoup
-
 from apps.pages.models import Page
 from apps.users.models import User
 from apps.classrooms.models import Group

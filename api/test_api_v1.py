@@ -1,10 +1,7 @@
 import json
-import base64
-from django.test import TestCase, Client
+from django.test import TestCase
 from django.contrib.auth import get_user_model
-from django.core.files.uploadedfile import SimpleUploadedFile
 from apps.projects.models import Project
-from apps.classrooms.models import Group, SelectedProject
 from allauth.account.models import EmailAddress
 
 

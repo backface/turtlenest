@@ -20,8 +20,6 @@ from ninja import Schema
 from ninja.errors import HttpError
 from allauth.account.forms import ResetPasswordForm
 from allauth.account.utils import send_email_confirmation
-from allauth.account.forms import SignupForm
-from allauth.account.adapter import DefaultAccountAdapter
 
 from apps.projects.models import Project
 from apps.classrooms.models import Group, SelectedProject

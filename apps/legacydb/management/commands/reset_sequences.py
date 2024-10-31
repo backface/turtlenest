@@ -31,7 +31,7 @@ class Command(BaseCommand):
             conn = psycopg.connect(conn_str)
             conn.autocommit = True
 
-            select_all_table_statement = f"""SELECT *
+            select_all_table_statement = """SELECT *
                                     FROM information_schema.tables
                                     WHERE table_schema = 'public'
                                     ORDER BY table_name;
@@ -71,7 +71,7 @@ class Command(BaseCommand):
                             # will be 1 row
                             for value in return_values:
                                 print(f"Sequence reset to {value['setval']} for {row['table_name']}")
-                        except Exception as ex:
+                        except Exception:
                             # will only fail if PK is not an integer...
                             # currently in my system this is from django.contrib.sessions
                             not_reset_tables.append(f"{row['table_name']} not reset")

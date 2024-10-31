@@ -4,6 +4,7 @@ from django.contrib.auth.models import Group
 from .models import User
 from apps.projects.models import Project
 
+
 class ProjectInline(admin.TabularInline):
     model = Project
     max_num = 0

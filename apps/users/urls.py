@@ -1,5 +1,4 @@
 from django.urls import path
-
 from apps.projects import views as project_views
 from . import views
 

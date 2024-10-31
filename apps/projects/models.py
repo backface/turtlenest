@@ -10,7 +10,6 @@ from django.utils.translation import gettext_lazy as _
 from fastembed import TextEmbedding as Embedding
 from markdownx.utils import markdownify
 from pgvector.django import VectorField
-
 from .templatetags.tags import removetags
 
 
