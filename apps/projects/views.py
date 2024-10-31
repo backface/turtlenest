@@ -100,8 +100,7 @@ def collection(request, collection="newest", mine=False, arg=None):
     arg_str = arg or ""
 
     collections = COLLECTIONS + PRIVATE_COLLECTIONS if mine else COLLECTIONS
-
-    if collection not in collections:
+    if not [item for item in collections if item.get('slug')==collection]:
         raise Http404("Collection not found")
     
     # pre-filter

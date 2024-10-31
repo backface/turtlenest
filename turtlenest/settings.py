@@ -57,9 +57,7 @@ ADMINS = (("mash", "m@ash.to"),)
 
 INSTALLED_APPS = [
     # "grappelli",
-
     "jazzmin",
-
     "taggit",
 
     "django.contrib.admin",
@@ -71,7 +69,6 @@ INSTALLED_APPS = [
 
     "whitenoise.runserver_nostatic",
     "django.contrib.staticfiles",
-    
     "django_htmx",
     
     "allauth",    
