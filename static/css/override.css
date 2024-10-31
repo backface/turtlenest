@@ -69,7 +69,7 @@ button a:hover {
   color: var(--primary);
 }
 
-.search button:hover a {
+.search button:hover a, .search button.active a{
   color: white;
 }
 
