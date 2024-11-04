@@ -88,10 +88,7 @@
         <div>
             <div class="mt-1">
                 <a href="/run#cloud:Username={{ project.user.username }}&ProjectName={{ project.name }}">
-                    <button ><i class="icon--[ion--play] mr-1"></i> Open in TurtleStitch</button>
-                </a>
-                <a href="/snap/snap.html#cloud:Username={{ project.user.username }}&ProjectName={{ project.name }}">
-                    <button><i class="icon--[ion--play] mr-1"></i> Open in Snap!</button>
+                    <button ><i class="icon--[ion--play] mr-1"></i> Open Project</button>
                 </a>
             </div>   
         </div>
@@ -134,9 +131,14 @@
                     {% include "projects/_is_unshared.html" %}
                 {% endif %}                
             </div>   
+            <a class="ml-1 hover:text-primary" style="font-size:9px; color: #ccc;" target="_blank" href="/snap/snap.html#cloud:Username={{ project.user.username }}&ProjectName={{ project.name }}">
+                Open in running Beta (Use only if you know what you do!)
+            </a><br>
         </div>
 
         <div class="mt-3 text-green-800">
+
+
             {% if request.user == project.user  %}           
             <a href="{% url 'projects:edit' project.id %}">
                 <button><i class="icon-[ion--edit] mr-1"></i> Edit</button>
