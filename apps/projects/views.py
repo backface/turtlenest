@@ -97,7 +97,9 @@ def collection(request, collection="newest", mine=False, arg=None):
     """returns a collection of projects"""
     arg_str = arg or ""
 
-    collections = COLLECTIONS + PRIVATE_COLLECTIONS if mine else COLLECTIONS
+    # check if collection is valid
+    TAG_COLLECTION = [{"name": _("Tag"), "slug": "tag"}]
+    collections = COLLECTIONS + TAG_COLLECTION + PRIVATE_COLLECTIONS if mine else COLLECTIONS + TAG_COLLECTION
     if not [item for item in collections if item.get('slug')==collection]:
         raise Http404("Collection not found")
     
