@@ -424,9 +424,6 @@ SUMMERNOTE_CONFIG = {
 
 
 TEXT_EMBEDDING_MODEL = "BAAI/bge-small-en-v1.5"
-
-# BAAI/bge-small-en-v1.5
-# BAAI/bge-small-en
 # "sentence-transformers/all-MiniLM-L6-v2"
 
 

@@ -45,10 +45,10 @@ def migrate_userdata():
             print(f"\r  .. {(progress):.1f}% ({counter})..", end="")
 
 
-            print(person.email, person.username)
+            print(person.id, person.email, person.username)
             new_user, created = User.objects.get_or_create(
                 username=person.username,
-                email=person.email.lower() if person.email else f"{person.username}@turtlestitch.org".lower()
+                email=person.email if person.email else f"{person.username}@turtlestitch.org"
             )
 
             # new_user.email = (
