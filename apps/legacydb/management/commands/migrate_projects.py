@@ -79,7 +79,8 @@ def migrate_projects():
             #     old_project.projectname = (
             #         old_project.projectname.strip() + " - " + shortuuid.uuid()[:6]
             #     )
-
+            
+            print(f"..{old_project.projectname} by {old_project.username}")
             new_project.name = old_project.projectname
 
             new_project.slug = slugify(old_project.projectname, allow_unicode=True)
