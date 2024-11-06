@@ -15,10 +15,13 @@ class Command(BaseCommand):
         )
         call_command(
             "migrate_classrooms",
+        ),
+        call_command(
+            "reset_sequences",
         )
         # call_command(
         #     "migrate_pages",
         # )
-        call_command(
-            "migrate_pages2wagtail",
-        )
+        # call_command(
+        #     "migrate_pages2wagtail",
+        # )
