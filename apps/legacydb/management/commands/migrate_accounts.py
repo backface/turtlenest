@@ -30,7 +30,7 @@ def create_groups():
 
 def migrate_userdata():
     print("migrating user data ..", end="\n")
-    oldusers = OldUser.objects.using("legacydb").order_by("id")
+    oldusers = OldUser.objects.using("legacydb").order_by("joined")
     p = Paginator(oldusers, 100)    
     print(f"  .. total objects: {p.count} ({p.num_pages})..")
     i = 0
@@ -68,11 +68,17 @@ def migrate_userdata():
             new_account.save()
 
             if person.has_teacher:
-                new_user.mentor = (
-                    User.objects.get(username=person.has_teacher)
-                    if person.has_teacher
-                    else None
-                )
+                try: 
+                    teacher = User.objects.get(username=person.has_teacher)
+                except User.DoesNotExist:
+                    print("Teacher not found", person.has_teacher, "for", person.username)
+                    raise Exception("Teacher not found")
+                else:
+                    new_user.mentor = (
+                        User.objects.get(username=person.has_teacher)
+                        if person.has_teacher
+                        else None
+                    )
             if person.isadmin:
                 new_user.is_staff = True
             if person.ismoderator:
