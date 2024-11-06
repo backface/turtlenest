@@ -150,6 +150,11 @@ def migrate_projects():
             print(f"\r  .. {(progress):.1f}% ({i})..", end="", flush=True)
 
             try:
+                try:
+                    unit = Unit.objects.get(id=old_object.unit)
+                except Unit.DoesNotExist:
+                    unit = None
+                    continue
                 new_object, created = ProjectSelection.objects.get_or_create(
                     id=old_object.id,
                     project_id=old_object.project_id,
@@ -157,9 +162,7 @@ def migrate_projects():
                     group=Group.objects.get(id=old_object.classroom_id)
                     if old_object.classroom_id
                     else None,
-                    unit=Unit.objects.get(id=old_object.unit)
-                    if old_object.unit
-                    else None,
+                    unit=unit,
                 )
                 new_object.date_created = old_object.created_at or timezone.now()
                 new_object.date_modified = old_object.updated_at or timezone.now()
@@ -169,6 +172,6 @@ def migrate_projects():
             except Group.DoesNotExist:
                 print("error: group does not exist")
             except Unit.DoesNotExist:
-                print("error: unit does not exist")
+                print(f"error: unit does not exist: .. Unit #{old_object.unit}.. class #{old_object.classroom_id}")
 
     print("\nDone.")
