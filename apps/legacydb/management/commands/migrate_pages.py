@@ -1,6 +1,7 @@
 import math
 from django.utils import timezone
 from django.core.management.base import BaseCommand
+from django.core.paginator import Paginator
 from django.db import migrations
 from django.apps import apps
 

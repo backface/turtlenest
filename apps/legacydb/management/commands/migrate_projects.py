@@ -7,6 +7,7 @@ from django.db.utils import IntegrityError
 from django.core.management.base import BaseCommand
 from django.core.files.base import ContentFile
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.paginator import Paginator
 from django.utils.text import slugify
 from django.db import connection
 from django.apps import apps
@@ -41,21 +42,18 @@ class Command(BaseCommand):
         migrate_comments()
         migrate_project_images()
 
-
 def migrate_projects():
     print("migrating projects ..")
-    count = OldProject.objects.using("legacydb").count()
-    pages = math.ceil(count / 100)
-    print(f"  .. total objects: {count} ({pages})..")
-    for ii in range(0, pages + 1):
-        for i, old_project in enumerate(
-            OldProject.objects.using("legacydb").order_by("id")[
-                (ii * 100) : ((ii + 1) * 100)
-            ]
-        ):
-            progress = ((ii * 100 + i) / count) * 100
-            counter = (ii * 100 + i) + 1
-            print(f"\r  .. {(progress):.1f}% ({counter})..", end="", flush=True)
+    projects = OldProject.objects.using("legacydb").order_by("id")
+    p = Paginator(projects, 100)    
+    print(f"  .. total objects: {p.count} ({p.num_pages})..")
+    i = 0
+    for page_num in p.page_range:
+        page = p.page(page_num)
+        for old_project in page:
+            i += 1
+            progress = (i / p.count) * 100
+            print(f"\r  .. {(progress):.1f}% ({i})..", end="", flush=True)
 
             new_project, created = Project.objects.get_or_create(id=old_project.id)
 
@@ -180,17 +178,16 @@ def migrate_projects():
 
 def migrate_likes():
     print("migrating likes")
-    count = OldLikes.objects.using("legacydb").count()
-    pages = math.ceil(count / 100)
-    print(f"  .. total objects: {count} ..", end="\n")
-
-    for ii in range(pages + 1):
-        for i, old_object in enumerate(
-            OldLikes.objects.using("legacydb")[(ii * 100) : ((ii + 1) * 100)]
-        ):
-            progress = ((ii * 100 + i) / count) * 100
-            counter = (ii * 100 + i) + 1
-            print(f"\r  .. {(progress):.1f}% ({counter})..", end="")
+    likes = OldLikes.objects.using("legacydb").order_by("id")
+    p = Paginator(likes, 100)    
+    print(f"  .. total objects: {p.count} ({p.num_pages})..")
+    i = 0
+    for page_num in p.page_range:
+        page = p.page(page_num)
+        for old_object in page:
+            i += 1
+            progress = (i / p.count) * 100
+            print(f"\r  .. {(progress):.1f}% ({i})..", end="", flush=True)
 
             try:
                 new_object, created = Like.objects.get_or_create(
@@ -213,17 +210,16 @@ def migrate_likes():
 
 def migrate_comments():
     print("migrating comments ..", end="\n")
-    count = OldComment.objects.using("legacydb").count()
-    pages = math.ceil(count / 100)
-    print(f"  .. total objects: {count} ..", end="\n")
-
-    for ii in range(pages + 1):
-        for i, old_object in enumerate(
-            OldComment.objects.using("legacydb")[(ii * 100) : ((ii + 1) * 100)]
-        ):
-            progress = ((ii * 100 + i) / count) * 100
-            counter = (ii * 100 + i) + 1
-            print(f"\r  .. {(progress):.1f}% ({counter})..", end="")
+    comments = OldComment.objects.using("legacydb").order_by("id")
+    p = Paginator(comments, 100)    
+    print(f"  .. total objects: {p.count} ({p.num_pages})..")
+    i = 0
+    for page_num in p.page_range:
+        page = p.page(page_num)
+        for old_object in page:
+            i += 1
+            progress = (i / p.count) * 100
+            print(f"\r  .. {(progress):.1f}% ({i})..", end="", flush=True)
 
             try:
                 new_object, created = Comment.objects.get_or_create(

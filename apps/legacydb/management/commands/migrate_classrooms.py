@@ -2,6 +2,7 @@ import math
 from django.utils import timezone
 from django.db.utils import IntegrityError
 from django.core.management.base import BaseCommand
+from django.core.paginator import Paginator
 from django.utils.text import slugify
 from django.db import connection
 from django.apps import apps
@@ -40,18 +41,17 @@ def migrate_classrooms():
     OldClass = apps.get_model("legacydb", "Classrooms")
     Group = apps.get_model("classrooms", "Group")
 
-    count = OldClass.objects.using("legacydb").count()
-    pages = math.ceil(count / 100)
-    print(f"  .. total objects: {count} ({pages})..", end="\n")
-
-    for ii in range(0, pages):
-        for i, old_object in enumerate(
-            OldClass.objects.using("legacydb")[(ii * 100) : ((ii + 1) * 100)]
-        ):
-            progress = ((ii * 100 + i) / count) * 100
-            counter = (ii * 100 + i) + 1
-            print(f"\r  .. {(progress):.1f}% ({counter})..", end="")
-
+    oldclasses = OldClass.objects.using("legacydb").order_by("id")
+    p = Paginator(oldclasses, 100)    
+    print(f"  .. total objects: {p.count} ({p.num_pages})..")
+    i = 0
+    for page_num in p.page_range:
+        page = p.page(page_num)
+        for old_object in page:
+            i += 1
+            progress = (i / p.count) * 100
+            print(f"\r  .. {(progress):.1f}% ({i})..", end="", flush=True)
+                  
             new_object, created = Group.objects.get_or_create(
                 id=old_object.id, host=User.objects.get(username=old_object.host)
             )
@@ -72,17 +72,16 @@ def migrate_members():
     Group = apps.get_model("classrooms", "Group")
     MemberShip = apps.get_model("classrooms", "MemberShip")
 
-    count = OldObject.objects.using("legacydb").count()
-    pages = math.ceil(count / 100)
-    print(f"  .. total objects: {count} ({pages})..", end="\n")
-
-    for ii in range(0, pages):
-        for i, old_object in enumerate(
-            OldObject.objects.using("legacydb")[(ii * 100) : ((ii + 1) * 100)]
-        ):
-            progress = ((ii * 100 + i) / count) * 100
-            counter = (ii * 100 + i) + 1
-            print(f"\r  .. {(progress):.1f}% ({counter})..", end="")
+    oldobjects = OldObject.objects.using("legacydb").order_by("id")
+    p = Paginator(oldobjects, 100)    
+    print(f"  .. total objects: {p.count} ({p.num_pages})..")
+    i = 0
+    for page_num in p.page_range:
+        page = p.page(page_num)
+        for old_object in page:
+            i += 1
+            progress = (i / p.count) * 100
+            print(f"\r  .. {(progress):.1f}% ({i})..", end="", flush=True)
 
             new_object, created = MemberShip.objects.get_or_create(
                 id=old_object.id,
@@ -102,17 +101,16 @@ def migrate_units():
     Group = apps.get_model("classrooms", "Group")
     Unit = apps.get_model("classrooms", "Unit")
 
-    count = OldObject.objects.using("legacydb").count()
-    pages = math.ceil(count / 100)
-    print(f"  .. total objects: {count} ({pages})..", end="\n")
-
-    for ii in range(0, pages):
-        for i, old_object in enumerate(
-            OldObject.objects.using("legacydb")[(ii * 100) : ((ii + 1) * 100)]
-        ):
-            progress = ((ii * 100 + i) / count) * 100
-            counter = (ii * 100 + i) + 1
-            print(f"\r  .. {(progress):.1f}% ({counter})..", end="")
+    oldobjects = OldObject.objects.using("legacydb").order_by("id")
+    p = Paginator(oldobjects, 100)    
+    print(f"  .. total objects: {p.count} ({p.num_pages})..")
+    i = 0
+    for page_num in p.page_range:
+        page = p.page(page_num)
+        for old_object in page:
+            i += 1
+            progress = (i / p.count) * 100
+            print(f"\r  .. {(progress):.1f}% ({i})..", end="", flush=True)
 
             try:
                 new_object, created = Unit.objects.get_or_create(
@@ -140,17 +138,16 @@ def migrate_projects():
     ProjectSelection = apps.get_model("classrooms", "SelectedProject")
     Unit = apps.get_model("classrooms", "Unit")
 
-    count = OldObject.objects.using("legacydb").count()
-    pages = math.ceil(count / 100)
-    print(f"  .. total objects: {count} ({pages})..", end="\n")
-
-    for ii in range(0, pages):
-        for i, old_object in enumerate(
-            OldObject.objects.using("legacydb")[(ii * 100) : ((ii + 1) * 100)]
-        ):
-            progress = ((ii * 100 + i) / count) * 100
-            counter = (ii * 100 + i) + 1
-            print(f"\r  .. {(progress):.1f}% ({counter})..", end="")
+    oldobjects = OldObject.objects.using("legacydb").order_by("id")
+    p = Paginator(oldobjects, 100)    
+    print(f"  .. total objects: {p.count} ({p.num_pages})..")
+    i = 0
+    for page_num in p.page_range:
+        page = p.page(page_num)
+        for old_object in page:
+            i += 1
+            progress = (i / p.count) * 100
+            print(f"\r  .. {(progress):.1f}% ({i})..", end="", flush=True)
 
             try:
                 new_object, created = ProjectSelection.objects.get_or_create(

@@ -1,6 +1,7 @@
 from django.core.management.base import BaseCommand
 from django.contrib.auth.models import Group
 from django.db import migrations
+from django.core.paginator import Paginator
 import math
 
 from apps.users.models import User
@@ -18,7 +19,6 @@ class Command(BaseCommand):
             'SELECT setval(pg_get_serial_sequence(\'"users_user"\',\'id\'), coalesce(max("id"), 1), max("id") IS NOT null) FROM "users_user";'
         )
 
-
 def create_groups():
     for g in [
         "Teachers",
@@ -30,31 +30,24 @@ def create_groups():
 
 def migrate_userdata():
     print("migrating user data ..", end="\n")
-    count = OldUser.objects.using("legacydb").count()
-    pages = math.ceil(count / 100.0)
-    print(f"  .. total objects: {count} ({pages}) ..", end="\n")
+    oldusers = OldUser.objects.using("legacydb").order_by("id")
+    p = Paginator(oldusers, 100)    
+    print(f"  .. total objects: {p.count} ({p.num_pages})..")
+    i = 0
+    for page_num in p.page_range:
+        page = p.page(page_num)
+        for person in page:
+            i += 1
+            progress = (i / p.count) * 100
+            print(f"\r  .. {(progress):.1f}% ({i})..", end="", flush=True)
 
-    for ii in range(0, pages + 1):
-        for i, person in enumerate(
-            OldUser.objects.using("legacydb").order_by("joined")[
-                (ii * 100) : ((ii + 1) * 100)
-            ]
-        ):
-            progress = ((ii * 100 + i + 1) / count) * 100
-            counter = (ii * 100 + i) + 1
-            print(f"\r  .. {(progress):.1f}% ({counter})..", end="")
-
-
-            print(person.id, person.email, person.username)
             new_user, created = User.objects.get_or_create(
                 username=person.username,
                 email=person.email if person.email else f"{person.username}@turtlestitch.org"
             )
-
             # new_user.email = (
             #     person.email if person.email else f"{person.username}@turtlestitch.org"
             # )
-
             new_user.password = "crypt$21$" + person.password
             new_user.date_joined = person.joined
             new_user.last_login = person.last_active
@@ -64,6 +57,7 @@ def migrate_userdata():
             new_user.notify_like = person.notify_like
             new_user.verified = person.confirmed
             new_user.is_mentor = person.is_teacher
+            new_user.save()
 
             new_account, created = EmailAddress.objects.get_or_create(
                 user=new_user,
@@ -79,7 +73,6 @@ def migrate_userdata():
                     if person.has_teacher
                     else None
                 )
-
             if person.isadmin:
                 new_user.is_staff = True
             if person.ismoderator:
@@ -95,5 +88,6 @@ def migrate_userdata():
                 new_user.is_superuser = True
 
             new_user.save()
+        
 
     print("\nDone.")
