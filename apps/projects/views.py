@@ -100,7 +100,7 @@ def collection(request, collection="newest", mine=False, arg=None):
     # check if collection is valid
     INTERNAL_COLLECTIONS = [
         {"name": _("Tag"), "slug": "tag"},
-        {"user": _("Tag"), "slug": "user"}
+        {"user": _("User"), "slug": "user"}
     ]
     collections = COLLECTIONS + INTERNAL_COLLECTIONS + PRIVATE_COLLECTIONS if mine else COLLECTIONS + INTERNAL_COLLECTIONS
     if not [item for item in collections if item.get('slug')==collection]:
@@ -171,7 +171,10 @@ def collection(request, collection="newest", mine=False, arg=None):
                 arg,
             ]
         )
-        arg_str = f"#{Project.tags.filter(slug=arg).first().name}"
+        if projects:
+            arg_str = f"#{Project.tags.filter(slug=arg).first().name}"
+        else: 
+            arg_str = f"#{arg}"
     elif collection == "category":
         projects = projects.filter(categories__slug__in=[arg])
         arg_str = Category.objects.filter(slug=arg).first().name
