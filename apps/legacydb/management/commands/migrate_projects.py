@@ -65,7 +65,9 @@ def migrate_projects():
             #     print("- setting empty name to noname")
             #     old_project.projectname = "no name - " + shortuuid.uuid()[:6]
 
-            # old_project.projectname = old_project.projectname.replace("\n", "-")
+            if "\n" in old_project.projectname:
+                print(f" - replacing linebreaks with -- in {old_project.projectname} ..")
+                old_project.projectname = old_project.projectname.replace("\n", "--")
 
             # if old_project.projectname.endswith(
             #     " "
@@ -78,7 +80,7 @@ def migrate_projects():
             #         old_project.projectname.strip() + " - " + shortuuid.uuid()[:6]
             #     )
             
-            print(f"..{old_project.projectname} by {old_project.username}")
+            # print(f"..{old_project.projectname} by {old_project.username}")
             new_project.name = old_project.projectname
 
             new_project.slug = slugify(old_project.projectname, allow_unicode=True)
