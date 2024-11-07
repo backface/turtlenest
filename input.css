@@ -142,6 +142,10 @@
   @apply border border-gray-300 rounded;
 }  
 
+.alert { 
+  @apply shadow-sm shadow-slate-700
+}
+
 .alert-success {
   @apply bg-primary text-white
 }
