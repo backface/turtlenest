@@ -39,15 +39,14 @@
         </div>
      
         <h2>Profile Info</h2>
-        <form class="form" method="post" action="{% url 'users:profile' %}" enctype="multipart/form-data">{% csrf_token %}
+        <form class="form" method="post" action="{% url 'users:profile' %}" enctype="multipart/form-data">
+            {% csrf_token %}
             <div class="text-left">
                 {% crispy form %}
-            </div>
-            <div>
-                <button>
+                <button type="submit">
                     <i class="icon--[ion--save]"></i> Save
                 </button>
-            </div>
+            </div>>
         </form>
 
         <h1>Danger Zone</h1>
