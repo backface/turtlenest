@@ -66,7 +66,7 @@ def migrate_projects():
             #     old_project.projectname = "no name - " + shortuuid.uuid()[:6]
 
             if "\n" in old_project.projectname:
-                print(f" - replacing linebreaks with -- in {old_project.projectname} ..")
+                print(f" - replacing linebreaks with -- in {old_project.projectname} by {old_project.username}")
                 old_project.projectname = old_project.projectname.replace("\n", "--")
 
             # if old_project.projectname.endswith(
@@ -127,9 +127,9 @@ def migrate_projects():
                     )
                     new_remix.save()
                 except ObjectDoesNotExist:
-                    print(
-                        f"  .. error finding project: {old_project.origname} from {old_project.origcreator}"
-                    )
+                    # print(
+                    #     f"  .. error finding project: {old_project.origname} from {old_project.origcreator}"
+                    # )
                     pass
 
             if old_project.categories:
