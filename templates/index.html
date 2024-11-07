@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load i18n %}
 {% load project_renderers static tags %}
 
 {% block css %}
@@ -16,15 +17,31 @@
     </div>
 </div>
 
+
+
 {% if announcement.content|length > 10 %}
 
-<div class="container mx-auto text-center pt-12 pb-2 announcement">
+<div class="container mx-auto text-center pt-12 pb-2 announcement relative">
     <div class="mx-4 p-4 border border-tertiary leading-7">
        {{ announcement.content|safe }}
     </div>
-</div>
+
+    {% if user.is_editor or user.is_superuser %}
+    <div class="absolute right-0 top-2">
+    <button class="bg-secondary">
+        <a href="/admin/pages/page/{{ announcement.id }}" 
+            style="color:white; text-decoration: none !important;"><i class="icon-[mdi--edit]"></i>
+        {% trans "Edit announcment" %}
+        </a>
+    </button>
+    </div>
+    {% endif %}  
+
+</div> 
 
 {% endif %}
+
+
 
 <div class="container mx-auto px-4 lg:grid lg:grid-cols-3 lg:gap-5 text-left">
     <div class="my-14 ">
