@@ -8,7 +8,7 @@
 
 {% if group.host == request.user %}
 <div class="container mx-auto bg-slate-50 p-4 mb-10">
-    <form action="{% url 'groups:add_member' group.id %}" method="POST">
+    <form id="addmember" action="{% url 'groups:add_member' group.id %}" method="POST">
         {% csrf_token %}
         {{ addMemberForm }}
         <button
@@ -17,11 +17,11 @@
             hx-target="#members"
         ><i class="icon-[ion--person-add] mr-1"></i>Add Member
         </button>  
-        <button onclick="bulkmodal.showModal()">
+        <button onclick="bulkmodal.showModal()" type="button">
             <i class="icon-[ion--person-add] mr-1"></i><i class="icon-[ion--person-add] mr-1"></i><i class="icon-[ion--person-add] mr-1"></i> Bulk Add
-        </button>      
+        </button>   
     </form>
-
+    
     <dialog id="bulkmodal" class="modal">
         <div class="modal-box">
             {% include "classrooms/_members_bulkadd.html" %}
