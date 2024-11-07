@@ -6,7 +6,6 @@ from . import views
 app_name = "users"
 
 urlpatterns = [
-    path("profile", views.profile, name="profile"),
-    path("users/<str:username>", project_views.user_detail, name="detail"),
+    path("profile", views.profile, name="profile"),   
     path("delete_my_account", views.delete_account, name="delete_account")
 ]

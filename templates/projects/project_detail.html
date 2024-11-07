@@ -80,7 +80,7 @@
     <div class="mx-10 lg:text-left">       
         <p class="text-lg mb-10">
             by 
-            <a href="{% url 'users:detail' project.user.username %}" 
+            <a href="{% url 'projects:user_detail' project.user.username %}" 
                 class="underline hover:text-primary text-tertiary">
             {{ project.user.username }}</a>
         </p>        

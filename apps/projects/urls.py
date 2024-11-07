@@ -21,8 +21,8 @@ urlpatterns = [
     path(
         "users/<str:username>/projects/<path:projectname>", views.detail, name="detail"
     ),  # old style
-    path("user/<str:username>", views.user_detail, name="user_detail"),
-    path("users/<str:username>", views.user_detail),
+    path("users/<str:username>", views.user_detail, name="user_detail"),
+    path("user/<str:username>", views.user_detail),
     
     path("project/<int:id>", views.detail_by_id, name="detail_by_id"),
     path("project/stats/<int:id>", views.project_stats, name="project_stats"),

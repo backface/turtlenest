@@ -20,7 +20,7 @@
      <div class="text-sm pt-1 relative">
         {% if not mine %}
         <p>
-           by <a href="{% url 'users:detail' project.user.username %}" class="text-primary">{{ project.user.username }}</a>
+           by <a href="{% url 'projects:user_detail' project.user.username %}" class="text-primary">{{ project.user.username }}</a>
         </p>
         {% endif %}
         <!-- <p class="text-slate-500">{{ project.date_created }}</p> -->

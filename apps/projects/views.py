@@ -98,8 +98,11 @@ def collection(request, collection="newest", mine=False, arg=None):
     arg_str = arg or ""
 
     # check if collection is valid
-    TAG_COLLECTION = [{"name": _("Tag"), "slug": "tag"}]
-    collections = COLLECTIONS + TAG_COLLECTION + PRIVATE_COLLECTIONS if mine else COLLECTIONS + TAG_COLLECTION
+    INTERNAL_COLLECTIONS = [
+        {"name": _("Tag"), "slug": "tag"},
+        {"user": _("Tag"), "slug": "user"}
+    ]
+    collections = COLLECTIONS + INTERNAL_COLLECTIONS + PRIVATE_COLLECTIONS if mine else COLLECTIONS + INTERNAL_COLLECTIONS
     if not [item for item in collections if item.get('slug')==collection]:
         raise Http404("Collection not found")
     
