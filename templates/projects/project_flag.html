@@ -9,7 +9,7 @@
     <div class="mt-3">Project:
         <a href="{% url 'projects:detail_by_id' project.id %}" class="text-primary">{{ project.name }}</a>
         by 
-        <a href="{% url 'users:detail' project.user.username %}" class="text-primary">{{ project.user.username }}</a>
+        <a href="{% url 'projects:user_detail' project.user.username %}" class="text-primary">{{ project.user.username }}</a>
 
     </div>
     <div class="my-4">

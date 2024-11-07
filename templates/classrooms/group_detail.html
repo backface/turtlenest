@@ -9,7 +9,7 @@
         {% if group.host == request.user %}
         <h4>You are hosting this group!</h4>
         {% else %}
-        <p class="mx-auto text-center">hosted by <a href="{% url 'users:detail' group.host.username %}">{{ group.host }}</a></p>
+        <p class="mx-auto text-center">hosted by <a href="{% url 'projects:user_detail' group.host.username %}">{{ group.host }}</a></p>
         {% endif %}
     </div>
 

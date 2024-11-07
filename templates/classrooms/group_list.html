@@ -23,7 +23,7 @@
         {% if group.host == request.user %}
         <p>You are hosting this group!</p>
         {% else %}
-        <p>hosted by <a href="{% url 'users:detail' group.host.username %}" class="underline text-primary">{{ group.host }}</a></p>
+        <p>hosted by <a href="{% url 'projects:user_detail' group.host.username %}" class="underline text-primary">{{ group.host }}</a></p>
         {% endif %}
         </div>
 

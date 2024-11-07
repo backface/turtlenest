@@ -330,10 +330,10 @@ def detail_by_id(request, id):
     project.views = project.views + 1
     project.save(no_timestamp=True)
 
+    group = None
     if "group" in request.session:
-        group = Group.objects.get(pk=request.session["group"])
-    else:
-        group = None
+        if request.session["group"]:
+            group = Group.objects.get(pk=request.session["group"])
 
     return render(
         request,

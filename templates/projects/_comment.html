@@ -7,7 +7,7 @@
         </div>
         <div class="chat-image avatar">
             <div class="w-10 rounded-full">
-              <a href="{% url 'users:detail' comment.author.username %}">
+              <a href="{% url 'projects:user_detail' comment.author.username %}">
                 <img  class="w-10 pt-0.5 rounded-full" alt="gravatar" src="{{ comment.author.avatar_url }}" />
               </a>
             </div>
