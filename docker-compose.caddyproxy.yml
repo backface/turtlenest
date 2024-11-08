@@ -6,8 +6,8 @@ services:
       - 443:443
     #   cap_add:
     #     - NET_ADMIN  
-    #   extra_hosts: #only for docker!
-    #     - "host.docker.internal:host-gateway"       
+    extra_hosts: #only for docker!
+      - "host.docker.internal:host-gateway"       
     environment:
       - CADDY_INGRESS_NETWORKS=public_proxy
     networks:

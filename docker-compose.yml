@@ -56,6 +56,8 @@ services:
       - ./static:/app/static
 
     restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     labels:
       caddy: ${DOMAIN}
       caddy.log: ""
@@ -68,7 +70,9 @@ services:
       caddy.1_handle.3_root: "/snap* /app/guis/"
       caddy.1_handle.4_root: "/turtlestitch* /app/guis/"
       caddy.1_handle.5_file_server: ""
-      caddy.2_handle.0_reverse_proxy: "{{upstreams 8000}}"
+      caddy.2_handle: "/hooks*"
+      caddy_2_handle.0_reverse_proxy: "host.docker.internal:9000"
+      caddy.3_handle.0_reverse_proxy: "{{upstreams 8000}}"
 
 
 networks:
