@@ -73,7 +73,9 @@ services:
       caddy.2_handle: "/hooks*"
       caddy.2_handle.0_reverse_proxy: "host.docker.internal:9000"
       caddy.3_handle.0_reverse_proxy: "{{upstreams 8000}}"
-
+      # caddy.handle_errors.0_repond: "{err.status_code} {err.status_text}"
+      # caddy.handle_errors.0_rewrite: "* /error.html"
+      # caddy.handle_errors.2_file_server: ""
 
 networks:
   public_proxy:
