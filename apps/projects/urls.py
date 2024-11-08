@@ -8,8 +8,8 @@ urlpatterns = [
     path("", views.index, name="index"),
     path("run", views.run, name="run"),
     path("run/", views.run),
-    path("categories", views.category_list, name="categories"),
-    path("categories/<str:collection>", views.category_list, name="categories"),
+    path("categories/", views.category_list, name="categories"),
+    path("categories/<str:arg>", views.collection, { "collection" : "category" }),
 
     path("myprojects", views.my_projects, name="my_projects"),
     

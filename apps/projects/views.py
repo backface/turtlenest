@@ -118,6 +118,9 @@ def collection(request, collection="newest", mine=False, arg=None):
 
     projects = projects.select_related("user")
 
+    if collection == "category" and arg is None:
+        collection = "categories"
+
     # build collection
     if collection == "newest":
         projects = projects.order_by("-date_created")
