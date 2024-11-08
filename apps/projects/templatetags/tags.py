@@ -1,5 +1,6 @@
 from django.template import Library
 from django.utils.safestring import mark_safe
+from django.utils.http import urlencode
 import re
 
 
@@ -75,3 +76,8 @@ def link_uris(value):
 def scale_tag(value, min_out, max_out, max_in):
     size = max(min_out, (value / max_in * max_out))
     return f"{size}"
+
+
+@register.filter(name="escape")
+def escape(value):
+    return value.urlencode().replace(" ","%20")
