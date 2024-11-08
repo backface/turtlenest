@@ -183,7 +183,7 @@ def collection(request, collection="newest", mine=False, arg=None):
         if projects:
             arg_str = Category.objects.filter(slug=arg).first().name
         else:
-           arg_str = f"#{arg}" 
+           arg_str = f"{arg}" 
     elif collection == "categories":
         return category_list(request)
 
