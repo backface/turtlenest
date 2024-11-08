@@ -54,7 +54,8 @@ services:
     volumes:
       - ${APP_DATA_DIR?./app-data/}/media:/app/app-data/media
       - ./static:/app/static
-
+    ports:
+      - "8000:8000"
     restart: unless-stopped
     extra_hosts:
       - "host.docker.internal:host-gateway"
@@ -73,9 +74,10 @@ services:
       caddy.2_handle: "/hooks*"
       caddy.2_handle.0_reverse_proxy: "host.docker.internal:9000"
       caddy.3_handle.0_reverse_proxy: "{{upstreams 8000}}"
-      # caddy.handle_errors.0_repond: "{err.status_code} {err.status_text}"
-      # caddy.handle_errors.0_rewrite: "* /error.html"
-      # caddy.handle_errors.2_file_server: ""
+      #caddy.handle_errors.0_respond: "{err.status_code} {err.status_text}"
+      # caddy.0_handle_errors.0_root: "* /app/static"
+      # caddy.0_handle_errors.1_rewrite: "* /error.html"
+      # caddy.0_handle_errors.2_file_server: ""
 
 networks:
   public_proxy:

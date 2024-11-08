@@ -78,5 +78,5 @@ if not settings.TESTING:
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-    urlpatterns += static("run", document_root=f"{settings.STATIC_ROOT}/run")
+    # urlpatterns += static("run", document_root=f"{settings.STATIC_ROOT}/run")
     

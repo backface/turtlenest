@@ -21,6 +21,11 @@ services:
       - "host.docker.internal:host-gateway"       
     labels:
       caddy.log: ""
+      # caddy.1_handle_errors: ""
+      # caddy.1_handle_errors.0_root: "* /app/static"
+      # caddy.1_handle_errors.1_rewrite: "* /error.html"
+      # caddy.1_handle_errors.2_file_server: ""
+
     #  caddy.log.output: "file ${APP_DATA_DIR?./app-data}/logs/access.log"
     # extra_hosts: #only for docker!
     # - "host.docker.internal:host-gateway" 
