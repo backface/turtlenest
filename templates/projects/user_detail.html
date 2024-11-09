@@ -22,14 +22,14 @@
         {% if user.about %}
         <div class="mt-2">
             <h4 class="uppercase">About me</h4>
-            {{ user.about|link_uris }}
+            {{ user.about|link_uris|linebreaksbr }}
         </div>
         {% endif %}
 
         {% if user.location %}
         <div class="mt-4">
             <h4 class="uppercase">Location</h4>
-            {{ user.location }}
+            {{ user.location|link_uris|linebreaksbr }}
         </div>
         {% endif %}
 
