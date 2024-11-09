@@ -20,17 +20,17 @@ for designers to experiment with generative aesthetics and precision
 {% block sharing %}
 <meta property="og:title" content="Code! .. Draw! .. Stitch!  / TurtleStitch - Coded Embroidery" />
 <meta property="og:description" content="Turtlestitch is based on a browser-based educational programming language (Snap!) to generate patterns for embroidery machines."/>
-<meta property="og:url" content="http://www.turtlestitch.org/"/>
+<meta property="og:url" content="{% if request.is_secure %}https://{% else %}http://{% endif %}www.turtlestitch.org/"/>
 <meta property="og:type" content="website"/>
 <meta property="og:site_name" content="Code! .. Draw! .. Stitch! / TurtleStitch - Coded Embroidery" />
-<meta property="og:image" content=" http://www.turtlestitch.org/static/img/slide1.png"/>
+<meta property="og:image" content="{% if request.is_secure %}https://{% else %}http://{% endif %}www.turtlestitch.org/static/img/slide1.png"/>
 
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:site" content="@turtlestitch">
 <meta name="twitter:title" content="Code! .. Draw! .. Stitch! / TurtleStitch - Coded Embroidery" />
 <meta name="twitter:description" content="Turtlestitch is based on a browser-based educational programming language (Snap!) to generate patterns for embroidery machines."/>
 <meta name="twitter:domain" content="turtlestitch.org"/>
-<meta name="twitter:image" content=" http://www.turtlestitch.org/static/img/slide1.png"/>
+<meta name="twitter:image" content="{% if request.is_secure %}https://{% else %}http://{% endif %}www.turtlestitch.org/static/img/slide1.png"/>
 {% endblock %}    
 
 {% block js %}
