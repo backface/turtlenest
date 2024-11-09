@@ -51,7 +51,7 @@ class LikeAdmin(admin.ModelAdmin):
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ("id", "project", "author", "contents", "date_created")
+    list_display = ("id", "project", "author", "truncated", "date_created", )
     search_fields = ["author__username", "contents", "project__name"]
 
 
@@ -66,6 +66,7 @@ class RemixAdmin(admin.ModelAdmin):
         "id",
         "original_project",
         "remixed_project",
+        "date_created",
     )
 
 

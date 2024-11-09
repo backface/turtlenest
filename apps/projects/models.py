@@ -6,6 +6,7 @@ from django.utils import timezone
 from django.utils.text import slugify
 from django.utils.html import mark_safe
 from taggit.managers import TaggableManager
+from django.template.defaultfilters import truncatechars
 from django.utils.translation import gettext_lazy as _
 from fastembed import TextEmbedding as Embedding
 from markdownx.utils import markdownify
@@ -310,7 +311,12 @@ class Comment(models.Model):
     date_updated = models.DateTimeField(default=timezone.now, editable=False)
 
     class Meta:
-        ordering = ["date_created"]
+        ordering = ["-date_created"]
+
+    @property
+    def truncated(self):
+        return truncatechars(self.contents, 50)
+
 
     def save(self, *args, **kwargs):
         self.date_updated = timezone.now()
