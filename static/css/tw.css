@@ -4821,6 +4821,10 @@ details.collapse summary::-webkit-details-marker {
   max-width: 640px;
 }
 
+.max-w-\[900px\] {
+  max-width: 900px;
+}
+
 .max-w-full {
   max-width: 100%;
 }
