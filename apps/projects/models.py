@@ -221,6 +221,10 @@ class Project(models.Model):
     def username(self):
         return self.user.username
 
+    @property
+    def name_short(self):
+        return truncatechars(self.name, 23)
+    
 
 class Category(models.Model):
     """
