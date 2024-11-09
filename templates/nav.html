@@ -77,14 +77,16 @@
         </a>
         {% endif %}
           
-        <div class="dropdown  dropdown-end">
+        <div class="dropdown dropdown-end">
           <div tabindex="0" role="button" class="m-1" >
-            <img  class="w-10 pt-0.5 rounded-full" alt="gravatar" src="{{ request.user.avatar_url }}" />
+            <!-- <span class="font-bold mr-2 align-center hover:text-secondary">{{ request.user.username }}</span> -->
+            <img  class="w-10 pt-0.5 pb-1 rounded-full" alt="gravatar" src="{{ request.user.avatar_url }}" />
           </div>
           <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-primary w-52">
             <li><a href="/user/profile">My profile</a></li>
-            <li><a href="/myprojects" hx-boost="false">My projects</a></li>
+            <li><a href="/myprojects" hx-boost="false">My projects</a></li>            
             <li><a href="/mygroups">My Groups</a></li>
+            <li><a href="{% url "projects:user_detail" user.username %}" hx-boost="false">My public page</a></li>
             <li><a href="/logout">Logout</a></li>
           </ul>
         </div>
