@@ -1,43 +1,5 @@
 services:
 
-  caddy:
-    image: lucaslorentz/caddy-docker-proxy:ci-alpine
-    ports:
-      - 80:80
-      - 443:443
-    environment:
-      - CADDY_INGRESS_NETWORKS=public_proxy
-    networks:
-      - public_proxy
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ${APP_DATA_DIR?./app-data}/caddy_data:/data
-      - ${APP_DATA_DIR?./app-data}/media:/app/media
-      - ./static:/app/static
-      - ../turtlestitch:/app/guis/turtlestitch
-      - ../snap:/app/guis/snap
-    restart: unless-stopped
-    extra_hosts:
-      - "host.docker.internal:host-gateway"       
-    labels:
-      caddy.log: ""
-      # caddy.1_handle_errors: ""
-      # caddy.1_handle_errors.0_root: "* /app/static"
-      # caddy.1_handle_errors.1_rewrite: "* /error.html"
-      # caddy.1_handle_errors.2_file_server: ""
-
-    #  caddy.log.output: "file ${APP_DATA_DIR?./app-data}/logs/access.log"
-    # extra_hosts: #only for docker!
-    # - "host.docker.internal:host-gateway" 
-    # ports: !override
-    #  - 8080:80
-    #  - 4433:443
-
-  db:
-    restart: "no"
-    ports:
-      - "5432:5432"
-
   django:
     # command: >
     #   gunicorn -b 0.0.0.0:$PORT
@@ -51,29 +13,61 @@ services:
       - "host.docker.internal:host-gateway"    
     volumes:
       - ./:/app
+    networks:
+      - public_proxy
+      - default      
     ports:
       - "8000:8000"
-    # labels:
-    #   caddy: ${DOMAIN}
-    #   caddy.log: ""
-    #   caddy.@media.path: "/media* /static* /turtlestitch* /snap*"
-    #   caddy.0_redir: "/static/run* /turtlestitch"
-    #   caddy.1_handle: "@media"
-    #   caddy.1_handle.0_root: "/media* /app/"
-    #   caddy.1_handle.1_root: "/run* /app/guis/turtlestitch/"
-    #   caddy.1_handle.2_root: "/static* /app/"
-    #   caddy.1_handle.3_root: "/snap* /app/guis/"
-    #   caddy.1_handle.4_root: "/turtlestitch* /app/guis/"
-    #   caddy.1_handle.5_file_server: ""
-    #   caddy.2_handle: "/hooks*"
-    #   caddy.2_handle.0_reverse_proxy: "host.docker.internal:9000"
-    #   caddy.3_handle.0_reverse_proxy: "{{upstreams 8000}}"
+    labels:
+      caddy: ${DOMAIN}
+      caddy.log: ""
+      caddy.@media.path: "/media* /static* /turtlestitch* /snap*"
+      caddy.0_redir: "/static/run* /turtlestitch"
+      caddy.1_handle: "@media"
+      caddy.1_handle.0_root: "/media* /app/"
+      caddy.1_handle.1_root: "/run* /app/guis/turtlestitch/"
+      caddy.1_handle.2_root: "/static* /app/"
+      caddy.1_handle.3_root: "/snap* /app/guis/"
+      caddy.1_handle.4_root: "/turtlestitch* /app/guis/"
+      caddy.1_handle.5_file_server: ""
+      caddy.2_handle: "/hooks*"
+      caddy.2_handle.0_reverse_proxy: "host.docker.internal:9000"
+      caddy.3_handle.0_reverse_proxy: "{{upstreams 8000}}"
+    #   # #caddy.handle_errors.0_respond: "{err.status_code} {err.status_text}"
+    #   # caddy.0_handle_errors.0_root: "* /app/static"
+    #   # caddy.0_handle_errors.1_rewrite: "* /error.html"
+    #   # caddy.0_handle_errors.2_file_server: ""
 
-  # flower:
-  #   ports:
-  #     - 8888:8888 # docker will expose this ports
+  db:
+    restart: "no"
+    ports:
+      - "5432:5432"
+      
+  caddy:
+    image: lucaslorentz/caddy-docker-proxy:ci-alpine
+    ports:
+      - 80:80
+      - 443:443
+    environment:
+      - CADDY_INGRESS_NETWORKS=public_proxy
+    networks:
+      - public_proxy
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - caddy_data:/data:/data
+      - ${APP_DATA_DIR?./app-data}/media:/app/media
+      - ./static:/app/static
+      - ../turtlestitch:/app/guis/turtlestitch
+      - ../snap:/app/guis/snap
+    restart: unless-stopped
+    extra_hosts: #only for docker!
+    - "host.docker.internal:host-gateway" 
+    # ports: !override
+    #  - 8080:80
+    #  - 4433:443
 
-# redis:
+
+  # redis:
   #   image: redis:7-alpine 
   #   volumes:
   #     - redis-data:/data
