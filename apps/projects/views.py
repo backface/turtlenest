@@ -319,17 +319,17 @@ def detail_by_id(request, id):
     similar_projects = (
         Project.objects.filter(is_published=True)
         .exclude(id=id)
-        .order_by(L2Distance("embedding_project_meta", project.embedding_project_meta))
-        .annotate(
-            l2_distance=L2Distance(
-                "embedding_project_meta", project.embedding_project_meta
-            )
-        )
-        .annotate(
-            cos_distance=CosineDistance(
-                "embedding_project_meta", project.embedding_project_meta
-            )
-        )[:6]
+        .order_by(CosineDistance("embedding_project_meta", project.embedding_project_meta))[:6]
+        # .annotate(
+        #     l2_distance=L2Distance(
+        #         "embedding_project_meta", project.embedding_project_meta
+        #     )
+        # )
+        # .annotate(
+        #     cos_distance=CosineDistance(
+        #         "embedding_project_meta", project.embedding_project_meta
+        #     )
+        #)
     )
 
     # increment view counter
