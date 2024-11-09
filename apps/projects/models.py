@@ -132,13 +132,21 @@ class Project(models.Model):
         return self.likes.filter(liker=user).count() > 0
 
     def get_absolute_url(self):
-        return reverse(
-            "projects:detail",
-            kwargs={
-                "username": self.user.username if self.user else "",
-                "projectname": self.name,
-            },
-        )
+        if (self.name):
+            return reverse(
+                "projects:detail",
+                kwargs={
+                    "username": self.user.username if self.user else "",
+                    "projectname": self.name,
+                },
+            )
+        else:
+            return reverse(
+                "projects:detail_by_id",
+                kwargs={
+                    "id": self.id,
+                },
+            )
 
     def update_tags_from_notes(self):
         # remove all tags
