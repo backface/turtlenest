@@ -10,6 +10,8 @@ urlpatterns = [
     path("run/", views.run),
     path("categories/", views.category_list, name="categories"),
     path("categories/<str:arg>", views.collection, { "collection" : "category" }),
+    path("tag/<str:tag>", views.list_by_tag, name="list_by_tag"),
+    path("tags", views.tags),
 
     path("myprojects", views.my_projects, name="my_projects"),
     
@@ -49,7 +51,7 @@ urlpatterns = [
     path("projects/g/<str:collection>", views.collection_redirect),
     path("projects/tag/<str:tag>", views.list_by_tag, name="list_by_tag"),
     path("projects/tags", views.tags, name="list_tags"),
-    path("projects/tags/<str:collection>", views.tags, name="list_tags"),
+    path("projects/tags/<str:tag>", views.list_by_tag),
     path("projects/<str:collection>", views.collection, name="collection"),
     path("projects/<str:collection>/<str:arg>", views.collection, name="collection"),
     path("myprojects/tags", views.tags, {"mine": True}, name="mycollection"),
