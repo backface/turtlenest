@@ -79,6 +79,24 @@ services:
     #   # caddy.0_handle_errors.1_rewrite: "* /error.html"
     #   # caddy.0_handle_errors.2_file_server: ""
 
+  db-backup:
+    image: pgvector/pgvector:pg16
+    env_file:
+      - '.env'
+    volumes:
+      - ${APP_DATA_DIR?./app-data}/postgres-backup:/backup
+    restart: unless-stopped
+    command: >
+      sh -c "while true; do \
+        echo $(date) 'starting database dump ${POSTGRES_DB} '; \
+        pg_dump postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB} -c > /backup/${POSTGRES_DB}-dump.sql.tmp; \
+        mv /backup/${POSTGRES_DB}-dump.sql.tmp /backup/${POSTGRES_DB}-dump.sql; \
+        echo $(date) 'finished dumping ${POSTGRES_DB} '; \
+        sleep 3600; \
+      done"
+    depends_on: 
+      - db
+
 # networks:
 #   public_proxy:
 #     name: public_proxy  
