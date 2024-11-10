@@ -56,7 +56,7 @@
     @apply hover:text-primary
   }
   .page h2 {
-    @apply mb-8
+    @apply my-8
   }
   input[type="checkbox"]  {
     @apply accent-tertiary mr-12
