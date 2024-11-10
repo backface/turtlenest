@@ -4,14 +4,14 @@
         {{ collection_str }}
         {% if arg_str %} {{ arg_str }}{% endif %}
         
-        <details class="dropdown dropdown-end">
-            <summary tabindex="0" title="Choose a collection"  class="list-none [&::-webkit-details-marker]:hidden focus:outline-none hover:text-secondary">
+        <div class="dropdown dropdown-end">
+            <div tabindex="0" title="Choose a collection"  class="list-none [&::-webkit-details-marker]:hidden focus:outline-none hover:text-secondary hover:cursor-pointer">
                 <svg xmlns="http://www.w3.org/2000/svg" width="0.7em" height="1em" viewBox="0 0 24 24">
                     <path fill="currentColor" d="M12 4a1 1 0 0 1 .707.293l4 4a1 1 0 0 1-1.414 1.414L12 6.414L8.707 9.707a1 1 0 0 1-1.414-1.414l4-4A1 1 0 0 1 12 4M7.293 14.293a1 1 0 0 1 1.414 0L12 17.586l3.293-3.293a1 1 0 0 1 1.414 1.414l-4 4a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 0-1.414" />
                 </svg>
-            </summary>
+            </div>
             <ul tabindex="0" class="dropdown-content menu mt-2 bg-base-100 w-52 z-[1] p-2 shadow">
-              {% for c in collections %}
+            {% for c in collections %}
               {% if not c.hidden %}   
                  <li>
                     <a href="{% url basename c.slug %}"
@@ -21,8 +21,9 @@
                     >{{ c.name }}</a>
                 </li>
              {% endif %}
-          {% endfor %}
+            {% endfor %}
             </ul>
+        </div>
     </h2>
     
     <!-- <div class="mb-8">
