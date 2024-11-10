@@ -74,7 +74,7 @@ class Project(models.Model):
     )
     image_is_featured = models.IntegerField(default=0)
 
-    is_public = models.BooleanField(default=True, verbose_name="is_shared")
+    is_public = models.BooleanField(default=True, verbose_name="shared")
     is_active = models.BooleanField(default=True, verbose_name="is_active")
     is_published = models.BooleanField(default=True, verbose_name="is_published")
 

@@ -5335,10 +5335,6 @@ details.collapse summary::-webkit-details-marker {
   padding-top: 2rem;
 }
 
-.pt-5 {
-  padding-top: 1.25rem;
-}
-
 .text-left {
   text-align: left;
 }
@@ -5351,24 +5347,12 @@ details.collapse summary::-webkit-details-marker {
   text-align: right;
 }
 
-.align-top {
-  vertical-align: top;
-}
-
 .align-middle {
   vertical-align: middle;
 }
 
-.align-bottom {
-  vertical-align: bottom;
-}
-
 .align-text-top {
   vertical-align: text-top;
-}
-
-.align-text-bottom {
-  vertical-align: text-bottom;
 }
 
 .text-2xl {
@@ -5775,6 +5759,10 @@ summary::marker {
 
 input[type="checkbox"] {
   margin-right: 0px;
+}
+
+#div_id_is_public input[type="checkbox"] {
+  margin-right: 2.5rem;
 }
 
 form a {

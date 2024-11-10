@@ -176,6 +176,11 @@ input[type="checkbox"] {
   @apply mr-0
 }
 
+#div_id_is_public input[type="checkbox"] {
+  @apply mr-10
+}
+
+
 form a {
   @apply underline text-primary
 }
