@@ -220,9 +220,13 @@ def save_project(
     project.update_embeddings()
     project.save()
 
-    if tags:
-        for tag in tags.split(","):
-            project.tags.add(tag.strip())
+    # ignore tags from old API
+    # if tags:
+    #     for tag in tags.split(","):
+    #         if tag.strip():
+    #             project.tags.add(tag.strip())
+    #         # selse: 
+    #         #    print("Empty tag found.")
     project.save()
 
     # save project file
