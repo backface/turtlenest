@@ -105,7 +105,9 @@
             <div class="mt-5 p-1">
                 <h4 class="inline">{% trans "Tags" %}:</h4>
                 {% for tag in project.tags.all %}
-                    <a href="{% url 'projects:list_by_tag' tag.slug %}" class="text-tertiary hover:text-primary">#{{ tag }}</a>
+                    {% if tag %}
+_                    <a href="{% url 'projects:list_by_tag' tag.slug %}" class="text-tertiary hover:text-primary">#{{ tag }}</a>
+                    {% endif %}
                 {% endfor %}
             </div>
             {% endif %} -->
