@@ -1,0 +1,30 @@
+# see docker-compose.dev for app configurations
+
+
+services:
+  caddy:
+    image: lucaslorentz/caddy-docker-proxy:ci-alpine
+    ports:
+      - 80:80
+      - 443:443
+    extra_hosts: #only for docker!
+      - "host.docker.internal:host-gateway"       
+    environment:
+      - CADDY_INGRESS_NETWORKS=public_proxy
+    networks:
+      - public_proxy
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - caddy_data:/data
+      - ${APP_DATA_DIR?./app-data}/media:/app/media
+      - ./static:/app/static
+      - ../turtlestitch:/app/guis/turtlestitch
+      - ../snap:/app/guis/snap      
+    restart: unless-stopped
+
+volumes:
+  caddy_data:
+
+networks:
+  public_proxy:
+    external: true
