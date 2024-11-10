@@ -739,11 +739,11 @@ input[type="radio"] {
 }
 
 .page ul *::marker {
-  color: rgb(24 138 76 );
+  color: rgb(0 0 0 );
 }
 
 .page ul::marker {
-  color: rgb(24 138 76 );
+  color: rgb(0 0 0 );
 }
 
 *, ::before, ::after {
