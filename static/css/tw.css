@@ -733,16 +733,17 @@ input[type="radio"] {
 
 .page ul {
   margin-left: 1.25rem;
+  margin-bottom: 1rem;
   list-style-type: disc;
   padding-left: 1.25rem;
 }
 
 .page ul *::marker {
-  color: rgb(0 0 0 );
+  color: rgb(24 138 76 );
 }
 
 .page ul::marker {
-  color: rgb(0 0 0 );
+  color: rgb(24 138 76 );
 }
 
 *, ::before, ::after {

@@ -71,7 +71,7 @@
     @apply my-1
   }  
   .page ul {
-    @apply list-disc pl-5 ml-5 marker:text-black;
+    @apply list-disc pl-5 ml-5 marker:text-tertiary mb-4
   }
 }
 
