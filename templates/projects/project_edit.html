@@ -14,11 +14,6 @@
 
     <form class="form" method="post" action="{% url 'projects:edit' project.id %}" enctype="multipart/form-data">{% csrf_token %}
       <div class="text-left">
-        <!-- <style> 
-          me { background-color: #eee }
-          textarea { width: 100%; border:1px solid rgb(98, 98, 98); padding: 8px }
-          .markdownx-preview { border-top:1px solid black; padding:10px; margin-top: 20px }
-        </style> -->
           {% crispy form %}
           <button type="submit"><i class="icon--[ion-save] mr-1"></i> Save</button>
       </div>
