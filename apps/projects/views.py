@@ -615,7 +615,7 @@ def edit(request, id):
                         if note.contents:
                             note.contents[0].replace_with(project.notes)
                         else:
-                            note.contents = [project.notes]
+                            note.append(project.notes)
                     content = str(soup).replace(
                         '<?xml version="1.0" encoding="utf-8"?>\n', ""
                     )
