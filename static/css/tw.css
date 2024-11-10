@@ -731,6 +731,20 @@ input[type="radio"] {
   margin-bottom: 0.25rem;
 }
 
+.page ul {
+  margin-left: 1.25rem;
+  list-style-type: disc;
+  padding-left: 1.25rem;
+}
+
+.page ul *::marker {
+  color: rgb(0 0 0 );
+}
+
+.page ul::marker {
+  color: rgb(0 0 0 );
+}
+
 *, ::before, ::after {
   --tw-border-spacing-x: 0;
   --tw-border-spacing-y: 0;
