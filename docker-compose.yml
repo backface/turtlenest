@@ -59,25 +59,6 @@ services:
     restart: unless-stopped
     extra_hosts:
       - "host.docker.internal:host-gateway"
-    # labels:
-    #   caddy: ${DOMAIN}
-    #   caddy.log: ""
-    #   caddy.@media.path: "/media* /static* /turtlestitch* /snap*"
-    #   caddy.0_redir: "/static/run* /turtlestitch"
-    #   caddy.1_handle: "@media"
-    #   caddy.1_handle.0_root: "/media* /app/"
-    #   caddy.1_handle.1_root: "/run* /app/guis/turtlestitch/"
-    #   caddy.1_handle.2_root: "/static* /app/"
-    #   caddy.1_handle.3_root: "/snap* /app/guis/"
-    #   caddy.1_handle.4_root: "/turtlestitch* /app/guis/"
-    #   caddy.1_handle.5_file_server: ""
-    #   caddy.2_handle: "/hooks*"
-    #   caddy.2_handle.0_reverse_proxy: "host.docker.internal:9000"
-    #   caddy.3_handle.0_reverse_proxy: "{{upstreams 8000}}"
-    #   # #caddy.handle_errors.0_respond: "{err.status_code} {err.status_text}"
-    #   # caddy.0_handle_errors.0_root: "* /app/static"
-    #   # caddy.0_handle_errors.1_rewrite: "* /error.html"
-    #   # caddy.0_handle_errors.2_file_server: ""
 
   db-backup:
     image: pgvector/pgvector:pg16
@@ -97,7 +78,3 @@ services:
     depends_on: 
       - db
 
-# networks:
-#   public_proxy:
-#     name: public_proxy  
-#     external: true

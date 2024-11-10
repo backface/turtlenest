@@ -62,10 +62,6 @@ services:
     restart: unless-stopped
     extra_hosts: #only for docker!
     - "host.docker.internal:host-gateway" 
-    # ports: !override
-    #  - 8080:80
-    #  - 4433:443
-
 
   # redis:
   #   image: redis:7-alpine 
