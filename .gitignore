@@ -4,6 +4,7 @@ app-data*
 GeoLite2*
 tmp
 docker-compose.override.yml
+deploy
 
 # Django #
 *.log
