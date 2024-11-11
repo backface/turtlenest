@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="my-10 container mx-auto text-left">
+    <h2 class="text-5xl mb-10  text-center">Delete group</h2>
+
+	<form method="post" class="card">
+		{% csrf_token %}
+		<h2>Delete Group?</h2>
+		<p>Are you sure that you want to delete group: "{{group}}"?</p>
+        {% if group.description %}
+        <div class="mt-8">
+            <p>{{ group.description }}</p>
+        </div>
+        {% endif %} 
+		<div class="mt-8">
+			<button type="submit"  class="bg-red-600"><i class="icon-[ion--trash] mr-1"></i>Delete</button>
+
+         <a href="{% url 'groups:group_list' %}">
+            <button class="bg-slate-50 text-black" type="button">Cancel</button></a>
+         </div>
+	</form>
+</div>
+
+{%endblock content%}

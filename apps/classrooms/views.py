@@ -89,7 +89,13 @@ class GroupUpdateView(HostRequiredMixin, UpdateView):
 class GroupDeleteView(HostRequiredMixin, DeleteView):
     model = Group
     success_url = reverse_lazy("groups:group_list")
+    def form_valid(self, form):
+        self.request.session["group"] = 0
+        messages.success(self.request, "The group was deleted successfully.")
+        return super(GroupDeleteView, self).form_valid(form)
+    
 
+    
 
 @login_required
 def my_groups(request):

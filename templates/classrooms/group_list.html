@@ -45,7 +45,7 @@
                 <a href="{% url 'groups:group_update' group.id %}">
                     <button><i class="icon-[ion--edit] mr-1"></i>Edit Group Info</button>
                 </a>
-                <a href="{% url 'groups:group_detail' group.id %}">
+                <a href="{% url 'groups:group_delete' group.id %}">
                     <button class="bg-red-600"><i class="icon-[ion--trash] mr-1"></i>Delete Group</button>
                 </a>
             {% endif %}
