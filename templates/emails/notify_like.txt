@@ -2,7 +2,7 @@
 
 Your project {{ like.project.name }} has been liked by {{ like.liker.username }}.
 Visit your project and see all likes here: 
-https://turtlestitch.org/{% url "projects:detail_by_id" like.project.id %}
+https://turtlestitch.org{% url "projects:detail_by_id" like.project.id %}
 
 Happy Stitching!
 

@@ -1,15 +1,17 @@
 {% autoescape off %}Dear moderator,
 
-Following project was report as inappropriate by user {{ flag.flagged_by.username }}
+Following project was reported as inappropriate by user {{ flag.flagged_by.username }}
+
+Please review and take appropriate action.
 
 Project: {{ flag.project.name }}
-by: {{ flag.project.user.username }}
-
-Stated reason:
-{{ flag.reason }}
+User: {{ flag.project.user.username }}
+Link: https://turtlestitch.org{% url "projects:detail" flag.project.user.username flag.project.name %}
+Flagged by: {{ flag.project.user.username }}
+Reason: {{ flag.reason }}
 
 Visit the project and see for yourself:
-https://turtlestitch.org/{% url "projects:detail" flag.project.user.username flag.project.name %}
+https://turtlestitch.org{% url "projects:detail" flag.project.user.username flag.project.name %}
 
 
 --

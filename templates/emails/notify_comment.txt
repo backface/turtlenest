@@ -5,7 +5,7 @@ Your project {{ like.project.name }} got a comment from {{ comment.author.userna
 {{ comment.contents }}
 
 Visit your project and read all comments here: 
-https://turtlestitch.org/{% url "projects:detail_by_id" comment.project.id %}
+https://turtlestitch.org{% url "projects:detail_by_id" comment.project.id %}
 
 
 Happy Stitching!
