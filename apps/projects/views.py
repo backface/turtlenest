@@ -726,7 +726,23 @@ def feature_media(request, id):
     project.save()
     messages.success(request, _("Set Image as featured"))
 
-    return redirect(reverse("projects:edit", args=(project.id,)))
+    return redirect(reverse("projects:detail", args=(project.user.username,project.projectname)))
+
+
+@login_required
+def unfeature_media(request, id):
+    image = get_object_or_404(Image, pk=id)
+    project = image.project
+    if image.project.user != request.user:
+        raise (PermissionDenied)
+
+    project.image_is_featured = 0
+    project.save()
+    messages.success(request, _("Image was unfeatured"))
+
+    return redirect(reverse("projects:detail", args=(project.user.username,project.projectname)))
+
+
 
 
 @login_required

@@ -34,8 +34,10 @@
         <a href="{% url 'projects:delete_media' image.id %}">
           <button type="button"><i class="icon--[ion--trash] mr-1"></i> Delete Media</button>
         </a>
-        {% if project.image_is_featured == image.id %}
-          This is the featured image
+        {% if project.image_is_featured == image.id %}         
+          <a href="{% url 'projects:unfeature_media' image.id %}">
+            <button type="button" class="bg-orange-600"><i class="icon--[ion--star] mr-1"></i> Unfeature Media</button>
+          </a>
         {% else %}
           <a href="{% url 'projects:feature_media' image.id %}">
             <button type="button"><i class="icon--[ion--star] mr-1"></i> Feature Media</button>

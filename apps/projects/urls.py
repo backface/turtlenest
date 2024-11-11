@@ -34,6 +34,7 @@ urlpatterns = [
     path("project/delete_media/<int:id>", views.delete_media, name="delete_media"),
     path("project/upload_media/<int:id>", views.upload_media, name="upload_media"),
     path("project/feature_media/<int:id>", views.feature_media, name="feature_media"),
+    path("project/unfeature_media/<int:id>", views.unfeature_media, name="unfeature_media"),
     path(
         "project/update_categories/<int:id>",
         views.update_categories,

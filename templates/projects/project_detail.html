@@ -41,11 +41,10 @@
                     src="{{ project.featured_image.url }}" 
                     alt="{{ project.featured_caption }}" 
                     loading="lazy"
-                    class="w-full max-w-full aspect-[4/3] object-cover border border-rounded border-light shadow"
+                    class="min-w-[320px] max-w-full aspect-[4/3] object-cover border border-rounded border-light shadow"
                 />
             </a>
 
-            {% if project.image_is_featured %}
             <div class="mt-2 h-16 w-auto">
                 {% if project.thumbnail and project.image_is_featured %}
                     <a href="{{ project.thumbnail.url }}" data-fancybox="gallery" data-caption="{{ project.name}}"  class="hover:opacity-80">
@@ -69,7 +68,6 @@
                     {% endif %}
                 {% endfor %}
             </div>
-            {% endif %}
 
         </div>
             
@@ -142,7 +140,6 @@ _                    <a href="{% url 'projects:list_by_tag' tag.slug %}" class="
         </div>
 
         <div class="mt-3 text-green-800">
-
 
             {% if request.user == project.user  %}           
             <a href="{% url 'projects:edit' project.id %}">
