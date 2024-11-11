@@ -241,20 +241,14 @@ def save_project(
         )
 
     if "group" in request.session:
-        group = Group.objects.get(id=request.session["group"])
-        newproject = SelectedProject(
-            group=group,
-            project=project,
-            is_starter=False,
-            unit_id=group.current_unit or "",
-        )
-        newproject.save()
-        # if group.current_unit:
-        #     unit = Unit.objects.get(id=group.current_unit)
-        #     unit.projects.add(project)
-        #     unit.save()
-        # else:
-        #     group.projects.add(project)
-        #     group.save()
+        if request.session["group"]:
+            group = Group.objects.get(id=request.session["group"])
+            newproject = SelectedProject(
+                group=group,
+                project=project,
+                is_starter=False,
+                unit_id=group.current_unit or "",
+            )
+            newproject.save()
 
     return {"text": f"project {projectname} {'created' if created else 'updated'}"}
