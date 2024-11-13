@@ -78,13 +78,12 @@ class ProfileForm(forms.ModelForm):
                 "Avatar",  
                 HTML(current_avatar),          
                 "avatar",
-                css_class="border border-gray-300 border-rounded p-4",
+                css_class="border border-gray-300 border-rounded p-4 mb-6",
             ),
             Fieldset(
-                None,
-                
-                "location",
+                None,                
                 "about",
+                "location",
             ),
             Fieldset(
                 "Notifications:",
