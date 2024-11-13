@@ -337,9 +337,15 @@ def detail_by_id(request, id):
     project.save(no_timestamp=True)
 
     group = None
-    if "group" in request.session:
-        if request.session["group"]:
-            group = Group.objects.get(pk=request.session["group"])
+    try:
+        if "group" in request.session:
+            if request.session["group"]:
+                group = Group.objects.get(pk=request.session["group"])
+    except Group.DoesNotExist:
+        # seems der is a faulty reference to group in this session
+        # delete if from the session        
+        del request.session["group"]
+        pass 
 
     return render(
         request,
