@@ -127,7 +127,7 @@ def get_project_thumbnail(request, username: str, projectname: str):
     """
     Get a project's thumbnail.
     """
-    project = Project.objects.get(user__username=username, name=projectname)
+    project = get_object_or_404(Project, user__username=username, name=projectname)
     # check permission
     if (
         request.user.is_authenticated and request.user.username == username
@@ -149,7 +149,7 @@ def set_project_visibility(
     """
     Change the project's visibility.
     """
-    project = Project.objects.get(user__username=username, name=projectname)
+    project = get_object_or_404(Project, user__username=username, name=projectname)
     if (
         request.user.is_authenticated and request.user.username == username
     ) or project.is_public:
@@ -174,7 +174,7 @@ def delete_project(request, username: str, projectname: str):
     """
     Delete a Project
     """
-    project = Project.objects.get(user__username=username, name=projectname)
+    project = get_object_or_404(Project, user__username=username, name=projectname)
 
     if (
         request.user.is_authenticated and request.user.username == username
