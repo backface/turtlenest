@@ -5,6 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 from django.utils import timezone
 from django.core.files.base import ContentFile
+from django.shortcuts import get_object_or_404
 from ninja.errors import HttpError
 from ninja.security import django_auth
 from ninja import NinjaAPI
@@ -88,7 +89,7 @@ def get_project(request, username: str, projectname: str):
     """
     Get a project's full details
     """
-    project = Project.objects.get(user__username=username, name=projectname)
+    project = get_object_or_404(Project, user__username=username, name=projectname)
 
     if (
         request.user.is_authenticated and request.user.username == username
