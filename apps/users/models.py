@@ -10,7 +10,7 @@ from django.contrib.auth.models import Group
 
 def _get_avatar_filename(instance, filename):
     """Use random filename prevent overwriting existing files & to fix caching issues."""
-    return f'profile-pictures/{uuid.uuid4()}.{filename.split(".")[-1]}'
+    return f'avatars/{uuid.uuid4()}.{filename.split(".")[-1]}'
 
 
 # class Preferences(models.Model):

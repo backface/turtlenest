@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.utils.translation import gettext_lazy as _
 from django.contrib import messages
 from django.conf import settings
@@ -15,11 +15,12 @@ def profile(request):
     if not user.is_authenticated:
         raise (PermissionDenied)
     if request.method == "POST":
-        form = ProfileForm(request.POST, instance=user)
+        form = ProfileForm(request.POST, request.FILES, instance=user)
         if form.is_valid():
             form.save()
             messages.success(request, _("Your profile has been updated."))
-            return render(request, "users/profile.html", {"user": user, "form": form})
+            #return render(request, "users/profile.html", {"user": user, "form": form})
+            return redirect('projects:user_detail', username=user.username)
         else:
             messages.error(request, _("Please correct the following errors:"))
             return render(request, "users/profile.html", {"user": user, "form": form})
