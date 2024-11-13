@@ -241,15 +241,19 @@ def save_project(
             f"{project.slug}.{ext}", ContentFile(base64.b64decode(imgstr)), save=True
         )
 
-    if "group" in request.session:
-        if request.session["group"]:
-            group = Group.objects.get(id=request.session["group"])
-            newproject = SelectedProject(
-                group=group,
-                project=project,
-                is_starter=False,
-                unit_id=group.current_unit or "",
-            )
-            newproject.save()
+    try:
+        if "group" in request.session:
+            if request.session["group"]:
+                group = Group.objects.get(id=request.session["group"])
+                newproject = SelectedProject(
+                    group=group,
+                    project=project,
+                    is_starter=False,
+                    unit_id=group.current_unit or "",
+                )
+                newproject.save()
+    except Group.DoesNotExist:
+        del request.session["group"]
+        pass
 
     return {"text": f"project {projectname} {'created' if created else 'updated'}"}
