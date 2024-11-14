@@ -20,3 +20,17 @@ You also need to create an admin/superuser if you are not importing/migrating fr
 	docker compose exec django python manage.py createsuperuser
 
 Finally go to: [http://localhost:8000](http://localhost:8000)
+
+
+### development
+
+for development with tailwind you also need to run tailwind compile stylesheets
+
+on first use:
+
+	pnpm install
+
+then:
+
+    pnpm run dev
+    
