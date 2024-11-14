@@ -24,13 +24,12 @@ Finally go to: [http://localhost:8000](http://localhost:8000)
 
 ### development
 
-for development with tailwind you also need to run tailwind compile stylesheets
-
-on first use:
+For frontend development you also need to run tailwind  to compile the stylesheets
+On first use:
 
 	pnpm install
 
-then:
+Then:
 
     pnpm run dev
     
