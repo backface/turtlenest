@@ -88,7 +88,9 @@ INSTALLED_APPS = [
     "apps.classrooms.apps.ClassroomsConfig",
     
     "apps.wp_blog",
-    "apps.legacydb",
+    
+    #"apps.legacydb",
+    # only needed for migrating or looking into the legacy database
 
     #"django_browser_reload",
     "django_cleanup.apps.CleanupConfig",
