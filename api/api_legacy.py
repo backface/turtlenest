@@ -14,7 +14,7 @@ from typing import List
 from datetime import datetime
 from bs4 import BeautifulSoup
 import base64
-from apps.projects.models import Project
+from apps.projects.models import Project, Remix
 from apps.classrooms.models import Group, SelectedProject
 
 
@@ -228,6 +228,7 @@ def save_project(
     #             project.tags.add(tag.strip())
     #         # selse: 
     #         #    print("Empty tag found.")
+
     project.save()
 
     # save project file
@@ -241,6 +242,7 @@ def save_project(
             f"{project.slug}.{ext}", ContentFile(base64.b64decode(imgstr)), save=True
         )
 
+    # are we logged into a group? add a reference there as well
     try:
         if "group" in request.session:
             if request.session["group"]:
@@ -255,5 +257,19 @@ def save_project(
     except Group.DoesNotExist:
         del request.session["group"]
         pass
+
+    # Are we a remix? then add remix
+    orig_creator = soup.find_all("origCreator")[0].text if soup.find_all("origCreator") else None
+    orig_name = soup.find_all("origName")[0].text if soup.find_all("origName") else None
+    if orig_creator != username or orig_name != projectname:
+        try:        
+            remixed_from = Project.objects.get(user__username=orig_creator, name=orig_name)
+            new_remix, created = Remix.objects.get_or_create(
+                original_project=remixed_from,
+                remixed_project=project,
+            )
+            new_remix.save()
+        except Project.DoesNotExist:
+            pass #ingore projects that don't exit
 
     return {"text": f"project {projectname} {'created' if created else 'updated'}"}
