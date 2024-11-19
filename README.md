@@ -10,8 +10,7 @@ Currently, supports both the legacy [TurtleCloud](https://github.com/backface/tu
 
     cp env.SAMPLE .env
 
-make sure those settings fit you.
-Link or copy docker-compose.dev.yml to docker-compose.override.yml in case you want to run a local web proxy server (caddy) or if need changes for your local system best put it there. then run:
+make sure those values fit your system.
 
     docker compose up
 
@@ -22,10 +21,43 @@ You also need to create an admin/superuser if you are not importing/migrating fr
 Finally go to: [http://localhost:8000](http://localhost:8000)
 
 
-### development
+### Development
 
-For frontend development you also need to run tailwind  to compile the stylesheets
-On first use:
+#### Backend
+
+Link (or copy) docker-compose.dev.yml to docker-compose.override.yml 
+
+    cp docker-compose.dev.yml docker-compose.override.yml
+
+This will start Django's development server on port 8000 with hot reloading.
+It also starts caddy as local proxy server on port 80 and with SSL on port 443. 
+In some cases this is needed for testing. Feel free to adapt ports and other settings
+the the docker-compose.override file - it is not tracked by git.
+
+You can the standart Django management script like:
+
+    docker compose exec django python manage.py 
+
+If you don't like docker, you can run turtlenest with [uv](https://docs.astral.sh/uv/). 
+Just make sure you configure a valid database in your environment or .env file, see env.SAMPLE. 
+Install dependies:
+   
+    uv sync --frozen
+
+run development server
+
+    uv run manage.py runserver
+
+or using a .env file:
+
+    uv run --env-file .env manage.py runserver
+
+#### Frontend
+
+
+For styling in frontend development you need to run tailwind to watch and compile the stylesheets.
+You need node and a node package manager. We use [pnpm](https://pnpm.io/)
+On first use run:
 
 	pnpm install
 
