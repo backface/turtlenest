@@ -60,11 +60,16 @@ urlpatterns = [
     
     path("make/", include("apps.wp_blog.urls")),
     
-    path("tos", RedirectView.as_view(url="/page/tos")),
-    path("", include("apps.projects.urls")),
-    
+    # page shortcuts
+    path("tos/", RedirectView.as_view(url="/page/tos")),
+    path("privacy/", RedirectView.as_view(url="/page/privacy")),
+    path("about/", RedirectView.as_view(url="/page/about")),
+   
     path("api/", api_legacy.urls),
     path("api/v1/", api_v1.urls),
+
+    # lookup everything else in projects
+    path("", include("apps.projects.urls")),    
 
     path("__reload__/", include("django_browser_reload.urls")),
 ]
