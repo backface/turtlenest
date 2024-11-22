@@ -15,13 +15,14 @@ def fix_accounts(apps, schema_editor):
         user.save()
 
         # add allauth email account
+        EmailAddress.objects.filter(user=user).delete()
         new_account, created = EmailAddress.objects.get_or_create(
             user=user,
             email=user.email,
             primary = True,
             verified = True
         )
-        new_account.save() 
+        # new_account.save() 
 
 class Migration(migrations.Migration):
 
