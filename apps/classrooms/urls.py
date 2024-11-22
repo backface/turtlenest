@@ -27,6 +27,7 @@ urlpatterns = [
     path(r"unit/edit/<int:pk>", views.edit_unit, name="unit_update"),
     path(r"unit/delete/<int:pk>", views.delete_unit, name="unit_delete"),
     path(r"unit/activate/<int:pk>", views.activate_unit, name="unit_activate"),
+    path(r"unit/deactivate/<int:pk>", views.deactivate_unit, name="unit_deactivate"),
     path(
         r"addstarter/<int:group_id>/<int:project_id>",
         views.add_starter,

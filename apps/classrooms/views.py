@@ -177,6 +177,16 @@ def activate_unit(request, pk):
 
 
 @login_required
+def deactivate_unit(request, pk):
+    unit = get_object_or_404(Unit, pk=pk)
+    if not unit.group.is_host(request.user):
+        raise (PermissionDenied)
+    unit.group.current_unit = 0
+    unit.group.save()
+    return redirect(reverse("groups:group_detail", args=[unit.group.id]))
+
+
+@login_required
 def add_starter(request, group_id, project_id):
     group = get_object_or_404(Group, id=group_id)
     project = get_object_or_404(Project, id=project_id)

@@ -95,6 +95,10 @@
                 <a href="{% url 'groups:unit_activate' unit.id %}">
                     <button type="button"><i class="icon-[ion--trash] mr-1"></i>Activate Unit</button>
                 </a>
+                {% else %}
+                <a href="{% url 'groups:unit_deactivate' unit.id %}">
+                    <button type="button"><i class="icon-[ion--trash] mr-1"></i>Deactivate</button>
+                </a>
                 {% endif %}                
                 <a href="{% url 'groups:unit_update' unit.id %}">
                     <button type="button"><i class="icon-[ion--edit] mr-1"></i>Edit Unit Info</button>
