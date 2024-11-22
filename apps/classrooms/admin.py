@@ -51,7 +51,7 @@ class UnitAdmin(admin.ModelAdmin):
 
 @admin.register(SelectedProject)
 class SelectedProjectAdmin(admin.ModelAdmin):
-    list_display = ("id", "project", "group", "unit", "is_starter")
+    list_display = ("id", "project", "group", "unit", "is_starter", "date_created")
     search_fields = ("group__title", "project__name")
 
 

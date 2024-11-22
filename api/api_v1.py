@@ -404,22 +404,27 @@ def save_project(request, username: str, projectname: str):
         )
     project.save()
 
-    if "group" in request.session:
-        group = Group.objects.get(id=request.session["group"])
-        newproject = SelectedProject(
-            group=group,
-            project=project,
-            is_starter=False,
-            unit_id=group.current_unit or "",
-        )
-        newproject.save()
-        # if group.current_unit:
-        #     unit = Unit.objects.get(id=group.current_unit)
-        #     unit.projects.add(project)
-        #     unit.save()
-        # else:
-        #     group.projects.add(project)
-        #     group.save()
+    # are we logged into a group? add a reference there as well
+    try:
+        if "group" in request.session:
+            if request.session["group"]:
+                group = Group.objects.get(id=request.session["group"])
+                if group.current_unit:
+                    project = SelectedProject.objects.get_or_create(
+                        group=group,
+                        project=project,
+                        is_starter=False,
+                        unit_id=group.current_unit,
+                    )
+                else:
+                    project = SelectedProject.objects.get_or_create(
+                        group=group,
+                        project=project,
+                        is_starter=False
+                    )                    
+    except Group.DoesNotExist:
+        del request.session["group"]
+        pass
 
     return Message(message=f"project {projectname} saved")
 

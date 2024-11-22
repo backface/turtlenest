@@ -15,7 +15,7 @@ from datetime import datetime
 from bs4 import BeautifulSoup
 import base64
 from apps.projects.models import Project, Remix
-from apps.classrooms.models import Group, SelectedProject
+from apps.classrooms.models import Group, SelectedProject, Unit
 
 
 # TODO:
@@ -247,13 +247,19 @@ def save_project(
         if "group" in request.session:
             if request.session["group"]:
                 group = Group.objects.get(id=request.session["group"])
-                newproject = SelectedProject(
-                    group=group,
-                    project=project,
-                    is_starter=False,
-                    unit_id=group.current_unit or "",
-                )
-                newproject.save()
+                if group.current_unit:
+                    project = SelectedProject.objects.get_or_create(
+                        group=group,
+                        project=project,
+                        is_starter=False,
+                        unit_id=group.current_unit,
+                    )
+                else:
+                    project = SelectedProject.objects.get_or_create(
+                        group=group,
+                        project=project,
+                        is_starter=False
+                    )                    
     except Group.DoesNotExist:
         del request.session["group"]
         pass
