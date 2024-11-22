@@ -38,6 +38,11 @@ urlpatterns = [
         views.remove_member,
         name="remove_member",
     ),
+    path(
+        r"<int:id>/remove_project/<int:project_id>",
+        views.remove_project,
+        name="remove_project",
+    ),    
     path(r"<int:id>/bulk_add", views.bulk_add, name="bulk_add"),
     path(r"trainer_request", views.trainer_request, name="trainer_request"),
 ]

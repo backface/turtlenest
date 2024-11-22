@@ -16,6 +16,7 @@ from django.contrib import messages
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
+from django_htmx.http import HttpResponseClientRefresh
 from apps.projects.models import Project
 from apps.users.models import User
 from allauth.account.models import EmailAddress
@@ -235,6 +236,17 @@ def remove_member(request, id, username):
     else:
         return redirect(reverse("groups:group_detail", args=[group.id]))
 
+
+@login_required
+def remove_project(request, id, project_id):
+    group = get_object_or_404(Group, pk=id)
+    if not group.is_host(request.user):
+        raise  (PermissionDenied)
+    project = SelectedProject.objects.get(group=group, pk=project_id)
+    project.delete()
+    messages.success(request, "Project removed")
+    return HttpResponseClientRefresh()
+    
 
 @login_required
 def bulk_add(request, id):

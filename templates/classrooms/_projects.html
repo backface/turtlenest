@@ -1,5 +1,16 @@
 {% for project in projects %}
-   {% include "projects/_project.html" with project=project %}
+    <div class="relative inline">
+    {% include "projects/_project.html" with project=project %}
+    {% if group.host == request.user %}
+        <div 
+            class="absolute top-4 -right-2 w-6 h-6 text-center border bg-white border-red-700 text-red-700 rounded-full hover:bg-red-700 hover:text-white hover:cursor-pointer"        
+            hx-post="{% url 'groups:remove_project' group.id project.selectedproject_set.all.0.id %}"
+            hx-trigger="click"          
+        >
+            <i class="icon-[ion--remove]"></i>
+        </div>
+    {% endif %}
+    </div>
 {% endfor %}
 
 
