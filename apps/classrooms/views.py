@@ -223,8 +223,6 @@ def remove_member(request, id, username):
     group = get_object_or_404(Group, pk=id)
     if not group.is_host(request.user):
         raise (PermissionDenied)
-    print(group)
-    print(group.membership_set.all)
     membership = Membership.objects.get(group=group, user__username=username)
     membership.delete()
     messages.success(request, "Member removed")
