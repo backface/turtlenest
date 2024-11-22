@@ -18,6 +18,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from apps.projects.models import Project
 from apps.users.models import User
+from allauth.account.models import EmailAddress
 from .models import Group, TrainerRequest, Unit, SelectedProject, Membership
 from .forms import TrainerRequestForm, UnitForm, AddMemberForm, BulkAddForm
 
@@ -256,11 +257,24 @@ def bulk_add(request, id):
                             u, created = User.objects.get_or_create(
                                 username=username,
                             )
+                            # create a fake email
+                            u.email = f"{username}@turtlestitch.org"                            
                             u.mentor = request.user
                             u.set_password(password)
+                            u.notify_comments = False
+                            u.notify_like = False
                             u.add_to_group("Puppets")
                             u.save()
                             group.members.add(u)
+
+                            # add allauth email account
+                            new_account, created = EmailAddress.objects.get_or_create(
+                                user=u,
+                                email=u.email
+                            )
+                            new_account.verified = True
+                            new_account.primary = True
+                            new_account.save()                            
                     else:
                         raise (Exception("Invalid CSV data"))
             except Exception as e:

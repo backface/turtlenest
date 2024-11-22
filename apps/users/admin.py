@@ -88,7 +88,10 @@ class UserAdmin(UserAdmin):
     fieldsets = UserAdmin.fieldsets + (
         (
             "Additional Infos",
-            {"fields": ("avatar", "language", "location", "about", "mentor")},
+            {"fields": (
+                "avatar", "language", "location", "about", 
+                "mentor", 
+                "notify_comment", "notify_like")},
         ),
     )
     raw_id_fields = ("mentor",)

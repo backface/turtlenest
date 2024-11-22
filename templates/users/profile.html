@@ -15,29 +15,31 @@
             <p>You have <span>{{ user.project_set.all.count }}</span> projects</p>
         </div>
 
-        <div class="my-8">         
-            <button>
-                <a href="{% url 'account_email' %}">Change your email</a> ({{ user.email }})
-            </button>
+        <div class="my-8">   
+            {% if not user.is_puppet %}         
+                <button>
+                    <a href="{% url 'account_email' %}">Change your email</a> ({{ user.email }})
+                </button>
 
-            {% get_providers as socialaccount_providers %}
-            {% if socialaccount_providers %}         
-            <button>
-                <a href="{% url 'socialaccount_connections' %}">Edit your social connections</a>
-            </button>
+                {% get_providers as socialaccount_providers %}
+                {% if socialaccount_providers %}         
+                <button>
+                    <a href="{% url 'socialaccount_connections' %}">Edit your social connections</a>
+                </button>
+                {% endif %}
             {% endif %}
-            
+
             <button>
                 <a href="{% url 'account_change_password' %}">Change your password</a>
             </button>
 
-            {% if not user.is_teacher %}
+            {% if not user.is_teacher and not user.is_puppet %}
             <button>
                 <a href="{% url 'groups:trainer_request' %}">Request Trainer Account</a>
             </button>
             {% endif %}
         </div>
-     
+             
         <h2>Profile Info</h2>
         <form class="form" method="post" action="{% url 'users:profile' %}" enctype="multipart/form-data">
             {% csrf_token %}
@@ -46,14 +48,15 @@
                 <button type="submit">
                     <i class="icon--[ion--save]"></i> Save
                 </button>
-            </div>>
+            </div>
         </form>
 
-        <h1>Danger Zone</h1>
-        <button class="danger">
-            <a href="{% url 'users:delete_account' %}">Delete my account</a>
-        </button>
-
+        {% if not user.is_puppet %}
+            <h1>Danger Zone</h1>
+            <button class="danger">
+                <a href="{% url 'users:delete_account' %}">Delete my account</a>
+            </button>        
+        {% endif %}
 
     {% else %}
 

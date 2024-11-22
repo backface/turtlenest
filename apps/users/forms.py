@@ -73,30 +73,45 @@ class ProfileForm(forms.ModelForm):
             )
             
         self.helper = helper
-        self.helper.layout = Layout(
-            Fieldset(
-                "Avatar",  
-                HTML(current_avatar),          
-                "avatar",
-                css_class="border border-gray-300 border-rounded p-4 mb-6",
-            ),
-            Fieldset(
-                None,                
-                "about",
-                "location",
-            ),
-            Fieldset(
-                "Notifications:",
-                "notify_comment",
-                "notify_like",
-                css_class="border border-gray-300 border-rounded p-4",
-            ),
-            # Row(
-            #     'notify_comment',
-            #     'notify_like',
-            #     css_class='flex flex-row',
-            # ),
-        )
+        if self.instance.is_puppet:
+            self.helper.layout = Layout(
+                Fieldset(
+                    "Avatar",  
+                    HTML(current_avatar),          
+                    "avatar",
+                    css_class="border border-gray-300 border-rounded p-4 mb-6",
+                ),
+                Fieldset(
+                    None,                
+                    "about",
+                    "location",
+                ),
+            )
+        else:
+            self.helper.layout = Layout(
+                Fieldset(
+                    "Avatar",  
+                    HTML(current_avatar),          
+                    "avatar",
+                    css_class="border border-gray-300 border-rounded p-4 mb-6",
+                ),
+                Fieldset(
+                    None,                
+                    "about",
+                    "location",
+                ),
+                Fieldset(
+                    "Notifications:",
+                    "notify_comment",
+                    "notify_like",
+                    css_class="border border-gray-300 border-rounded p-4",
+                ),
+                # Row(
+                #     'notify_comment',
+                #     'notify_like',
+                #     css_class='flex flex-row',
+                # ),
+            )
 
 
     def clean_avatar(self):
