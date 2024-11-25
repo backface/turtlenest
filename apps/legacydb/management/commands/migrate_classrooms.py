@@ -14,21 +14,21 @@ class Command(BaseCommand):
     help = "Migrate classrooms "
 
     def handle(self, **options):
-        migrate_classrooms()
-        with connection.cursor() as cursor:
-            cursor.execute(
-                "SELECT setval(pg_get_serial_sequence('classrooms_group', 'id'), (select max(id) from classrooms_group) + 1);"
-            )
-        migrate_members()
-        with connection.cursor() as cursor:
-            cursor.execute(
-                "SELECT setval(pg_get_serial_sequence('classrooms_membership', 'id'), (select max(id) from classrooms_membership) + 1);"
-            )
-        migrate_units()
-        with connection.cursor() as cursor:
-            cursor.execute(
-                "SELECT setval(pg_get_serial_sequence('classrooms_unit', 'id'), (select max(id) from classrooms_unit) + 1);"
-            )
+        # migrate_classrooms()
+        # with connection.cursor() as cursor:
+        #     cursor.execute(
+        #         "SELECT setval(pg_get_serial_sequence('classrooms_group', 'id'), (select max(id) from classrooms_group) + 1);"
+        #     )
+        # migrate_members()
+        # with connection.cursor() as cursor:
+        #     cursor.execute(
+        #         "SELECT setval(pg_get_serial_sequence('classrooms_membership', 'id'), (select max(id) from classrooms_membership) + 1);"
+        #     )
+        # migrate_units()
+        # with connection.cursor() as cursor:
+        #     cursor.execute(
+        #         "SELECT setval(pg_get_serial_sequence('classrooms_unit', 'id'), (select max(id) from classrooms_unit) + 1);"
+        #     )
         migrate_projects()
         with connection.cursor() as cursor:
             cursor.execute(
@@ -154,7 +154,7 @@ def migrate_projects():
                     unit = Unit.objects.get(id=old_object.unit)
                 except Unit.DoesNotExist:
                     unit = None
-                    continue
+                    pass
                 new_object, created = ProjectSelection.objects.get_or_create(
                     id=old_object.id,
                     project_id=old_object.project_id,
@@ -168,7 +168,20 @@ def migrate_projects():
                 new_object.date_modified = old_object.updated_at or timezone.now()
                 new_object.save()
             except IntegrityError:
-                print("error: duplicate entry?")
+                print("error: duplicate entry? id alreay exists.")
+                print("trying without id")
+                try:
+                    new_object, created = ProjectSelection.objects.get_or_create(
+                        # id=old_object.id,
+                        project_id=old_object.project_id,
+                        is_starter=old_object.is_starter,
+                        group=Group.objects.get(id=old_object.classroom_id)
+                        if old_object.classroom_id
+                        else None,
+                        unit=unit, 
+                    )
+                except IntegrityError:
+                    print("error: duplicate entry? failed again")            
             except Group.DoesNotExist:
                 print("error: group does not exist")
             except Unit.DoesNotExist:
