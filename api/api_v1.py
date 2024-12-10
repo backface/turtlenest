@@ -410,14 +410,14 @@ def save_project(request, username: str, projectname: str):
             if request.session["group"]:
                 group = Group.objects.get(id=request.session["group"])
                 if group.current_unit:
-                    project = SelectedProject.objects.get_or_create(
+                    selected_project = SelectedProject.objects.get_or_create(
                         group=group,
                         project=project,
                         is_starter=False,
                         unit_id=group.current_unit,
                     )
                 else:
-                    project = SelectedProject.objects.get_or_create(
+                    selected_project = SelectedProject.objects.get_or_create(
                         group=group,
                         project=project,
                         is_starter=False
