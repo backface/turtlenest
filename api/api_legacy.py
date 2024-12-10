@@ -210,6 +210,9 @@ def save_project(
     notes = soup.find_all("notes")[0].text if soup.find_all("notes") else None
     # tag = soup.find_all("tags")[0].text if soup.find_all("notes") else None
 
+    # rempve line breaks in name
+    projectname = projectname.replace("\n","")
+
     project, created = Project.objects.get_or_create(
         user=request.user, name=projectname
     )
@@ -248,14 +251,14 @@ def save_project(
             if request.session["group"]:
                 group = Group.objects.get(id=request.session["group"])
                 if group.current_unit:
-                    project = SelectedProject.objects.get_or_create(
+                    selected_project = SelectedProject.objects.get_or_create(
                         group=group,
                         project=project,
                         is_starter=False,
                         unit_id=group.current_unit,
                     )
                 else:
-                    project = SelectedProject.objects.get_or_create(
+                    selected_project = SelectedProject.objects.get_or_create(
                         group=group,
                         project=project,
                         is_starter=False
