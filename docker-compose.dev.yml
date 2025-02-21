@@ -123,6 +123,4 @@ volumes:
 
 networks:
   public_proxy:
-    name: public_proxy  
-    # For local dev, don't expect an external network
-    external: false
+    driver: bridge
