@@ -105,7 +105,7 @@ def get_project(request, username: str, projectname: str):
             projectfile = project_file.read()
 
         project.views = project.views + 1
-        project.save()
+        project.save(no_timestamp=True)
 
         return {
             "projectname": project.name,

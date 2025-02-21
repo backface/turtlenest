@@ -328,6 +328,8 @@ def get_project(request, username: str, projectname: str, updatingnotes: bool = 
     if (
         request.user.is_authenticated and request.user.username == username
     ) or project.is_public:
+        project.views = project.views + 1
+        project.save(no_timestamp=True)
         with open(f"{settings.MEDIA_ROOT}/{project.project_file}", "r") as project_file:
             contents = project_file.read()
         return HttpResponse(
