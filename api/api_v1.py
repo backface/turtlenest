@@ -304,88 +304,6 @@ def get_project_versions(request, username: str, projectname: str):
     return []
 
 
-@api.post(
-    "/projects/{username}/{path:projectname}",
-    description="saves a project",
-)
-def save_project(request, username: str, projectname: str):
-    """
-    Save a Project
-    """
-    # are we the same user who requested to save the project?
-    if not (request.user.is_authenticated and request.user.username == username):
-        raise HttpError(403, "Not Allowed.")
-
-    # print(type(request.body))
-    data = json.loads(request.body.decode("ISO-8859-1"))
-    # return {}
-    # string = f"{request.body}"
-    # print(json.loads(string))
-    # print(json.loads(str(request.body, encoding="utf-8")))
-    # print("------------------------------")
-
-    contents = data["xml"]
-
-    # print(contents)
-    notes = data["notes"]
-    thumbnail = data["thumbnail"]
-    soup = BeautifulSoup(contents, "xml")
-
-    # # we look for the first instances (less elegant but it might be nested)
-    # thumbnail = soup.find_all("thumbnail")[0].text if soup.find_all("thumbnail") else thumbnail
-    thumbnail = soup.find_all("pentrails")[0].text if soup.find_all("pentrails") else thumbnail
-          
-    # notes = soup.find_all("notes")[0].text if soup.find_all("notes") else None
-    # # tag = soup.find_all("tags")[0].text if soup.find_all("notes") else None
-
-    project, created = Project.objects.get_or_create(
-        user=request.user, name=projectname
-    )
-    project.is_public = True
-    project.is_published = True
-    project.notes = notes
-    project.update_tags_from_notes()
-    project.update_embeddings()
-    project.date_updated = timezone.now()
-    project.save()
-
-    # save project file
-    project.project_file.save(project.slug + ".xml", ContentFile(contents))
-
-    # parse thumbnail and save to file
-    if thumbnail:
-        imgformat, imgstr = thumbnail.split(";base64,")
-        ext = imgformat.split("/")[-1]
-        project.thumbnail.save(
-            f"{project.slug}.{ext}", ContentFile(base64.b64decode(imgstr)), save=True
-        )
-    project.save()
-
-    # are we logged into a group? add a reference there as well
-    try:
-        if "group" in request.session:
-            if request.session["group"]:
-                group = Group.objects.get(id=request.session["group"])
-                if group.current_unit:
-                    selected_project = SelectedProject.objects.get_or_create(
-                        group=group,
-                        project=project,
-                        is_starter=False,
-                        unit_id=group.current_unit,
-                    )
-                else:
-                    selected_project = SelectedProject.objects.get_or_create(
-                        group=group,
-                        project=project,
-                        is_starter=False
-                    )                    
-    except Group.DoesNotExist:
-        del request.session["group"]
-        pass
-
-    return Message(message=f"project {projectname} saved")
-
-
 @api.post("/projects/{username}/{path:projectname}/metadata")
 def set_project_visibility(
     request,
@@ -479,3 +397,84 @@ def get_project(request, username: str, projectname: str, updatingnotes: bool = 
     else:
         raise HttpError(401, "Unauthorized. Note that this project is not public.")
 
+
+@api.post(
+    "/projects/{username}/{path:projectname}",
+    description="saves a project",
+)
+def save_project(request, username: str, projectname: str):
+    """
+    Save a Project
+    """
+    # are we the same user who requested to save the project?
+    if not (request.user.is_authenticated and request.user.username == username):
+        raise HttpError(403, "Not Allowed.")
+
+    # print(type(request.body))
+    data = json.loads(request.body.decode("ISO-8859-1"))
+    # return {}
+    # string = f"{request.body}"
+    # print(json.loads(string))
+    # print(json.loads(str(request.body, encoding="utf-8")))
+    # print("------------------------------")
+
+    contents = data["xml"]
+
+    # print(contents)
+    notes = data["notes"]
+    thumbnail = data["thumbnail"]
+    soup = BeautifulSoup(contents, "xml")
+
+    # # we look for the first instances (less elegant but it might be nested)
+    # thumbnail = soup.find_all("thumbnail")[0].text if soup.find_all("thumbnail") else thumbnail
+    thumbnail = soup.find_all("pentrails")[0].text if soup.find_all("pentrails") else thumbnail
+          
+    # notes = soup.find_all("notes")[0].text if soup.find_all("notes") else None
+    # # tag = soup.find_all("tags")[0].text if soup.find_all("notes") else None
+
+    project, created = Project.objects.get_or_create(
+        user=request.user, name=projectname
+    )
+    project.is_public = True
+    project.is_published = True
+    project.notes = notes
+    project.update_tags_from_notes()
+    project.update_embeddings()
+    project.date_updated = timezone.now()
+    project.save()
+
+    # save project file
+    project.project_file.save(project.slug + ".xml", ContentFile(contents))
+
+    # parse thumbnail and save to file
+    if thumbnail:
+        imgformat, imgstr = thumbnail.split(";base64,")
+        ext = imgformat.split("/")[-1]
+        project.thumbnail.save(
+            f"{project.slug}.{ext}", ContentFile(base64.b64decode(imgstr)), save=True
+        )
+    project.save()
+
+    # are we logged into a group? add a reference there as well
+    try:
+        if "group" in request.session:
+            if request.session["group"]:
+                group = Group.objects.get(id=request.session["group"])
+                if group.current_unit:
+                    selected_project = SelectedProject.objects.get_or_create(
+                        group=group,
+                        project=project,
+                        is_starter=False,
+                        unit_id=group.current_unit,
+                    )
+                else:
+                    selected_project = SelectedProject.objects.get_or_create(
+                        group=group,
+                        project=project,
+                        is_starter=False
+                    )                    
+    except Group.DoesNotExist:
+        del request.session["group"]
+        pass
+
+    return Message(message=f"project {projectname} saved")
