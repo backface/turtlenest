@@ -82,47 +82,8 @@ def get_users_projects(request, username: str):
         return projects
 
 
-@api.get(
-    "/users/{username}/projects/{projectname}", summary="Get a Project's full details."
-)
-def get_project(request, username: str, projectname: str):
-    """
-    Get a project's full details
-    """
-    project = get_object_or_404(Project, user__username=username, name=projectname)
 
-    if (
-        request.user.is_authenticated and request.user.username == username
-    ) or project.is_public:
-        if project.thumbnail:
-            with open(f"{settings.MEDIA_ROOT}/{project.thumbnail}", "rb") as image_file:
-                encoded_thumbnail = encoded_thumbnail = base64.b64encode(
-                    image_file.read()
-                ).decode("utf-8")
-        else:
-            encoded_thumbnail = ""
-        with open(f"{settings.MEDIA_ROOT}/{project.project_file}", "r") as project_file:
-            projectfile = project_file.read()
-
-        project.views = project.views + 1
-        project.save(no_timestamp=True)
-
-        return {
-            "projectname": project.name,
-            "username": project.user.username,
-            "notes": project.notes,
-            "thumbnail": f"data:image/png;base64,{encoded_thumbnail}",
-            "contents": f"{projectfile}",
-            "ispublic": project.is_public,
-            "updated": project.date_updated,
-            "id": project.id,
-            "views": project.views,
-        }
-    else:
-        raise HttpError(401, "Unauthorized. Note that this project is not public.")
-
-
-@api.get("/users/{username}/projects/{projectname}/image")
+@api.get("/users/{username}/projects/{path:projectname}/image")
 def get_project_thumbnail(request, username: str, projectname: str):
     """
     Get a project's thumbnail.
@@ -142,7 +103,7 @@ def get_project_thumbnail(request, username: str, projectname: str):
         raise HttpError(401, "Unauthorized. Note that this project is not public.")
 
 
-@api.get("/users/{username}/projects/{projectname}/visibility", auth=django_auth)
+@api.get("/users/{username}/projects/{path:projectname}/visibility", auth=django_auth)
 def set_project_visibility(
     request, username: str, projectname: str, ispublic: bool = True
 ):
@@ -169,7 +130,7 @@ def set_project_visibility(
         raise HttpError(401, "Unauthorized. Note that this project is not public.")
 
 
-@api.get("/users/{username}/projects/{projectname}/delete", auth=django_auth)
+@api.get("/users/{username}/projects/{path:projectname}/delete", auth=django_auth)
 def delete_project(request, username: str, projectname: str):
     """
     Delete a Project
@@ -282,3 +243,45 @@ def save_project(
             pass #ingore projects that don't exit
 
     return {"text": f"project {projectname} {'created' if created else 'updated'}"}
+
+
+
+
+@api.get(
+    "/users/{username}/projects/{path:projectname}", summary="Get a Project's full details."
+)
+def get_project(request, username: str, projectname: str):
+    """
+    Get a project's full details
+    """
+    project = get_object_or_404(Project, user__username=username, name=projectname)
+
+    if (
+        request.user.is_authenticated and request.user.username == username
+    ) or project.is_public:
+        if project.thumbnail:
+            with open(f"{settings.MEDIA_ROOT}/{project.thumbnail}", "rb") as image_file:
+                encoded_thumbnail = encoded_thumbnail = base64.b64encode(
+                    image_file.read()
+                ).decode("utf-8")
+        else:
+            encoded_thumbnail = ""
+        with open(f"{settings.MEDIA_ROOT}/{project.project_file}", "r") as project_file:
+            projectfile = project_file.read()
+
+        project.views = project.views + 1
+        project.save(no_timestamp=True)
+
+        return {
+            "projectname": project.name,
+            "username": project.user.username,
+            "notes": project.notes,
+            "thumbnail": f"data:image/png;base64,{encoded_thumbnail}",
+            "contents": f"{projectfile}",
+            "ispublic": project.is_public,
+            "updated": project.date_updated,
+            "id": project.id,
+            "views": project.views,
+        }
+    else:
+        raise HttpError(401, "Unauthorized. Note that this project is not public.")

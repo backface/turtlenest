@@ -295,52 +295,7 @@ def get_users_projects(request, username: str):
         return ProjectList(projects=projects)
 
 
-@api.get(
-    "/projects/{username}/{projectname}/thumbnail",
-    description="returns a base64 encoded image string",
-)
-def get_project_thumbnail(request, username: str, projectname: str):
-    """
-    Get a project's thumbnail.
-    """
-    project = Project.objects.get(user__username=username, name=projectname)
-    if (
-        request.user.is_authenticated and request.user.username == username
-    ) or project.is_public:
-        with open(f"{settings.MEDIA_ROOT}/{project.thumbnail}", "rb") as image_file:
-            encoded_thumbnail = base64.b64encode(image_file.read()).decode("utf-8")
-        return HttpResponse(
-            f"data:image/png;base64,{encoded_thumbnail}", content_type="text/html"
-        )
-    else:
-        raise HttpError(401, "Unauthorized. Note that this project is not public.")
-
-
-@api.get(
-    "/projects/{username}/{projectname}",
-    description="returns XML project file",
-)
-def get_project(request, username: str, projectname: str, updatingnotes: bool = True):
-    """
-    Load a project.
-    """
-    project = Project.objects.get(user__username=username, name=projectname)
-    if (
-        request.user.is_authenticated and request.user.username == username
-    ) or project.is_public:
-        project.views = project.views + 1
-        project.save(no_timestamp=True)
-        with open(f"{settings.MEDIA_ROOT}/{project.project_file}", "r") as project_file:
-            contents = project_file.read()
-        return HttpResponse(
-            f'<snapdata>{contents}<media name="{project.name}" app="Snap! 4.2, http://snap.berkeley.edu" version="1"/></snapdata>',
-            content_type="text/xml",
-        )
-    else:
-        raise HttpError(401, "Unauthorized. Note that this project is not public.")
-
-
-@api.get("/projects/{username}/{projectname}/versions")
+@api.get("/projects/{username}/{path:projectname}/versions")
 def get_project_versions(request, username: str, projectname: str):
     """
     Get a Project's Versions (returns and empty array for now)
@@ -350,7 +305,7 @@ def get_project_versions(request, username: str, projectname: str):
 
 
 @api.post(
-    "/projects/{username}/{projectname}",
+    "/projects/{username}/{path:projectname}",
     description="saves a project",
 )
 def save_project(request, username: str, projectname: str):
@@ -431,7 +386,7 @@ def save_project(request, username: str, projectname: str):
     return Message(message=f"project {projectname} saved")
 
 
-@api.post("/projects/{username}/{projectname}/metadata")
+@api.post("/projects/{username}/{path:projectname}/metadata")
 def set_project_visibility(
     request,
     username: str,
@@ -463,7 +418,28 @@ def set_project_visibility(
         raise HttpError(401, "Unauthorized. Note that this project is not public.")
 
 
-@api.delete("/projects/{username}/{projectname}")
+@api.get(
+    "/projects/{username}/{path:projectname}/thumbnail",
+    description="returns a base64 encoded image string",
+)
+def get_project_thumbnail(request, username: str, projectname: str):
+    """
+    Get a project's thumbnail.
+    """
+    project = Project.objects.get(user__username=username, name=projectname)
+    if (
+        request.user.is_authenticated and request.user.username == username
+    ) or project.is_public:
+        with open(f"{settings.MEDIA_ROOT}/{project.thumbnail}", "rb") as image_file:
+            encoded_thumbnail = base64.b64encode(image_file.read()).decode("utf-8")
+        return HttpResponse(
+            f"data:image/png;base64,{encoded_thumbnail}", content_type="text/html"
+        )
+    else:
+        raise HttpError(401, "Unauthorized. Note that this project is not public.")
+
+
+@api.delete("/projects/{username}/{path:projectname}")
 def delete_project(request, username: str, projectname: str):
     """
     Delete a Project
@@ -478,3 +454,28 @@ def delete_project(request, username: str, projectname: str):
         }
     else:
         raise HttpError(401, "Unauthorized. Note that this project is not public.")
+
+
+@api.get(
+    "/projects/{username}/{path:projectname}",
+    description="returns XML project file",
+)
+def get_project(request, username: str, projectname: str, updatingnotes: bool = True):
+    """
+    Load a project.
+    """
+    project = Project.objects.get(user__username=username, name=projectname)
+    if (
+        request.user.is_authenticated and request.user.username == username
+    ) or project.is_public:
+        project.views = project.views + 1
+        project.save(no_timestamp=True)
+        with open(f"{settings.MEDIA_ROOT}/{project.project_file}", "r") as project_file:
+            contents = project_file.read()
+        return HttpResponse(
+            f'<snapdata>{contents}<media name="{project.name}" app="Snap! 4.2, http://snap.berkeley.edu" version="1"/></snapdata>',
+            content_type="text/xml",
+        )
+    else:
+        raise HttpError(401, "Unauthorized. Note that this project is not public.")
+
