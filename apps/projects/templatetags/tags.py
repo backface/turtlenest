@@ -61,7 +61,7 @@ def link_uris(value):
     """Replace string with http and ftp with links"""
 
     # regex = "(http|ftp|https)://([^\s]+\.[^\s]+)|(http|ftp)://([\w-]+\.[^\s]+)|(http|ftp)://([\w-]+\.[^\s]+)/?"
-    regex = "((http|https)\:\/\/)?[a-zA-Z0-9\.\/\?\:@\-_=#]+\.([a-zA-Z]){2,6}([a-zA-Z0-9\.\&\/\?\:@\-_=#])*"
+    regex = "((http|https)\:\/\/)?[a-zA-Z0-9\.\/\?\:@\-_=#]+\.([a-zA-Z]){2,6}([a-zA-Z0-9\.\&\/\?\%\:@\-_=#])*"
     return mark_safe(
         re.sub(
             regex,
