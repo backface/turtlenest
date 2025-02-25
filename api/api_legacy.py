@@ -187,13 +187,13 @@ def save_project(
 
     # ignore tags from old API
     # if tags:
-    #     for tag in tags.split(","):
+    #     for tag in tags.sfplit(","):
     #         if tag.strip():
     #             project.tags.add(tag.strip())
     #         # selse: 
     #         #    print("Empty tag found.")
 
-    project.save()
+    #project.save()
 
     # save project file
     project.project_file.save(project.slug + ".xml", ContentFile(contents))
