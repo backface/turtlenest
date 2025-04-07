@@ -64,16 +64,16 @@ services:
     depends_on: 
       - db
 
-  legacy-db:
-    image: postgres:16    
-    env_file:
-      - '.env'
-    volumes:
-      - ${APP_DATA_DIR?./app-data}/postgres-legacy-data:/var/lib/postgresql/data/
-      - ${APP_DATA_DIR?./app-data}/postgres-init:/docker-entrypoint-initdb.d/
-    healthcheck:
-      test: pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}
-      interval: 30s
-      retries: 10
-      start_period: 20s      
-    restart: unless-stopped
+  # legacy-db:
+  #   image: postgres:16    
+  #   env_file:
+  #     - '.env'
+  #   volumes:
+  #     - ${APP_DATA_DIR?./app-data}/postgres-legacy-data:/var/lib/postgresql/data/
+  #     - ${APP_DATA_DIR?./app-data}/postgres-init:/docker-entrypoint-initdb.d/
+  #   healthcheck:
+  #     test: pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}
+  #     interval: 30s
+  #     retries: 10
+  #     start_period: 20s      
+  #   restart: unless-stopped
