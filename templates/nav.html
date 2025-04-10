@@ -64,9 +64,11 @@
       </div>
     </div>
   
+    {% if request.path != '/run' %}
     <div class="hidden md:block md:flex-auto">
       <a class="mx-8 px-5 py-3 bg-secondary pt-3 pb-3 text-xl hover:bg-tertiary hover:text-white uppercase " href="/run">Run</a>
     </div>
+    {% endif %}
     
     <div class="flex-auto text-right">
        {% if request.user.is_authenticated %} 
