@@ -147,6 +147,12 @@ _                    <a href="{% url 'projects:list_by_tag' tag.slug %}" class="
             </a>
             {% endif %}
 
+            {% if request.user == project.user  %}           
+            <a href="{% url 'projects:delete' project.id %}" onclick="return confirm('Are you sure you wish to delete this project?')">
+                <button class="bg-red-600"><i class="icon-[ion--edit] mr-1"></i> Delete</button>
+            </a>
+            {% endif %}
+
             {% if group.host == request.user %}
             <a href="{% url 'groups:addstarter' group.id project.id %}">
                 <button><i class="icon-[mdi--plus] mr-1"></i>Add as Starter to current Group/Unit</button>

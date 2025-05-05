@@ -753,13 +753,12 @@ def unfeature_media(request, id):
 
 @login_required
 def delete(request, id):
+    
     project = get_object_or_404(Project, pk=id)
-    if (
-        not request.user == project.user
-        or request.user.is_superuser
-        or request.user.is_moderator
-    ):
+    if (not request.user == project.user):
         raise (PermissionDenied)
+    
+    project.delete()
 
     messages.success(request, _("Project successfully deleted"))
 
