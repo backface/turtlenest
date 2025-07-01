@@ -40,7 +40,7 @@ def delete_account(request):
             if user.email != form.cleaned_data["email"]:
                 messages.error(request, _("Please enter your valid email address to confirm."))
                 return render(request, "users/delete_account.html", {"form": form})
-            if check_password(form.cleaned_data["password"], user.password):
+            if not check_password(form.cleaned_data["password"], user.password):
                 messages.error(request, _("Please enter your valid password to confirm."))
                 return render(request, "users/delete_account.html", {"form": form})      
             #user.delete()
