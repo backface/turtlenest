@@ -70,6 +70,11 @@ server {
         alias /var/www/turtlestitch;
     }
 
+    # Serving turtlestitch IDE (beta endpoint)
+    location /static/beta {
+        alias /var/www/turtlestitch-beta;
+    }
+
     # show custom error if container is offline
     error_page 502 @offline;
     location @offline {

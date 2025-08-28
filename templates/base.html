@@ -74,7 +74,7 @@ for designers to experiment with generative aesthetics and precision
 
   </div>
 
-  {% if not request.path == "/run" %}
+  {% if not request.path == "/run" and not request.path == "/beta" %}
     {% include "footer.html" %}
   {% endif %}
 
