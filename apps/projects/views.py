@@ -939,3 +939,8 @@ def flag(request, id):
 @xframe_options_exempt
 def run(request):
     return render(request, "run.html")
+
+
+@xframe_options_exempt
+def beta(request):
+    return render(request, "beta.html")

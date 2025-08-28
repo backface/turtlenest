@@ -8,6 +8,8 @@ urlpatterns = [
     path("", views.index, name="index"),
     path("run", views.run, name="run"),
     path("run/", views.run),
+    path("beta", views.beta, name="beta"),
+    path("beta/", views.beta),
     path("categories/", views.category_list, name="categories"),
     path("categories/<str:arg>", views.collection, { "collection" : "category" }),
     path("tag/<str:tag>", views.list_by_tag, name="list_by_tag"),
