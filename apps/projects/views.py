@@ -608,6 +608,12 @@ def edit(request, id):
         form = ProjectForm(request.POST, instance=project)
         if form.is_valid():
             form.save()
+            project.is_published = form.cleaned_data["is_public"]
+            if not form.cleaned_data["is_public"]:
+                project.last_shared = None
+            else:
+                if not project.last_shared:
+                    project.last_shared = timezone.now()
             project.update_tags_from_notes()
             project.update_embeddings()
             project.save()
