@@ -234,12 +234,18 @@ MIGRATION_MODULES = {
 # Allauth settings
 # ----------------------------------------------------------
 
-ACCOUNT_EMAIL_REQUIRED = True
+# deprecated: ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'username*', 'password1*', 'password2*']
+
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 SOCIALACCOUNT_EMAIL_VERIFICATION = "none"
-ACCOUNT_AUTHENTICATION_METHOD = "username_email"
+
+#deprecated: ACCOUNT_AUTHENTICATION_METHOD = "username_email"
+ACCOUNT_LOGIN_METHODS = {'email', 'username'}
+
 #ACCOUNT_SIGNUP_FORM_CLASS = "apps.users.forms.MySignupForm"
+
 ACCOUNT_EMAIL_SUBJECT_PREFIX = ""
 ACCOUNT_SESSION_REMEMBER = True
 ACCOUNT_CHANGE_EMAIL=True

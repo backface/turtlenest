@@ -19,7 +19,8 @@ from ninja import NinjaAPI
 from ninja import Schema
 from ninja.errors import HttpError
 from allauth.account.forms import ResetPasswordForm
-from allauth.account.utils import send_email_confirmation
+from allauth.account.models import EmailAddress
+# removed from allauth.account.utils import send_email_confirmation
 
 from apps.projects.models import Project
 from apps.classrooms.models import Group, SelectedProject
@@ -180,7 +181,10 @@ def signup_user(
     user = User(username=username, email=email, password=password)
     user.set_password(password)
     user.save()
-    send_email_confirmation(request, user, user.email)
+
+    # removed see https://codeberg.org/allauth/django-allauth/issues/4507#issuecomment-6046162
+    # send_email_confirmation(request, user, user.email)
+    EmailAddress.objects.add_email(request, user, user.email, confirm=True)
 
     return {
         "redirect": "/login",
@@ -203,7 +207,11 @@ def resend_verification(request, username: str):
         return HttpResponse(status=200)
 
     if not user.is_email_verified():
-        send_email_confirmation(request, user, user.email)
+        # removed see https://codeberg.org/allauth/django-allauth/issues/4507    
+        # send_email_confirmation(request, user, user.email)
+        email_address = user.emailaddress_set.first()
+        email_address.send_confirmation()        
+        pass
     else:
         # return Message(message = f"Email already verified.")
         return HttpResponse(status=200)
