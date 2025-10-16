@@ -856,6 +856,45 @@ def unshare_project(request, id):
 
 
 @login_required
+def unpublish_project(request, id):
+    project = get_object_or_404(Project, pk=id)
+    if (
+        not request.user == project.user
+        and not request.user.is_moderator
+        and not request.user.is_superuser
+    ):
+        raise (PermissionDenied)
+    else:
+        project.is_published = False
+
+        project.save()
+        messages.success(request, "Project unlisted.")
+        if request.META.get("HTTP_HX_REQUEST") or request.htmx:
+            return render(request, "projects/_is_published.html", {"project": project})
+        else:
+            return redirect("projects:detail_by_id", id=project.id)
+
+
+@login_required
+def publish_project(request, id):
+    project = get_object_or_404(Project, pk=id)
+    if (
+        not request.user == project.user
+        and not request.user.is_moderator
+        and not request.user.is_superuser
+    ):
+        raise (PermissionDenied)
+    else:
+        project.is_published = True
+        project.save()
+        messages.success(request, "Project listed")
+        if request.META.get("HTTP_HX_REQUEST") or request.htmx:
+            return render(request, "projects/_is_published.html", {"project": project})
+        else:
+            return redirect("projects:detail_by_id", id=project.id)
+
+
+@login_required
 def add_comment(request, id):
     if request.method == "POST":
         if not request.user.id == int(request.POST["author"]):

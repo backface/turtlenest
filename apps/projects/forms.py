@@ -31,9 +31,9 @@ class ProjectForm(forms.ModelForm):
                 "Privacy Settings",
                 Row(
                     "is_public",
-                    #"is_published",
+                    "is_published",
                     css_class="border border-gray-300 border-rounded p-4 pb-2 flex flex-row mb-4",
-                ),
+                ),             
             ),
         )
         # self.helper.add_input(Submit('submit', 'Submit'))

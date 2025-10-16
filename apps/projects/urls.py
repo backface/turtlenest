@@ -47,6 +47,8 @@ urlpatterns = [
     path("project/<int:id>/comment/add", views.add_comment, name="add_comment"),
     path("project/<int:id>/share", views.share_project, name="share"),
     path("project/<int:id>/unshare", views.unshare_project, name="unshare"),
+    path("project/<int:id>/publish", views.publish_project, name="publish"),
+    path("project/<int:id>/unpublish", views.unpublish_project, name="unpublish"),    
     path("project/comment/delete/<id>", views.delete_comment, name="delete_comment"),
     
     path("projects", views.list, name="list"),
