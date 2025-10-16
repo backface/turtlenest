@@ -868,7 +868,7 @@ def unpublish_project(request, id):
         project.is_published = False
 
         project.save()
-        messages.success(request, "Project unlisted.")
+        messages.success(request, "Project unpublished.")
         if request.META.get("HTTP_HX_REQUEST") or request.htmx:
             return render(request, "projects/_is_published.html", {"project": project})
         else:
@@ -887,7 +887,7 @@ def publish_project(request, id):
     else:
         project.is_published = True
         project.save()
-        messages.success(request, "Project listed")
+        messages.success(request, "Project published")
         if request.META.get("HTTP_HX_REQUEST") or request.htmx:
             return render(request, "projects/_is_published.html", {"project": project})
         else:
