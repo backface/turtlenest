@@ -311,33 +311,33 @@ wheels = [
 
 [[package]]
 name = "django"
-version = "5.1.2"
+version = "5.2.7"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "asgiref" },
     { name = "sqlparse" },
     { name = "tzdata", marker = "sys_platform == 'win32'" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/9c/e5/a06e20c963b280af4aa9432bc694fbdeb1c8df9e28c2ffd5fbb71c4b1bec/Django-5.1.2.tar.gz", hash = "sha256:bd7376f90c99f96b643722eee676498706c9fd7dc759f55ebfaf2c08ebcdf4f0", size = 10711674 }
+sdist = { url = "https://files.pythonhosted.org/packages/b1/96/bd84e2bb997994de8bcda47ae4560991084e86536541d7214393880f01a8/django-5.2.7.tar.gz", hash = "sha256:e0f6f12e2551b1716a95a63a1366ca91bbcd7be059862c1b18f989b1da356cdd", size = 10865812 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/a3/b8/f205f2b8c44c6cdc555c4f56bbe85ceef7f67c0cf1caa8abe078bb7e32bd/Django-5.1.2-py3-none-any.whl", hash = "sha256:f11aa87ad8d5617171e3f77e1d5d16f004b79a2cf5d2e1d2b97a6a1f8e9ba5ed", size = 8276058 },
+    { url = "https://files.pythonhosted.org/packages/8f/ef/81f3372b5dd35d8d354321155d1a38894b2b766f576d0abffac4d8ae78d9/django-5.2.7-py3-none-any.whl", hash = "sha256:59a13a6515f787dec9d97a0438cd2efac78c8aca1c80025244b0fe507fe0754b", size = 8307145 },
 ]
 
 [[package]]
 name = "django-allauth"
-version = "65.1.0"
+version = "65.12.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "asgiref" },
     { name = "django" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/9a/a7/35a6586490b8d7dc47b514b78c0dab37f00625b3305cba89c48aaed71b5e/django_allauth-65.1.0.tar.gz", hash = "sha256:ab2c32c51797bab1e7a334f37afa61ef4a88c6f13dfd7bd898a16e2b7e567ef0", size = 1292228 }
+sdist = { url = "https://files.pythonhosted.org/packages/6f/53/709a7644f8e1f92888c818f5a4cae1c598813ee42bf4e709bf010ba16191/django_allauth-65.12.0.tar.gz", hash = "sha256:a76ec55935354a1455753601a0a814a4ded368242e8969323480a2810b349183", size = 1967199 }
 
 [package.optional-dependencies]
 socialaccount = [
+    { name = "oauthlib" },
     { name = "pyjwt", extra = ["crypto"] },
     { name = "requests" },
-    { name = "requests-oauthlib" },
 ]
 
 [[package]]
@@ -864,11 +864,11 @@ wheels = [
 
 [[package]]
 name = "oauthlib"
-version = "3.2.2"
+version = "3.3.1"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/6d/fa/fbf4001037904031639e6bfbfc02badfc7e12f137a8afa254df6c4c8a670/oauthlib-3.2.2.tar.gz", hash = "sha256:9859c40929662bec5d64f34d01c99e093149682a3f38915dc0655d5a633dd918", size = 177352 }
+sdist = { url = "https://files.pythonhosted.org/packages/0b/5f/19930f824ffeb0ad4372da4812c50edbd1434f678c90c2733e1188edfc63/oauthlib-3.3.1.tar.gz", hash = "sha256:0f0f8aa759826a193cf66c12ea1af1637f87b9b4622d46e866952bb022e538c9", size = 185918 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/7e/80/cab10959dc1faead58dc8384a781dfbf93cb4d33d50988f7a69f1b7c9bbe/oauthlib-3.2.2-py3-none-any.whl", hash = "sha256:8139f29aac13e25d502680e9e19963e83f16838d48a0d71c287fe40e7067fbca", size = 151688 },
+    { url = "https://files.pythonhosted.org/packages/be/9c/92789c596b8df838baa98fa71844d84283302f7604ed565dafe5a6b5041a/oauthlib-3.3.1-py3-none-any.whl", hash = "sha256:88119c938d2b8fb88561af5f6ee0eec8cc8d552b7bb1f712743136eb7523b7a1", size = 160065 },
 ]
 
 [[package]]
@@ -1045,6 +1045,16 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/bd/67/16d48e7f02b285b39028aa47f847b3a279c903bc5cd49c8012ea90255317/py_rust_stemmers-0.1.3-cp312-cp312-musllinux_1_2_armv7l.whl", hash = "sha256:fbb9f7933239a57d1d9c0fcdfbe0c5283a081e9e64ddc48ed878783be3d52b2b", size = 567278 },
     { url = "https://files.pythonhosted.org/packages/ad/1c/cb8cc9680f8aa04f96cb5c814887b3bb8d23a2e9abf460ef861ae16bfe50/py_rust_stemmers-0.1.3-cp312-cp312-musllinux_1_2_x86_64.whl", hash = "sha256:921803a6f8259f10bf348ac0e32a767c28ab587c9ad5c3b1ee593a4bbbe98d39", size = 488907 },
     { url = "https://files.pythonhosted.org/packages/cd/29/88217de06239e3e526fa6286a11e3662d94acb0be4216c1310301a252dab/py_rust_stemmers-0.1.3-cp312-none-win_amd64.whl", hash = "sha256:576206b540575e81bb84a0f620b7a8529f5e89b0b2ec7d4487f3183789dd5cfd", size = 208980 },
+    { url = "https://files.pythonhosted.org/packages/74/62/ab1492a3d6b7c724443f1f964ff986c5d64a5d97a880dcc4de9475815c00/py_rust_stemmers-0.1.3-cp313-cp313-macosx_10_12_x86_64.whl", hash = "sha256:ab7b6cc01df4013bd2e766ea4c367922bff4612dd36ec4a8aa8125cb384c5dac", size = 286055 },
+    { url = "https://files.pythonhosted.org/packages/f5/dd/35ec95708df96831382df12184ef51b2a3f4db7c5fbed4d0d88e9a83ea49/py_rust_stemmers-0.1.3-cp313-cp313-macosx_11_0_arm64.whl", hash = "sha256:d39a18641cfa6ff6678ea538d64926c1612eb6ddce9a90a61694f383743c0257", size = 271966 },
+    { url = "https://files.pythonhosted.org/packages/1d/3e/676726ab5fdd9d47ea6c8f0bbceebffec7a5d3837c71fc869ecce68faa2b/py_rust_stemmers-0.1.3-cp313-cp313-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:9ca50cef25d31e6ea200791f28976ee9500ef61fc91101343877b3d38fe3207a", size = 310515 },
+    { url = "https://files.pythonhosted.org/packages/d2/d6/1722299d74959267d6d77fdfde7fc13aeacd0845265694fa65f358ed4a68/py_rust_stemmers-0.1.3-cp313-cp313-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:a5d1a885830c5d94d36f74c0a2017225401f10e64f011e37e7b171ea84c17eb8", size = 315183 },
+    { url = "https://files.pythonhosted.org/packages/bf/5c/279d420618d6dea0b00d40805e08418146c8af3c53db74345abf77f32551/py_rust_stemmers-0.1.3-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:5bb25a58552c058530d69d119fc310dfa27e585dd7a4be6b8f739bd209c29164", size = 324424 },
+    { url = "https://files.pythonhosted.org/packages/7f/85/4e6e62c94c3cad7f2ef861300fb277c8b9cc89b1bcc2aeeb0c67db20a83a/py_rust_stemmers-0.1.3-cp313-cp313-manylinux_2_28_x86_64.whl", hash = "sha256:8016d3e7c43b1a93ac06e9c4d68f77c4f8d6beec6984b4e86438406a0b589d48", size = 324779 },
+    { url = "https://files.pythonhosted.org/packages/c9/b9/1079fd911d82f0ca1a34d613c5849ea33dcf373d3a0f18355a0f784420f4/py_rust_stemmers-0.1.3-cp313-cp313-musllinux_1_2_aarch64.whl", hash = "sha256:846a16e43d8e12d3178d608f82dcbddc0fd03c4478cde9adc377de58a769b825", size = 487976 },
+    { url = "https://files.pythonhosted.org/packages/80/17/5c52ad2b7cc3dbeb50aa1485372442989cb4e753e6c40476b174f38cb117/py_rust_stemmers-0.1.3-cp313-cp313-musllinux_1_2_armv7l.whl", hash = "sha256:9931ef64c9f2ace96f533092f5161a97bbf867ec5f1a9cb139838a6cf52da4c4", size = 575572 },
+    { url = "https://files.pythonhosted.org/packages/9d/13/b019d8c0e8006702d0845b6bc7f9f0d100051a7936bc35d7f982117852f7/py_rust_stemmers-0.1.3-cp313-cp313-musllinux_1_2_x86_64.whl", hash = "sha256:aa1ee56ae903f126598f237b45f316b2704ec29a85ad1d27467bf6a5b27c71b9", size = 493259 },
+    { url = "https://files.pythonhosted.org/packages/79/9f/36a004b3925dc4a61c44968c6be009ba03dd62827f8d1490cd91f9c3c506/py_rust_stemmers-0.1.3-cp313-none-win_amd64.whl", hash = "sha256:2837fc5a60eb0fa2cefc6e41f5fcfb9ff350cd3cdbed25d34a1bc36057d29397", size = 209418 },
 ]
 
 [[package]]
@@ -1286,19 +1296,6 @@ wheels = [
 ]
 
 [[package]]
-name = "requests-oauthlib"
-version = "2.0.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "oauthlib" },
-    { name = "requests" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/42/f2/05f29bc3913aea15eb670be136045bf5c5bbf4b99ecb839da9b422bb2c85/requests-oauthlib-2.0.0.tar.gz", hash = "sha256:b3dffaebd884d8cd778494369603a9e7b58d29111bf6b41bdc2dcd87203af4e9", size = 55650 }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/3b/5d/63d4ae3b9daea098d5d6f5da83984853c1bbacd5dc826764b249fe119d24/requests_oauthlib-2.0.0-py2.py3-none-any.whl", hash = "sha256:7dd8a5c40426b779b0868c404bdef9768deccf22749cde15852df527e6269b36", size = 24179 },
-]
-
-[[package]]
 name = "ruff"
 version = "0.7.1"
 source = { registry = "https://pypi.org/simple" }
@@ -1502,8 +1499,8 @@ requires-dist = [
     { name = "beautifulsoup4", specifier = ">=4.12.3" },
     { name = "celery", specifier = ">=5.4.0" },
     { name = "crispy-tailwind", specifier = ">=1.0.3" },
-    { name = "django", specifier = ">=5.1.2" },
-    { name = "django-allauth", extras = ["socialaccount"], specifier = ">=65.1.0" },
+    { name = "django", specifier = ">=5.2.7" },
+    { name = "django-allauth", extras = ["socialaccount"], specifier = ">=65.12.0" },
     { name = "django-browser-reload", specifier = ">=1.17.0" },
     { name = "django-cleanup", specifier = ">=9.0.0" },
     { name = "django-cors-headers", specifier = ">=4.6.0" },
