@@ -54,9 +54,10 @@ for designers to experiment with generative aesthetics and precision
 
 <body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
 
-
-
-  {% include "nav.html" %}
+  {% if not request.path == "/run" and not request.path == "/beta" %}
+    {% include "nav.html" %}
+  {% endif %}
+  
 
   <div class="main">
 
