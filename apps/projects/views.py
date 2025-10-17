@@ -306,7 +306,7 @@ def detail_by_id(request, id):
     project = get_object_or_404(Project, id=id)
 
     # check permissons
-    if not project.is_published and not project.user == request.user:
+    if not project.is_public and not project.user == request.user:
         raise PermissionDenied
 
     # get remixes and similar projects
@@ -608,9 +608,10 @@ def edit(request, id):
         form = ProjectForm(request.POST, instance=project)
         if form.is_valid():
             form.save()
-            project.is_published = form.cleaned_data["is_public"]
+            # project.is_published = form.cleaned_data["is_public"]
             if not form.cleaned_data["is_public"]:
                 project.last_shared = None
+                project.is_published = False
             else:
                 if not project.last_shared:
                     project.last_shared = timezone.now()

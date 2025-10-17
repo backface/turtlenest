@@ -299,7 +299,7 @@ def get_users_projects(request, username: str):
 
         return ProjectList(projects=projects)
     else:
-        projects = Project.objects.filter(user__username=username, is_public=True)
+        projects = Project.objects.filter(user__username=username, is_published=True)
         return ProjectList(projects=projects)
 
 
@@ -325,16 +325,19 @@ def set_project_visibility(
     """
     project = Project.objects.get(user__username=username, name=projectname)
     if request.user.is_authenticated and request.user.username == username:
+        if ispublished is not None:
+            project.is_published = ispublished
+
+        
         if ispublic is not None:
             project.is_public = ispublic
             if ispublic:
                 project.last_shared = timezone.now()
             else:
                 project.last_shared = None
+                # non public so we also set published to false  
+                project.is_published = False
         
-        # we set is published but it is ignored for now!
-        if ispublished is not None:
-            project.is_published = ispublished
 
         project.save()
         return Message(
