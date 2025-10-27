@@ -1,0 +1,61 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>{% block title %} TurtleStitch - Coded Embroidery {% endblock %} </title>
+
+<meta charset="utf-8">    
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="description" content="Turtlestitch is based on a browser-based
+educational programming language (Snap!) to generate patterns for embroidery
+machines. It is easy to use, requiring no prior knowledge in programming,
+yet powerful in creating nowels patterns for embroidery. It is usefull
+for designers to experiment with generative aesthetics and precision
+  embroidery as well as tool for innovative workshops combining an
+  introduction to programing with haptic output. " />
+<link rel="icon" href="{% static 'img/favicon.png' %}">
+
+{% block sharing %}
+<meta property="og:title" content="Code! .. Draw! .. Stitch!  / TurtleStitch - Coded Embroidery" />
+<meta property="og:description" content="Turtlestitch is based on a browser-based educational programming language (Snap!) to generate patterns for embroidery machines."/>
+<meta property="og:url" content="{% if request.is_secure %}https://{% else %}http://{% endif %}www.turtlestitch.org/"/>
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="Code! .. Draw! .. Stitch! / TurtleStitch - Coded Embroidery" />
+<meta property="og:image" content="{% if request.is_secure %}https://{% else %}http://{% endif %}www.turtlestitch.org/static/img/slide1.png"/>
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:site" content="@turtlestitch">
+<meta name="twitter:title" content="Code! .. Draw! .. Stitch! / TurtleStitch - Coded Embroidery" />
+<meta name="twitter:description" content="Turtlestitch is based on a browser-based educational programming language (Snap!) to generate patterns for embroidery machines."/>
+<meta name="twitter:domain" content="turtlestitch.org"/>
+<meta name="twitter:image" content="{% if request.is_secure %}https://{% else %}http://{% endif %}www.turtlestitch.org/static/img/slide1.png"/>
+{% endblock %}    
+
+{% block js %}
+<script src="{% static 'js/htmx.min.js' %}"></script>
+<script src="{% static 'js/alpine.js' %}" defer></script>
+<script src="{% static 'js/fancybox.js' %}"></script>    
+<script src="{% static 'js/init.js' %}"></script>
+{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/tw.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/fonts/noto-sans/standard.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/override.css' %}" />
+{% endblock %}
+
+{% if request.META.HTTP_HOST in "www.turtlestitch.org, turtlestitch.org, turtlenest.backface.org" %}
+<script defer src="https://umami.turtlestitch.org/script.js" data-website-id="453f8d54-aed4-43ce-9deb-3cce10a5d646"></script>
+{% endif %}
+
+</head>
+
+<body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+
+    {% block content %}{% endblock %}   
+
+</body>
+
+</html>
