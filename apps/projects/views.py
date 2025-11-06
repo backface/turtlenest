@@ -298,13 +298,24 @@ def tags(request, mine=False):
 def detail(request, username, projectname):
     """show project detail page by username and projectname"""
     project = get_object_or_404(Project, user__username=username, name=projectname)
-    return detail_by_id(request, project.id)
+    return project_details(request, project)
 
 
 def detail_by_id(request, id):
     """show project detail page by id"""
     project = get_object_or_404(Project, id=id)
+    return project_details(request, project)
 
+
+def detail_by_param(request):
+    """show project detail page by username and projectname"""
+    username = request.GET.get("username")
+    projectname = request.GET.get("projectname")
+    project = get_object_or_404(Project, user__username=username, name=projectname)
+    return project_details(request, project)
+
+
+def project_details(request, project):
     # check permissons
     if not project.is_public and not project.user == request.user:
         raise PermissionDenied
@@ -318,7 +329,7 @@ def detail_by_id(request, id):
     )
     similar_projects = (
         Project.objects.filter(is_published=True)
-        .exclude(id=id)
+        .exclude(id=project.id)
         .order_by(CosineDistance("embedding_project_meta", project.embedding_project_meta))[:6]
         # .annotate(
         #     l2_distance=L2Distance(

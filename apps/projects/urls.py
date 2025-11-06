@@ -29,6 +29,7 @@ urlpatterns = [
     path("users/<str:username>", views.user_detail, name="user_detail"),
     path("user/<str:username>", views.user_detail),
     
+    path("project/", views.detail_by_param, name="detail_by_param"),
     path("project/<int:id>", views.detail_by_id, name="detail_by_id"),
     path("project/stats/<int:id>", views.project_stats, name="project_stats"),
     path("project/edit/<int:id>", views.edit, name="edit"),
