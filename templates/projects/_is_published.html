@@ -1,0 +1,20 @@
+{% load static %}
+{% if request.user == project.user %}
+    {% if project.is_published %}
+        <a 
+            hx-target="#lister"
+            hx-swap="innerHTML"
+            hx-get="{% url 'projects:unpublish' project.id %}">
+            <button><i class="icon-[ri--git-repository-private-line] mr-1"></i>Unpublish</button>
+        </a>
+    {% else %}
+        
+        <a 
+            hx-target="#lister"
+            hx-swap="innerHTML"
+            hx-get="{% url 'projects:publish' project.id %}">
+            <button class="bg-orange-600"><i class="icon-[ri--git-repository-private-line] mr-1"></i>Publish</button>
+        </a> <br><span class="text-xs">This project is public but unlisted!</span>
+    {% endif %}    
+{% endif %}
+

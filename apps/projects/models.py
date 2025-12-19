@@ -76,7 +76,7 @@ class Project(models.Model):
 
     is_public = models.BooleanField(default=True, verbose_name="shared")
     is_active = models.BooleanField(default=True, verbose_name="is_active")
-    is_published = models.BooleanField(default=True, verbose_name="is_published")
+    is_published = models.BooleanField(default=True, verbose_name="published")
 
     last_shared = models.DateTimeField(blank=True, null=True)
     first_published = models.DateTimeField(blank=True, null=True)

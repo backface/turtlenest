@@ -54,35 +54,7 @@ for designers to experiment with generative aesthetics and precision
 
 <body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
 
-  {% if not request.path == "/run" and not request.path == "/beta" %}
-    {% include "nav.html" %}
-  {% endif %}
-  
-
-  <div class="main">
-
-    {% if messages %}
-      <div class="container mx-auto messages">
-      {% for message in messages %}
-        <div class="alert {% if message.tags %}alert-{{ message.tags }}"{% endif %}>
-          {{ message }}
-        </div>
-      {% endfor %}
-      </div>
-    {% endif %}
-
-    {% block content %}{% endblock %} 
-
-  </div>
-
-  {% if not request.path == "/run" and not request.path == "/beta" %}
-    {% include "footer.html" %}
-  {% endif %}
-
-  {% block "toast" %}
-    <div class="toast toast-top toast-end"></div>
-  {% endblock %} 
-  
+    {% block content %}{% endblock %}   
 
 </body>
 

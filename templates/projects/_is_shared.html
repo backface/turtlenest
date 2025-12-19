@@ -1,6 +1,6 @@
 {% load static %}
 <div id="sharing">
-    <div class="text-sm">
+    <div class="text-sm mb-4">
         This project is shared under the <br>
         <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="underline color-primary">
             Creative Commons Attribution-NonCommercial-ShareAlike (CC BY-NC-SA) license
@@ -19,4 +19,9 @@
             <button><i class="icon-[ri--git-repository-private-line] mr-1"></i>Unshare</button>
         </a>
     {% endif %}
+
+    <div id="lister" class="inline p-1 pt-3 mt-4">                       
+        {% include "projects/_is_published.html" %}
+    </div>
+
 </div>

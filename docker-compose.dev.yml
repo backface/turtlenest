@@ -123,4 +123,5 @@ volumes:
 
 networks:
   public_proxy:
-    driver: bridge
+#    external: true
+     driver: bridge

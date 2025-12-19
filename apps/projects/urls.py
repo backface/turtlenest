@@ -29,6 +29,7 @@ urlpatterns = [
     path("users/<str:username>", views.user_detail, name="user_detail"),
     path("user/<str:username>", views.user_detail),
     
+    path("project/", views.detail_by_param, name="detail_by_param"),
     path("project/<int:id>", views.detail_by_id, name="detail_by_id"),
     path("project/stats/<int:id>", views.project_stats, name="project_stats"),
     path("project/edit/<int:id>", views.edit, name="edit"),
@@ -47,6 +48,8 @@ urlpatterns = [
     path("project/<int:id>/comment/add", views.add_comment, name="add_comment"),
     path("project/<int:id>/share", views.share_project, name="share"),
     path("project/<int:id>/unshare", views.unshare_project, name="unshare"),
+    path("project/<int:id>/publish", views.publish_project, name="publish"),
+    path("project/<int:id>/unpublish", views.unpublish_project, name="unpublish"),    
     path("project/comment/delete/<id>", views.delete_comment, name="delete_comment"),
     
     path("projects", views.list, name="list"),

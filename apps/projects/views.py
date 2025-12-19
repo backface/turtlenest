@@ -298,15 +298,26 @@ def tags(request, mine=False):
 def detail(request, username, projectname):
     """show project detail page by username and projectname"""
     project = get_object_or_404(Project, user__username=username, name=projectname)
-    return detail_by_id(request, project.id)
+    return project_details(request, project)
 
 
 def detail_by_id(request, id):
     """show project detail page by id"""
     project = get_object_or_404(Project, id=id)
+    return project_details(request, project)
 
+
+def detail_by_param(request):
+    """show project detail page by username and projectname"""
+    username = request.GET.get("username")
+    projectname = request.GET.get("projectname")
+    project = get_object_or_404(Project, user__username=username, name=projectname)
+    return project_details(request, project)
+
+
+def project_details(request, project):
     # check permissons
-    if not project.is_published and not project.user == request.user:
+    if not project.is_public and not project.user == request.user:
         raise PermissionDenied
 
     # get remixes and similar projects
@@ -318,7 +329,7 @@ def detail_by_id(request, id):
     )
     similar_projects = (
         Project.objects.filter(is_published=True)
-        .exclude(id=id)
+        .exclude(id=project.id)
         .order_by(CosineDistance("embedding_project_meta", project.embedding_project_meta))[:6]
         # .annotate(
         #     l2_distance=L2Distance(
@@ -608,9 +619,10 @@ def edit(request, id):
         form = ProjectForm(request.POST, instance=project)
         if form.is_valid():
             form.save()
-            project.is_published = form.cleaned_data["is_public"]
+            # project.is_published = form.cleaned_data["is_public"]
             if not form.cleaned_data["is_public"]:
                 project.last_shared = None
+                project.is_published = False
             else:
                 if not project.last_shared:
                     project.last_shared = timezone.now()
@@ -851,6 +863,45 @@ def unshare_project(request, id):
         messages.success(request, "Project unshared")
         if request.META.get("HTTP_HX_REQUEST") or request.htmx:
             return render(request, "projects/_is_unshared.html", {"project": project})
+        else:
+            return redirect("projects:detail_by_id", id=project.id)
+
+
+@login_required
+def unpublish_project(request, id):
+    project = get_object_or_404(Project, pk=id)
+    if (
+        not request.user == project.user
+        and not request.user.is_moderator
+        and not request.user.is_superuser
+    ):
+        raise (PermissionDenied)
+    else:
+        project.is_published = False
+
+        project.save()
+        messages.success(request, "Project unpublished.")
+        if request.META.get("HTTP_HX_REQUEST") or request.htmx:
+            return render(request, "projects/_is_published.html", {"project": project})
+        else:
+            return redirect("projects:detail_by_id", id=project.id)
+
+
+@login_required
+def publish_project(request, id):
+    project = get_object_or_404(Project, pk=id)
+    if (
+        not request.user == project.user
+        and not request.user.is_moderator
+        and not request.user.is_superuser
+    ):
+        raise (PermissionDenied)
+    else:
+        project.is_published = True
+        project.save()
+        messages.success(request, "Project published")
+        if request.META.get("HTTP_HX_REQUEST") or request.htmx:
+            return render(request, "projects/_is_published.html", {"project": project})
         else:
             return redirect("projects:detail_by_id", id=project.id)
 

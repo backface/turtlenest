@@ -19,9 +19,10 @@ from ninja import NinjaAPI
 from ninja import Schema
 from ninja.errors import HttpError
 from allauth.account.forms import ResetPasswordForm
-from allauth.account.utils import send_email_confirmation
+from allauth.account.models import EmailAddress
+# removed from allauth.account.utils import send_email_confirmation
 
-from apps.projects.models import Project
+from apps.projects.models import Project, Remix
 from apps.classrooms.models import Group, SelectedProject
 
 
@@ -180,7 +181,10 @@ def signup_user(
     user = User(username=username, email=email, password=password)
     user.set_password(password)
     user.save()
-    send_email_confirmation(request, user, user.email)
+
+    # removed see https://codeberg.org/allauth/django-allauth/issues/4507#issuecomment-6046162
+    # send_email_confirmation(request, user, user.email)
+    EmailAddress.objects.add_email(request, user, user.email, confirm=True)
 
     return {
         "redirect": "/login",
@@ -203,7 +207,11 @@ def resend_verification(request, username: str):
         return HttpResponse(status=200)
 
     if not user.is_email_verified():
-        send_email_confirmation(request, user, user.email)
+        # removed see https://codeberg.org/allauth/django-allauth/issues/4507    
+        # send_email_confirmation(request, user, user.email)
+        email_address = user.emailaddress_set.first()
+        email_address.send_confirmation()        
+        pass
     else:
         # return Message(message = f"Email already verified.")
         return HttpResponse(status=200)
@@ -291,7 +299,7 @@ def get_users_projects(request, username: str):
 
         return ProjectList(projects=projects)
     else:
-        projects = Project.objects.filter(user__username=username, is_public=True)
+        projects = Project.objects.filter(user__username=username, is_published=True)
         return ProjectList(projects=projects)
 
 
@@ -317,16 +325,19 @@ def set_project_visibility(
     """
     project = Project.objects.get(user__username=username, name=projectname)
     if request.user.is_authenticated and request.user.username == username:
+        if ispublished is not None:
+            project.is_published = ispublished
+
+        
         if ispublic is not None:
             project.is_public = ispublic
             if ispublic:
                 project.last_shared = timezone.now()
             else:
                 project.last_shared = None
+                # non public so we also set published to false  
+                project.is_published = False
         
-        # we set is published but it is ignored for now!
-        if ispublished is not None:
-            project.is_published = ispublished
 
         project.save()
         return Message(
@@ -477,4 +488,18 @@ def save_project(request, username: str, projectname: str):
         del request.session["group"]
         pass
 
+    # Are we a remix? then add remix
+    orig_creator = soup.find_all("origCreator")[0].text if soup.find_all("origCreator") else None
+    orig_name = soup.find_all("origName")[0].text if soup.find_all("origName") else None
+    if orig_creator != username or orig_name != projectname:
+        try:        
+            remixed_from = Project.objects.get(user__username=orig_creator, name=orig_name)
+            new_remix, created = Remix.objects.get_or_create(
+                original_project=remixed_from,
+                remixed_project=project,
+            )
+            new_remix.save()
+        except Project.DoesNotExist:
+            pass #ingore projects that don't exit
+        
     return Message(message=f"project {projectname} saved")
