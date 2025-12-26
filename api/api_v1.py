@@ -422,7 +422,7 @@ def save_project(request, username: str, projectname: str):
         raise HttpError(403, "Not Allowed.")
 
     # print(type(request.body))
-    data = json.loads(request.body.decode("ISO-8859-1"))
+    data = json.loads(request.body.decode("utf-8"))
     # return {}
     # string = f"{request.body}"
     # print(json.loads(string))
