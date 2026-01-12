@@ -48,7 +48,7 @@ SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 
 
-ADMINS = (("mash", "m@ash.to"),)
+# ADMINS = (("mash", "m@ash.to"),)
 
 # Application definition
 
