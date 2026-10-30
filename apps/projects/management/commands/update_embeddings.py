@@ -28,16 +28,18 @@ def update_embeddings(replace=False):
     else:
         objects = Project.objects.filter(embedding_project_meta__isnull=True)
 
-    count = objects.count()
+    # fetch ids up front: saving removes projects from the isnull filter,
+    # so offset-based paging over the queryset would skip projects
+    ids = list(objects.order_by("id").values_list("id", flat=True))
+    count = len(ids)
     pages = math.ceil(count / 100)
 
     print(f"  .. total objects: {count} ({pages})..")
-    for ii in range(0, pages + 1):
-        for i, project in enumerate(
-            objects.order_by("id")[(ii * 100) : ((ii + 1) * 100)]
-        ):
-            progress = ((ii * 100 + i) / count) * 100
-            counter = (ii * 100 + i) + 1
+    for ii in range(pages):
+        page_ids = ids[(ii * 100) : ((ii + 1) * 100)]
+        for i, project in enumerate(Project.objects.filter(id__in=page_ids).order_by("id")):
+            counter = ii * 100 + i + 1
+            progress = (counter / count) * 100
             print(f"\r  .. {(progress):.1f}% ({counter})..", end="", flush=True)
 
             project.update_embeddings()
