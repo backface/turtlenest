@@ -18,6 +18,8 @@ class GroupViewTests(TestCase):
         self.teacher_group =  AuthGroup.objects.create(name="Teachers")        
         self.teacher = User.objects.create_user(username='teacher', password='password')
         self.teacher_group.user_set.add(self.teacher)
+        # bulk_add expects the 'Puppets' auth group to exist (seeded in prod by migrate_accounts)
+        AuthGroup.objects.get_or_create(name="Puppets")
         self.host = User.objects.create_user(username='host', password='password')
         self.member = User.objects.create_user(username='member', password='password')
         self.group = Group.objects.create(title='Test Group', description='Test description', introduction='Test intro', host=self.host)
@@ -55,6 +57,7 @@ class GroupViewTests(TestCase):
         self.assertFalse(Membership.objects.filter(group=self.group, user=self.member).exists())  # Check membership removed
 
     def test_trainer_request(self):
+        self.client.login(username='host', password='password')
         response = self.client.post(reverse('groups:trainer_request'), {
             'full_name': 'John Doe',
             'phone_number': '+1234567890',
