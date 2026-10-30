@@ -313,7 +313,7 @@ LOCALE_PATHS = [
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 
-STATICFILES_DIRS = []
+STATICFILES_DIRS = [BASE_DIR / "assets"]
 
 STATIC_URL = "static/"
 STATIC_ROOT = BASE_DIR / "static"
