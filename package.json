@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "tailwindcss -i ./input.css -o ./static/css/tw.css --watch",
-    "build": "tailwindcss -i ./input.css -o ./static/css/tw.css --minify"
+    "dev": "tailwindcss -i ./input.css -o ./assets/css/tw.css --watch",
+    "build": "tailwindcss -i ./input.css -o ./assets/css/tw.css --minify"
   },
   "keywords": [],
   "author": "",

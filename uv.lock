@@ -851,19 +851,6 @@ wheels = [
 ]
 
 [[package]]
-name = "django-markup"
-version = "1.10"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "django", version = "5.2.18", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
-    { name = "django", version = "6.1.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/11/ed/7f2518b8acb199f821c26cf25ed10ab920bf3709e96fcbf94d600fe3b047/django_markup-1.10.tar.gz", hash = "sha256:777c9a97f27fa4a25ea5b7dbe5a949c38fec1511ac23073595cfbbf2f2d83b55", size = 13152, upload-time = "2025-07-27T08:47:55.536Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/7c/75/cbc14879006b33441a047f0c5ace642764810b72b70858125591918b01cc/django_markup-1.10-py3-none-any.whl", hash = "sha256:e384699a29cb96287cc88acb3ac3ec9f444c91fb9a5c243d9c5b36f269fc0e9d", size = 18483, upload-time = "2025-07-27T08:47:54.219Z" },
-]
-
-[[package]]
 name = "django-ninja"
 version = "1.7.3"
 source = { registry = "https://pypi.org/simple" }
@@ -908,33 +895,6 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/34/a6/f1beaf8f552fe90c153cc039316ebab942c23dfbc88588dde081fefca816/django_taggit-6.1.0.tar.gz", hash = "sha256:c4d1199e6df34125dd36db5eb0efe545b254dec3980ce5dd80e6bab3e78757c3", size = 38151, upload-time = "2024-09-29T08:07:39.477Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/6b/34/4185c345530b91d05cb82e05d07148f481a5eb5dc2ac44e092b3daa6f206/django_taggit-6.1.0-py3-none-any.whl", hash = "sha256:ab776264bbc76cb3d7e49e1bf9054962457831bd21c3a42db9138b41956e4cf0", size = 75749, upload-time = "2024-09-29T08:07:14.612Z" },
-]
-
-[[package]]
-name = "django-tailwind"
-version = "4.6.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "django", version = "5.2.18", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
-    { name = "django", version = "6.1.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
-    { name = "pytailwindcss" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/ff/43/4fbef32ce3430b9e87bfe2bc31941b4c536c645b91fb78fdd393ab4d57cd/django_tailwind-4.6.0.tar.gz", hash = "sha256:a8ff8ddf576d840c1af9e3c59a62297b17e897b2665bfc14c4f69e85d1e18527", size = 15687, upload-time = "2026-10-13T11:58:34.784Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/f7/3c/b2a07d31d0374f08d2ac706a89a2a9d0ae18e9c476a20cfc2c5d36b66faa/django_tailwind-4.6.0-py3-none-any.whl", hash = "sha256:b865bac746158dd103ffc3b7855f54f8d75a3147eb59867d8ed0c145fd5f7a34", size = 25397, upload-time = "2026-10-13T11:58:33.332Z" },
-]
-
-[[package]]
-name = "django-template-partials"
-version = "25.3"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "django", version = "5.2.18", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
-    { name = "django", version = "6.1.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/b0/2e/957ee4a6ee0a7d46a18676ba8b01d762ef89d00b7769cc532853f9f989e1/django_template_partials-25.3.tar.gz", hash = "sha256:6d11f7bb049ce3032e6fe3331137b771e34239ce1af18c55ef6a9b667cf2ef36", size = 18052, upload-time = "2025-11-14T08:27:21.917Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/9b/9d/48f8721e48b938ca2e2dde577986624543be6ff9bdccac20ccb747be4287/django_template_partials-25.3-py2.py3-none-any.whl", hash = "sha256:a19334934cf40e4e1218802a4ddfdf22b8f78cc5a0b8c75a18b97e6ea4f3c108", size = 9702, upload-time = "2025-11-14T08:27:20.243Z" },
 ]
 
 [[package]]
@@ -1995,15 +1955,6 @@ wheels = [
 ]
 
 [[package]]
-name = "pytailwindcss"
-version = "0.4.2"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/fb/2c/044d8fffba8c4cd236766879a8fab6e782b8ecad285399b5b7b6c29e3836/pytailwindcss-0.4.2.tar.gz", hash = "sha256:f069bfe693aba32ffa7097ed642fc53e83db3b229449d6074a67dc900fa9c89f", size = 68086, upload-time = "2026-10-13T15:31:07.633Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/6e/a8/73b554fe3fab569b6827d7fba2e0cc9a0fa6ec866263153c0daa77a8417f/pytailwindcss-0.4.2-py3-none-any.whl", hash = "sha256:55cd55394ceb747c90b92e3e2822207cb60b143996e4ccf7753d8127e7fb5246", size = 10771, upload-time = "2026-10-13T15:31:06.453Z" },
-]
-
-[[package]]
 name = "python-dateutil"
 version = "3.0.0"
 source = { registry = "https://pypi.org/simple" }
@@ -2247,13 +2198,10 @@ dependencies = [
     { name = "django-htmx" },
     { name = "django-jazzmin" },
     { name = "django-markdownx" },
-    { name = "django-markup" },
     { name = "django-ninja" },
     { name = "django-ratelimit" },
     { name = "django-summernote" },
     { name = "django-taggit" },
-    { name = "django-tailwind" },
-    { name = "django-template-partials" },
     { name = "fastembed" },
     { name = "gunicorn" },
     { name = "lxml" },
@@ -2290,13 +2238,10 @@ requires-dist = [
     { name = "django-htmx", specifier = ">=1.21.0" },
     { name = "django-jazzmin", specifier = ">=3.0.1,<3.0.3" },
     { name = "django-markdownx", specifier = ">=4.0.7" },
-    { name = "django-markup", specifier = ">=1.9" },
     { name = "django-ninja", specifier = ">=1.3.0" },
     { name = "django-ratelimit", specifier = ">=4.1.0" },
     { name = "django-summernote", specifier = ">=0.8.20.0" },
     { name = "django-taggit", specifier = ">=6.1.0" },
-    { name = "django-tailwind", specifier = ">=3.8.0" },
-    { name = "django-template-partials", specifier = ">=24.4" },
     { name = "fastembed", specifier = ">=0.4.1" },
     { name = "gunicorn", specifier = ">=23.0.0" },
     { name = "lxml", specifier = ">=5.3.0" },
