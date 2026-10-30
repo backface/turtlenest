@@ -824,15 +824,15 @@ wheels = [
 
 [[package]]
 name = "django-jazzmin"
-version = "3.0.5"
+version = "3.0.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "django", version = "5.2.18", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
     { name = "django", version = "6.1.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/15/e4/17cd62e80c4876088bc5f8bca24446586a62eca386c82755894408751a44/django_jazzmin-3.0.5.tar.gz", hash = "sha256:7e39b029bddbb60f3aaf9897bd009f39f8f2bdc8a7d86beed1e943706dd79692", size = 2509734, upload-time = "2026-06-25T21:05:52.699Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/1b/1e/1ac1b4b916d86c3bbe950ddb8c952452f833c3b687e0d0cdbc824d3a9df6/django_jazzmin-3.0.2.tar.gz", hash = "sha256:cb247757b1e71f0c0f97d776856a32c3dd1377a7ffda6a731879cdc5e0e9ae89", size = 2361868, upload-time = "2026-02-08T17:37:10.435Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/23/40/892f4c922c92d0d2b8ca5f96f556c5dc04d19ea2ea717910d8bbf2dc23fc/django_jazzmin-3.0.5-py3-none-any.whl", hash = "sha256:578fb1fc0a1b7e3b8472d2692ace60b1584ccd937c3828e2c9a89bdf94067f94", size = 2581722, upload-time = "2026-06-25T21:05:50.948Z" },
+    { url = "https://files.pythonhosted.org/packages/ff/21/38d96baf6733c77dc51aeda953aec0a401f11b1d373f00efd92c05b3c0f9/django_jazzmin-3.0.2-py3-none-any.whl", hash = "sha256:e847be81f9704ba70b740fa8378781bd1412e9d09772ba0e6a0c8b56fcdf84d4", size = 2441213, upload-time = "2026-02-08T17:37:08.146Z" },
 ]
 
 [[package]]
@@ -2288,7 +2288,7 @@ requires-dist = [
     { name = "django-filter", specifier = ">=24.3" },
     { name = "django-hijack", specifier = ">=3.7.0" },
     { name = "django-htmx", specifier = ">=1.21.0" },
-    { name = "django-jazzmin", specifier = ">=3.0.1" },
+    { name = "django-jazzmin", specifier = ">=3.0.1,<3.0.3" },
     { name = "django-markdownx", specifier = ">=4.0.7" },
     { name = "django-markup", specifier = ">=1.9" },
     { name = "django-ninja", specifier = ">=1.3.0" },

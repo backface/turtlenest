@@ -643,12 +643,16 @@ JAZZMIN_SETTINGS = {
     # UI Tweaks #
     #############
     # Relative paths to custom CSS/JS scripts (must be present in static files)
-    "custom_css": "css/fonts.css",
+    # css/user-panel.css fixes the oversized sidebar avatar on jazzmin >=3.0.3 (AdminLTE 4),
+    # re-enable when upgrading past the 3.0.2 pin
+    # "custom_css": "css/user-panel.css",
+    "custom_css": None,
     "custom_js": None,
     # Whether to link font from fonts.googleapis.com (use custom_css to supply font otherwise)
     "use_google_fonts_cdn": False,
     # Whether to show the UI customizer on the sidebar
-    "show_ui_builder": True,
+    "show_ui_builder": False,
+
 
     ###############
     # Change view #

@@ -1,0 +1,20 @@
+/*
+ * Django admin (jazzmin 3.x) sidebar: user avatar.
+ *
+ * jazzmin's admin/base.html renders the sidebar avatar as:
+ *     <img src="..." width="160px" class="img-circle elevation-2">
+ * `img-circle` is an AdminLTE 3 class (jazzmin <=3.0.x shipped AdminLTE 3.1).
+ * jazzmin 3.0.5 ships AdminLTE 4 / Bootstrap 5, which no longer define it and
+ * nothing else constrains the image, so it renders as a 160px square.
+ * Restore the classic small round avatar.
+ */
+.user-panel .image img {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.user-panel {
+    align-items: center;
+}
