@@ -55,7 +55,7 @@ RUN --mount=type=cache,target=/root/.cache/pip \
   pip install --upgrade uv
 # Install the packages with uv using --mount=type=cache to cache the downloaded packages
 RUN --mount=type=cache,target=/root/.cache/uv \
-    uv sync --no-dev #--locked
+    uv sync --no-dev --locked
 
 # copy files and create dirs 
 COPY . /app
