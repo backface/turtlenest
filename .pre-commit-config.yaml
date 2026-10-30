@@ -1,0 +1,8 @@
+# .pre-commit-config.yaml
+repos:
+  - repo: https://github.com/astral-sh/uv-pre-commit
+    rev: <current tag>            # pin to a release
+    hooks:
+      - id: uv-lock               # keeps uv.lock in sync with pyproject.toml
+      - id: uv-export
+        args: ["--frozen", "--no-hashes", "--no-emit-project", "-o", "requirements.txt"]
