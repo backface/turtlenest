@@ -185,6 +185,14 @@ CACHES = {
     }
 }
 
+if TESTING:
+    # tests must not depend on the external memcached service
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        }
+    }
+
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 

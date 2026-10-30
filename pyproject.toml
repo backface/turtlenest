@@ -40,7 +40,20 @@ dependencies = [
     "whitenoise>=6.8.2",
 ]
 
-[tool.uv]
-dev-dependencies = [
+[dependency-groups]
+dev = [
     "ruff>=0.7.1",
+    "coverage>=7.6",
 ]
+
+[tool.coverage.run]
+source = ["apps", "api"]
+omit = [
+    "*/migrations/*",
+    "*/migrations.BAK/*",
+]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+skip_empty = true

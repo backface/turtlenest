@@ -52,6 +52,25 @@ or using a .env file:
 
     uv run --env-file .env manage.py runserver
 
+#### Tests
+
+Tests run with Django's built-in test runner against a temporary test database:
+
+    uv run python manage.py test
+    uv run python manage.py test apps/projects
+
+When running on the host instead of in docker, point the test run at the
+published database port (`POSTGRES_HOST=localhost uv run python manage.py test`);
+with direnv, `.envrc` already does this.
+
+Coverage is measured with [coverage.py](https://coverage.readthedocs.io/)
+(configured in `pyproject.toml`):
+
+    uv run coverage run manage.py test
+    uv run coverage report
+    uv run coverage html    # browse htmlcov/index.html
+
+
 #### Frontend
 
 
