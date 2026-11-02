@@ -15,6 +15,7 @@ import sys
 from pathlib import Path
 from django.utils.translation import gettext_lazy as _
 from django.contrib import messages
+from django.core.exceptions import ImproperlyConfigured
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -22,16 +23,37 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get("SECRET_KEY", "django-insecure-n1q(gkmgn8unzo4vwvkko))uqa!p907-8gyeek@f6otn5i4+py")
 DEBUG = os.environ.get("DEBUG", "").upper() == "TRUE"
 ENABLE_DEBUG_TOOLBAR = True
 
 TESTING = "test" in sys.argv
 
+# SECURITY: there is no insecure fallback for SECRET_KEY. Deployments must set
+# it; a fresh copy of env.SAMPLE (CHANGE_ME) fails until a real value is set.
+# Development and test runs without one get a fixed, obviously-not-a-secret key.
+SECRET_KEY = os.environ.get("SECRET_KEY", "")
+if not SECRET_KEY or SECRET_KEY == "CHANGE_ME":
+    if TESTING:
+        SECRET_KEY = "test-only-insecure-key"
+    elif not DEBUG:
+        raise ImproperlyConfigured(
+            "SECRET_KEY environment variable must be set to a real value; "
+            "see env.SAMPLE"
+        )
+    else:
+        SECRET_KEY = "insecure-dev-only-key"
+
 # APPEND_SLASH = False
 
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "*").split(" ")
+# Defaults to the real domains, never "*". Dev/test hosts are added below.
+_allowed_hosts = os.environ.get("ALLOWED_HOSTS", "")
+if not _allowed_hosts or _allowed_hosts == "CHANGE_ME":
+    _allowed_hosts = (
+        "turtlestitch.org *.turtlestitch.org backface.net *.backface.net"
+    )
+ALLOWED_HOSTS = _allowed_hosts.split()
+if TESTING or DEBUG:
+    ALLOWED_HOSTS += ["localhost", "127.0.0.1", "[::1]"]
 CORS_ALLOWED_ORIGINS = []
 CORS_ALLOWED_ORIGINS = []
 CSRF_TRUSTED_ORIGINS = [
@@ -154,7 +176,7 @@ DATABASES = {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": os.environ.get("POSTGRES_DB", "dbname"),
         "USER": os.environ.get("POSTGRES_USER", "postgres"),
-        "PASSWORD": os.environ.get("POSTGRES_PASSWORD", "***"),
+        "PASSWORD": os.environ.get("POSTGRES_PASSWORD", ""),
         "HOST": os.environ.get("POSTGRES_HOST", "localhost"),
         "PORT": os.environ.get("POSTGRES_PORT", "5432"),
     },
@@ -165,7 +187,7 @@ DATABASES = {
             "LEGACYDB_USER", os.environ.get("POSTGRES_USER", "postgres")
         ),
         "PASSWORD": os.environ.get(
-            "LEGACYDB_PASSWORD", os.environ.get("POSTGRES_PASSWORD", "***")
+            "LEGACYDB_PASSWORD", os.environ.get("POSTGRES_PASSWORD", "")
         ),
         "HOST": os.environ.get(
             "LEGACYDB_HOST", os.environ.get("LEGACY_HOST", "legacy-db")
@@ -264,29 +286,24 @@ ACCOUNT_FORMS = {
 LOGIN_REDIRECT_URL = "/myprojects"
 ACCOUNT_ADAPTER = "apps.users.allauth.AccountAdapter"
 
-SOCIALACCOUNT_PROVIDERS = {
-    # "github": {
-    #     "APP": {
-    #         "client_id": "28f278fb843ce057ed78",
-    #         "secret": "7d3aa1f15e7cacedc5f85183622674d5414cfe5c",
-    #     }
-    # },
-    # 'google': {
-    #     'SCOPE': ['https://www.googleapis.com/auth/userinfo.profile'],
-    #     'APP': {
-    #         'client_id': '123',
-    #         'secret': '456',
-    #         'key': ''
-    #     }
-    # },
-    # 'facebook': {
-    #     'APP': {
-    #         'client_id': '797011021955344',
-    #         'secret': '46145bf524b36f38de5fa2b4c1635e7e',
-    #         'key': ''
-    #     }
-    # }
-}
+# Social login is currently disabled. To enable a provider, configure it via
+# environment variables in .env — never commit real credentials:
+#
+# SOCIALACCOUNT_PROVIDERS = {
+#     "github": {
+#         "APP": {
+#             "client_id": os.environ.get("GITHUB_CLIENT_ID", ""),
+#             "secret": os.environ.get("GITHUB_SECRET", ""),
+#         }
+#     },
+#     "facebook": {
+#         "APP": {
+#             "client_id": os.environ.get("FACEBOOK_CLIENT_ID", ""),
+#             "secret": os.environ.get("FACEBOOK_SECRET", ""),
+#         }
+#     },
+# }
+SOCIALACCOUNT_PROVIDERS = {}
 
 
 # Internationalization

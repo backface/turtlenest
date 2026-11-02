@@ -91,7 +91,9 @@ USER django
 # Collect our static media.
 # https://stackoverflow.com/questions/59719175/where-to-run-collectstatic-when-deploying-django-app-to-heroku-using-docker
 # RUN DEBUG=False python /app/manage.py collectstatic --noinput --settings=turtlenest.settings
-RUN python /app/manage.py collectstatic --noinput
+# build-only placeholder: settings.py refuses to start without SECRET_KEY, but
+# collectstatic does not use it and the image never ships a real key
+RUN SECRET_KEY=build-only-not-a-secret python /app/manage.py collectstatic --noinput
 
 
 CMD exec gunicorn  --bind 0.0.0.0:$PORT \

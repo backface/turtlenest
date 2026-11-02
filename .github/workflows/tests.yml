@@ -25,6 +25,7 @@ jobs:
         shell: bash
 
       - run: cp env.SAMPLE .env
+      - run: echo "SECRET_KEY=$(openssl rand -hex 32)" >> .env
 
       - run: cp docker-compose.dev.yml docker-compose.override.yml
 
