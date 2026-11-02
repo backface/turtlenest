@@ -1,3 +1,7 @@
+import base64
+import os
+
+from django.conf import settings
 from django.test import TestCase, Client
 from django.urls import reverse
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -122,4 +126,28 @@ class LegacyAPITests(TestCase):
             reverse("api-legacy:get_users_projects", args=["testuser"])
         )
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.json()), 2)        
+        self.assertEqual(len(response.json()), 2)
+
+    def test_save_project_rejects_html_thumbnail(self):
+        self.client.login(username="testuser", password="testpassword")
+        payload = base64.b64encode(b'<script>alert(1)</script>').decode()
+        xml = (
+            f"<xml><thumbnail>data:text/html;base64,{payload}</thumbnail>"
+            "<notes>n</notes></xml>"
+        )
+        response = self.client.post(
+            "/api/projects/save?username=testuser&projectname=Evil&tags=&ispublic=true",
+            content_type="application/json",
+            data=xml,
+        )
+        self.assertEqual(response.status_code, 400)
+        # rejected before the project is created and before anything lands in /media
+        self.assertFalse(
+            Project.objects.filter(user__username="testuser", name="Evil").exists()
+        )
+        found = []
+        thumbs_root = os.path.join(settings.MEDIA_ROOT, "projects", "thumbs")
+        if os.path.isdir(thumbs_root):
+            for root, _, files in os.walk(thumbs_root):
+                found.extend(f for f in files if f.lower().endswith(".html"))
+        self.assertEqual(found, [])        

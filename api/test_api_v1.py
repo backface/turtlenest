@@ -1,4 +1,10 @@
+import base64
 import json
+import os
+from io import BytesIO
+
+from PIL import Image
+from django.conf import settings
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 from apps.projects.models import Project
@@ -84,6 +90,57 @@ class APITestCase(TestCase):
         response = self.client.delete('/api/v1/projects/testuser/newproject')
         self.assertEqual(response.status_code, 200)
         self.assertIn('project newproject has been deleted', response.json()['message'])        
+
+    def _html_thumbnails_in_media(self):
+        """*.html files under the media thumbs tree (what the attack writes)."""
+        found = []
+        thumbs_root = os.path.join(settings.MEDIA_ROOT, 'projects', 'thumbs')
+        if os.path.isdir(thumbs_root):
+            for root, _, files in os.walk(thumbs_root):
+                found.extend(f for f in files if f.lower().endswith('.html'))
+        return found
+
+    def test_save_project_rejects_html_thumbnail(self):
+        self.client.login(username='testuser', password='snap$testpass')
+        payload = base64.b64encode(b'<script>alert(1)</script>').decode()
+        data = {
+            'xml': '<project name="evil" app="Snap! 9.0, https://snap.berkeley.edu" version="2"><notes>n</notes></project>',
+            'notes': 'n',
+            'thumbnail': f'data:text/html;base64,{payload}',
+        }
+        response = self.client.post('/api/v1/projects/testuser/evil', data=json.dumps(data), content_type='application/json')
+        self.assertEqual(response.status_code, 400)
+        # rejected before the project is created and before anything is written to /media
+        self.assertFalse(Project.objects.filter(user__username='testuser', name='evil').exists())
+        self.assertEqual(self._html_thumbnails_in_media(), [])
+
+    def test_save_project_rejects_non_image_bytes_with_image_mime(self):
+        self.client.login(username='testuser', password='snap$testpass')
+        payload = base64.b64encode(b'<html><body><img src=x onerror=alert(1)></body></html>').decode()
+        data = {
+            'xml': '<project name="evil2" app="Snap! 9.0, https://snap.berkeley.edu" version="2"><notes>n</notes></project>',
+            'notes': 'n',
+            'thumbnail': f'data:image/png;base64,{payload}',
+        }
+        response = self.client.post('/api/v1/projects/testuser/evil2', data=json.dumps(data), content_type='application/json')
+        self.assertEqual(response.status_code, 400)
+        self.assertFalse(Project.objects.filter(user__username='testuser', name='evil2').exists())
+        self.assertEqual(self._html_thumbnails_in_media(), [])
+
+    def test_save_project_rejects_oversized_image(self):
+        self.client.login(username='testuser', password='snap$testpass')
+        buf = BytesIO()
+        Image.new('RGB', (5000, 5000), 'red').save(buf, format='PNG')
+        payload = base64.b64encode(buf.getvalue()).decode()
+        data = {
+            'xml': '<project name="evil3" app="Snap! 9.0, https://snap.berkeley.edu" version="2"><notes>n</notes></project>',
+            'notes': 'n',
+            'thumbnail': f'data:image/png;base64,{payload}',
+        }
+        response = self.client.post('/api/v1/projects/testuser/evil3', data=json.dumps(data), content_type='application/json')
+        self.assertEqual(response.status_code, 400)
+        self.assertFalse(Project.objects.filter(user__username='testuser', name='evil3').exists())
+        self.assertEqual(self._html_thumbnails_in_media(), [])
 
     def test_get_users_projects(self):
         self.client.login(username='testuser', password='snap$testpass')
