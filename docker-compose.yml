@@ -41,7 +41,7 @@ services:
       - ${APP_DATA_DIR?./app-data/}/media:/app/app-data/media
       - ./static:/app/static
     ports:
-      - "8000:8000"
+      - "127.0.0.1:8000:8000"
     restart: unless-stopped
     extra_hosts:
       - "host.docker.internal:host-gateway"
