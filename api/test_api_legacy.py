@@ -70,7 +70,21 @@ class LegacyAPITests(TestCase):
             reverse("api-legacy:get_users_projects", args=["testuser"])
         )
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.json()), 0)          
+        self.assertEqual(len(response.json()), 0)
+
+    def test_set_project_visibility_non_owner(self):
+        other = User.objects.create_user(username="other", password="otherpass")
+        self.client.force_login(other)
+        response = self.client.get(
+            reverse(
+                "api-legacy:set_project_visibility", args=["testuser", "Test Project"]
+            ),
+            {"ispublic": False},
+        )
+        self.assertEqual(response.status_code, 403)
+        self.project.refresh_from_db()
+        self.assertTrue(self.project.is_public)
+        self.assertTrue(self.project.is_published)
 
     def test_delete_project(self):
         self.client.login(username="testuser", password="testpassword")
@@ -80,6 +94,15 @@ class LegacyAPITests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTrue(response.json()["success"])
         self.assertFalse(Project.objects.filter(name="Test Project").exists())
+
+    def test_delete_project_non_owner(self):
+        other = User.objects.create_user(username="other", password="otherpass")
+        self.client.force_login(other)
+        response = self.client.get(
+            reverse("api-legacy:delete_project", args=["testuser", "Test Project"])
+        )
+        self.assertEqual(response.status_code, 403)
+        self.assertTrue(Project.objects.filter(name="Test Project").exists())
 
     def test_save_project(self):
         self.client.login(username="testuser", password="testpassword")

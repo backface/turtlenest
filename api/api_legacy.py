@@ -111,9 +111,7 @@ def set_project_visibility(
     Change the project's visibility.
     """
     project = get_object_or_404(Project, user__username=username, name=projectname)
-    if (
-        request.user.is_authenticated and request.user.username == username
-    ) or project.is_public:
+    if request.user == project.user:
         project.is_public = ispublic
         project.is_published = ispublic
         if ispublic:
@@ -127,7 +125,7 @@ def set_project_visibility(
             "success": True,
         }
     else:
-        raise HttpError(401, "Unauthorized. Note that this project is not public.")
+        raise HttpError(403, "You are not allowed to change this project's visibility.")
 
 
 @api.get("/users/{username}/projects/{path:projectname}/delete", auth=django_auth)
@@ -137,16 +135,14 @@ def delete_project(request, username: str, projectname: str):
     """
     project = get_object_or_404(Project, user__username=username, name=projectname)
 
-    if (
-        request.user.is_authenticated and request.user.username == username
-    ) or project.is_public:
+    if request.user == project.user:
         project.delete()
         return {
             "text": f"project {projectname} is removed",
             "success": True,
         }
     else:
-        raise HttpError(401, "Unauthorized. Note that this project is not public.")
+        raise HttpError(403, "You are not allowed to delete this project.")
 
 
 @api.post("/projects/save")
