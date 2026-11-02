@@ -391,8 +391,11 @@ def too_many_requests():
     return HttpResponse(TOO_MANY, status=429)
 
 
+MAX_SEARCH_LENGTH = 200
+
+
 def search(request, target="all"):
-    q = request.GET.get("q") or ""
+    q = (request.GET.get("q") or "")[:MAX_SEARCH_LENGTH]
     if is_limited(request, "web-search"):
         return too_many_requests()
     if target == "semantic" and is_limited(request, "web-semantic-search"):

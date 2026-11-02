@@ -1,4 +1,5 @@
 import re
+import threading
 from django.db import models
 from django.conf import settings
 from django.urls import reverse
@@ -14,15 +15,27 @@ from pgvector.django import VectorField
 from .templatetags.tags import removetags
 
 
+_embedding_model = None
+_embedding_model_lock = threading.Lock()
+
+
+def get_embedding_model():
+    """Load the embedding model once per process."""
+    global _embedding_model
+    if _embedding_model is None:
+        with _embedding_model_lock:
+            if _embedding_model is None:
+                _embedding_model = Embedding(
+                    model_name=settings.TEXT_EMBEDDING_MODEL,
+                    max_length=512,
+                    cache_dir=str(settings.MEDIA_ROOT / "models"),
+                )
+    return _embedding_model
+
+
 def create_embeddings(text):
     text = removetags(text)
-    cache_dir = settings.MEDIA_ROOT / "models"
-    embedding_model = Embedding(
-        model_name=settings.TEXT_EMBEDDING_MODEL,
-        max_length=512,
-        cache_dir=str(cache_dir),
-    )
-    embeddings_generator = embedding_model.embed(text)  # reminder this is a generator
+    embeddings_generator = get_embedding_model().embed(text)  # reminder this is a generator
     return list(embeddings_generator)[0]
 
 
