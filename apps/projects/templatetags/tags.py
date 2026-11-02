@@ -1,17 +1,21 @@
-from django.template import Library
-from django.utils.safestring import mark_safe
 import re
+
+from django.template import Library
+from django.utils.html import conditional_escape
+from django.utils.safestring import mark_safe
 
 
 register = Library()
 
 
-@register.filter(name="twittify")
-def twittify(value):
+@register.filter(name="twittify", needs_autoescape=True)
+def twittify(value, autoescape=None):
     """Replace @ and #'s with links to twitter"""
+    if autoescape:
+        value = conditional_escape(value)
     return mark_safe(
         re.sub(
-            r"#(?P<ht>([a-zA-Z0-9_])+)",
+            r"(?<!&)#(?P<ht>([a-zA-Z0-9_])+)",
             r"#<a href='http://twitter.com/#!/search?q=\g<ht>' target='_blank'>\g<ht></a>",
             re.sub(
                 r"@(?P<un>([a-zA-Z0-9_]){1,15})",
@@ -20,17 +24,16 @@ def twittify(value):
             ),
         )
     )
-twittify.mark_safe = True
 
 
-@register.filter(name="linktags")
-def linktags(value):
-    """Replace #tags with links to tag site using reverse"""
-    # regex = "#([a-zA-Z0-9_]+)"
+@register.filter(name="linktags", needs_autoescape=True)
+def linktags(value, autoescape=None):
+    """Replace @mentions and #tags with links"""
+    if autoescape:
+        value = conditional_escape(value)
     return mark_safe(
         re.sub(
-            # r"#(?P<ht>(\w+))",
-            r"#(?P<ht>([a-zA-Z0-9_\-])+)",
+            r"(?<!&)#(?P<ht>([a-zA-Z0-9_\-])+)",
             r"<a href='/projects/tag/\g<ht>' class='text-tertiary'>#\g<ht></a>",
             re.sub(
                 r"@(?P<ut>[a-zA-Z0-9_\-]+)",
@@ -39,33 +42,32 @@ def linktags(value):
             ),
         )
     )
-linktags.mark_safe = True
 
-register.filter(name="removetags")
-def removetags(value):
-    """Replace #tags with links to tag site using reverse"""
-    # regex = "#([a-zA-Z0-9_]+)"
+
+@register.filter(name="removetags", needs_autoescape=True)
+def removetags(value, autoescape=None):
+    """Remove #tags from text (used before computing embeddings)"""
+    if autoescape:
+        value = conditional_escape(value)
     return mark_safe(
         re.sub(
-            # r"#(?P<ht>(\w+))",
-            r"#(?P<ht>([a-zA-Z0-9_\-])+)",
-            r"",
+            r"(?<!&)#(?P<ht>([a-zA-Z0-9_\-])+)",
+            "",
             value,
         )
     )
-removetags.mark_safe = True
 
 
-@register.filter(name="link_uris")
-def link_uris(value):
-    """Replace string with http and ftp with links"""
-
-    # regex = "(http|ftp|https)://([^\s]+\.[^\s]+)|(http|ftp)://([\w-]+\.[^\s]+)|(http|ftp)://([\w-]+\.[^\s]+)/?"
-    regex = "((http|https)\:\/\/)?[a-zA-Z0-9\.\/\?\:@\-_=#]+\.([a-zA-Z]){2,6}([a-zA-Z0-9\.\&\/\?\%\:@\-_=#])*"
+@register.filter(name="link_uris", needs_autoescape=True)
+def link_uris(value, autoescape=None):
+    """Replace http(s) URLs with links"""
+    if autoescape:
+        value = conditional_escape(value)
+    regex = r"https?://[a-zA-Z0-9\.\/\?\:@\-_=#]+\.([a-zA-Z]){2,6}([a-zA-Z0-9\.\&\/\?\%\:@\-_=#])*"
     return mark_safe(
         re.sub(
             regex,
-            r"<a target='_blank' href='\g<0>' class='underline text-tertiary''>\g<0></a>",
+            r"<a target='_blank' href='\g<0>' class='underline text-tertiary'>\g<0></a>",
             value,
         )
     )

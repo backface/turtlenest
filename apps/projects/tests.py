@@ -3,6 +3,7 @@ from django.urls import reverse
 from django.contrib.auth import get_user_model
 from django.conf import settings
 from .models import Project, Category, Comment
+from .templatetags.tags import linktags, link_uris, removetags
 
 # TODO: test for comments, 
 
@@ -24,6 +25,26 @@ class ProjectViewsTest(TestCase):
         response = self.client.get(reverse('projects:detail', args=[self.user.username, self.project.name]))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'projects/project_detail.html')
+
+    def test_detail_view_escapes_xss_in_notes(self):
+        self.project.notes = '<img src=x onerror=alert(1)> http://example.com #tag'
+        self.project.save()
+        response = self.client.get(reverse('projects:detail', args=[self.user.username, self.project.name]))
+        self.assertEqual(response.status_code, 200)
+        content = response.content
+        self.assertNotIn(b'<img src=x onerror=alert(1)>', content)
+        self.assertIn(b'&lt;img src=x onerror=alert(1)&gt;', content)
+
+    def test_user_detail_view_escapes_xss_in_profile(self):
+        self.user.about = '<script>alert(1)</script>'
+        self.user.location = "<img src=x onerror='alert(2)'>"
+        self.user.save()
+        response = self.client.get(reverse('projects:user_detail', args=[self.user.username]))
+        self.assertEqual(response.status_code, 200)
+        content = response.content
+        self.assertNotIn(b'<script>alert(1)</script>', content)
+        self.assertNotIn(b"<img src=x onerror='alert(2)'>", content)
+        self.assertIn(b'&lt;script&gt;alert(1)&lt;/script&gt;', content)
 
     def test_collection_view(self):
         response = self.client.get(reverse('projects:collection', args=['newest']))
@@ -132,4 +153,40 @@ class ProjectEditViewsTest(TestCase):
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 500)  # Expecting an error response
         self.assertEqual(Comment.objects.count(), 0)  # No comment should be added
+
+
+class TemplateFilterTests(TestCase):
+    """The filters inject HTML, so they must escape user text first (stored XSS)."""
+
+    def test_linktags_escapes_html_and_links_tags(self):
+        out = linktags('<img src=x onerror=alert(1)> #tag @user', autoescape=True)
+        self.assertNotIn("<img", out)
+        self.assertIn("&lt;img src=x onerror=alert(1)&gt;", out)
+        self.assertIn("<a href='/projects/tag/tag' class='text-tertiary'>#tag</a>", out)
+        self.assertIn("<a href='/user/user' class='text-tertiary'>@user</a>", out)
+
+    def test_linktags_escapes_quote_injection(self):
+        out = linktags("#a' onclick='alert(1)", autoescape=True)
+        self.assertNotIn("' onclick='", out)
+        self.assertIn("&#x27;", out)
+
+    def test_link_uris_escapes_html_and_links_http_urls(self):
+        out = link_uris("<script>alert(1)</script> see http://example.com/a?b=1", autoescape=True)
+        self.assertNotIn("<script>", out)
+        self.assertIn("&lt;script&gt;alert(1)&lt;/script&gt;", out)
+        self.assertIn("<a target='_blank' href='http://example.com/a?b=1'", out)
+        self.assertNotIn("''", out)
+
+    def test_link_uris_escapes_quote_injection(self):
+        out = link_uris("http://example.com/' onclick='alert(1)", autoescape=True)
+        self.assertNotIn("' onclick='", out)
+        self.assertIn("&#x27;", out)
+
+    def test_link_uris_does_not_link_urls_without_scheme(self):
+        out = link_uris("example.com is here", autoescape=True)
+        self.assertNotIn("<a", out)
+
+    def test_removetags_still_strips_tags(self):
+        out = removetags("hello #world and @user")
+        self.assertNotIn("#", out)
 
