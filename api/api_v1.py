@@ -25,6 +25,7 @@ from allauth.account.models import EmailAddress
 from apps.projects.models import Project, Remix
 from apps.projects.thumbnails import save_project_thumbnail
 from apps.classrooms.models import Group, SelectedProject
+from apps.users.verification import days_left, grace_days, mark_verified
 from turtlenest.ratelimit import TOO_MANY, is_limited
 
 
@@ -99,6 +100,11 @@ class Message(Schema):
     message: str = ""
 
 
+class LoginMessage(Schema):
+    message: str = ""
+    days_left: Optional[int] = None
+
+
 class RedirectMessage(Schema):
     redirect: str = ""
 
@@ -135,24 +141,43 @@ def current_user(request):
 
 
 @api.post(
-    "/users/{username}/login", response={200: Message, 400: Error}, url_name="login"
+    "/users/{username}/login",
+    response={200: LoginMessage, 400: Error},
+    url_name="login",
+    exclude_none=True,
 )
 def login_user(request, username: str, persist: bool = True):
     """
     Login a user
     """
+    # unverified accounts may log in for UNVERIFIED_GRACE_DAYS after signup
     check_rate_limit(request, "api-login", username)
     password = request.body
     if isinstance(password, bytes):
         password = password.decode("utf-8")
     password = f"snap${password}"
     user = authenticate(request, username=username, password=password)
-    if user is not None:
-        login(request, user)
-        msg = Message(message=f"user {user.username} logged in.")
-        return msg
-    else:
+    if user is None:
         return Error(message="Wrong username or password")
+
+    left = None
+    if not user.is_email_verified():
+        left = days_left(user)
+        if left == 0:
+            return api.create_response(
+                request,
+                {
+                    "errors": [
+                        f"Your account has not been verified within {grace_days()} days. "
+                        "Please use the verification link that was sent to your email "
+                        'address, or use "Resend Verification Email..." in the cloud menu.'
+                    ]
+                },
+                status=403,
+            )
+
+    login(request, user)
+    return LoginMessage(message=f"user {user.username} logged in.", days_left=left)
 
 
 @api.post("/users/{username}", response={200: Info, 400: Errors}, url_name="signup")
@@ -204,7 +229,10 @@ def signup_user(
     return {
         "redirect": "/login",
         "title": "Account created",
-        "message": f"User {username} created. Verification email sent to {email}. Please validate your account before logging in.",
+        "message": (
+            f"User {username} created. Verification email sent to {email}. "
+            f"Please verify your account within {grace_days()} days."
+        ),
     }
 
 
@@ -478,6 +506,8 @@ def save_project(request, username: str, projectname: str):
 
     # validated, re-encoded as PNG; an invalid thumbnail is logged and skipped
     save_project_thumbnail(project, thumbnail)
+    # saving a project counts as verification
+    mark_verified(request.user)
     project.save()
 
     # are we logged into a group? add a reference there as well

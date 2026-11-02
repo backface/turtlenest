@@ -16,6 +16,7 @@ from bs4 import BeautifulSoup
 import base64
 from apps.projects.models import Project, Remix
 from apps.projects.thumbnails import save_project_thumbnail
+from apps.users.verification import mark_verified
 from apps.classrooms.models import Group, SelectedProject, Unit
 
 
@@ -198,6 +199,8 @@ def save_project(
 
     # validated, re-encoded as PNG; an invalid thumbnail is logged and skipped
     save_project_thumbnail(project, thumbnail)
+    # saving a project counts as verification
+    mark_verified(request.user)
 
     # are we logged into a group? add a reference there as well
     try:
