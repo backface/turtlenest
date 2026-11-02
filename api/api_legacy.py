@@ -15,7 +15,7 @@ from datetime import datetime
 from bs4 import BeautifulSoup
 import base64
 from apps.projects.models import Project, Remix
-from apps.projects.thumbnails import parse_thumbnail_data_uri
+from apps.projects.thumbnails import save_project_thumbnail
 from apps.classrooms.models import Group, SelectedProject, Unit
 
 
@@ -168,15 +168,6 @@ def save_project(
     notes = soup.find_all("notes")[0].text if soup.find_all("notes") else None
     # tag = soup.find_all("tags")[0].text if soup.find_all("notes") else None
 
-    # validate the client-controlled thumbnail before touching the project:
-    # only small, real images of a fixed type set are written to /media
-    thumbnail_ext = None
-    thumbnail_data = None
-    if thumbnail:
-        try:
-            thumbnail_ext, thumbnail_data = parse_thumbnail_data_uri(thumbnail)
-        except ValueError as exc:
-            raise HttpError(400, f"Invalid thumbnail: {exc}")
 
     # rempve line breaks in name
     projectname = projectname.replace("\n","")
@@ -205,11 +196,8 @@ def save_project(
     # save project file
     project.project_file.save(project.slug + ".xml", ContentFile(contents))
 
-    # save the validated thumbnail
-    if thumbnail_data is not None:
-        project.thumbnail.save(
-            f"{project.slug}.{thumbnail_ext}", ContentFile(thumbnail_data), save=True
-        )
+    # validated, re-encoded as PNG; an invalid thumbnail is logged and skipped
+    save_project_thumbnail(project, thumbnail)
 
     # are we logged into a group? add a reference there as well
     try:

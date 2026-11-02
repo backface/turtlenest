@@ -100,7 +100,7 @@ class APITestCase(TestCase):
                 found.extend(f for f in files if f.lower().endswith('.html'))
         return found
 
-    def test_save_project_rejects_html_thumbnail(self):
+    def test_save_project_drops_html_thumbnail(self):
         self.client.login(username='testuser', password='snap$testpass')
         payload = base64.b64encode(b'<script>alert(1)</script>').decode()
         data = {
@@ -109,12 +109,12 @@ class APITestCase(TestCase):
             'thumbnail': f'data:text/html;base64,{payload}',
         }
         response = self.client.post('/api/v1/projects/testuser/evil', data=json.dumps(data), content_type='application/json')
-        self.assertEqual(response.status_code, 400)
-        # rejected before the project is created and before anything is written to /media
-        self.assertFalse(Project.objects.filter(user__username='testuser', name='evil').exists())
+        # the project is saved, the invalid thumbnail is dropped
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(Project.objects.get(user__username='testuser', name='evil').thumbnail)
         self.assertEqual(self._html_thumbnails_in_media(), [])
 
-    def test_save_project_rejects_non_image_bytes_with_image_mime(self):
+    def test_save_project_drops_non_image_bytes_with_image_mime(self):
         self.client.login(username='testuser', password='snap$testpass')
         payload = base64.b64encode(b'<html><body><img src=x onerror=alert(1)></body></html>').decode()
         data = {
@@ -123,11 +123,12 @@ class APITestCase(TestCase):
             'thumbnail': f'data:image/png;base64,{payload}',
         }
         response = self.client.post('/api/v1/projects/testuser/evil2', data=json.dumps(data), content_type='application/json')
-        self.assertEqual(response.status_code, 400)
-        self.assertFalse(Project.objects.filter(user__username='testuser', name='evil2').exists())
+        # the project is saved, the invalid thumbnail is dropped
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(Project.objects.get(user__username='testuser', name='evil2').thumbnail)
         self.assertEqual(self._html_thumbnails_in_media(), [])
 
-    def test_save_project_rejects_oversized_image(self):
+    def test_save_project_drops_oversized_image(self):
         self.client.login(username='testuser', password='snap$testpass')
         buf = BytesIO()
         Image.new('RGB', (5000, 5000), 'red').save(buf, format='PNG')
@@ -138,8 +139,9 @@ class APITestCase(TestCase):
             'thumbnail': f'data:image/png;base64,{payload}',
         }
         response = self.client.post('/api/v1/projects/testuser/evil3', data=json.dumps(data), content_type='application/json')
-        self.assertEqual(response.status_code, 400)
-        self.assertFalse(Project.objects.filter(user__username='testuser', name='evil3').exists())
+        # the project is saved, the invalid thumbnail is dropped
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(Project.objects.get(user__username='testuser', name='evil3').thumbnail)
         self.assertEqual(self._html_thumbnails_in_media(), [])
 
     def test_get_users_projects(self):

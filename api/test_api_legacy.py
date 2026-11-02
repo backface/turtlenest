@@ -128,7 +128,7 @@ class LegacyAPITests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.json()), 2)
 
-    def test_save_project_rejects_html_thumbnail(self):
+    def test_save_project_drops_html_thumbnail(self):
         self.client.login(username="testuser", password="testpassword")
         payload = base64.b64encode(b'<script>alert(1)</script>').decode()
         xml = (
@@ -140,10 +140,10 @@ class LegacyAPITests(TestCase):
             content_type="application/json",
             data=xml,
         )
-        self.assertEqual(response.status_code, 400)
-        # rejected before the project is created and before anything lands in /media
+        # the project is saved, the invalid thumbnail is dropped
+        self.assertEqual(response.status_code, 200)
         self.assertFalse(
-            Project.objects.filter(user__username="testuser", name="Evil").exists()
+            Project.objects.get(user__username="testuser", name="Evil").thumbnail
         )
         found = []
         thumbs_root = os.path.join(settings.MEDIA_ROOT, "projects", "thumbs")
