@@ -65,6 +65,13 @@ CSRF_TRUSTED_ORIGINS = [
 INTERNAL_IPS = ["127.0.0.1", "172.20.0.1"]
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
+# reverse proxies in front of Django that set X-Forwarded-For
+TRUSTED_PROXY_COUNT = int(os.environ.get("TRUSTED_PROXY_COUNT", "1"))
+ALLAUTH_TRUSTED_PROXY_COUNT = TRUSTED_PROXY_COUNT
+
+# see turtlenest/ratelimit.py; off in tests unless a test enables it
+RATELIMIT_ENABLE = not TESTING
+
 # secure defaults
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
@@ -285,6 +292,18 @@ ACCOUNT_FORMS = {
 
 LOGIN_REDIRECT_URL = "/myprojects"
 ACCOUNT_ADAPTER = "apps.users.allauth.AccountAdapter"
+
+ACCOUNT_RATE_LIMITS = {
+    "login": "100/m/ip",
+    "login_failed": "50/m/ip,5/300s/key",
+    "signup": "40/h/ip",
+    "reset_password": "20/h/ip,5/h/key",
+    "reset_password_from_key": "20/m/ip",
+    "change_password": "5/m/user",
+    "manage_email": "10/m/user",
+    "reauthenticate": "10/m/user",
+    "confirm_email": "1/180s/key",
+}
 
 # Social login is currently disabled. To enable a provider, configure it via
 # environment variables in .env — never commit real credentials:

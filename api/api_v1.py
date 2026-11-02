@@ -25,6 +25,7 @@ from allauth.account.models import EmailAddress
 from apps.projects.models import Project, Remix
 from apps.projects.thumbnails import save_project_thumbnail
 from apps.classrooms.models import Group, SelectedProject
+from turtlenest.ratelimit import TOO_MANY, is_limited
 
 
 api = NinjaAPI(
@@ -34,8 +35,19 @@ api = NinjaAPI(
     urls_namespace="api-v1",
 )
 
-# TODO
-# * API rate lmiting?
+
+class RateLimited(Exception):
+    pass
+
+
+@api.exception_handler(RateLimited)
+def rate_limited(request, exc):
+    return api.create_response(request, {"errors": [TOO_MANY]}, status=429)
+
+
+def check_rate_limit(request, group, username=None):
+    if is_limited(request, group, username=username):
+        raise RateLimited
 
 
 
@@ -129,6 +141,7 @@ def login_user(request, username: str, persist: bool = True):
     """
     Login a user
     """
+    check_rate_limit(request, "api-login", username)
     password = request.body
     if isinstance(password, bytes):
         password = password.decode("utf-8")
@@ -149,6 +162,7 @@ def signup_user(
     """
     Signup a user
     """
+    check_rate_limit(request, "api-signup")
     User = get_user_model()
     password = f"snap${password}"
     password_repeat = f"snap${password_repeat}"
@@ -199,6 +213,7 @@ def resend_verification(request, username: str):
     """
     Resend verification email.
     """
+    check_rate_limit(request, "api-resend-verification", username)
     User = get_user_model()
     try:
         user = User.objects.get(username=username)
@@ -227,6 +242,7 @@ def request_password_change(request, username: str):
     """
     Request a password change.
     """
+    check_rate_limit(request, "api-password-reset", username)
     User = get_user_model()
     user = get_object_or_404(User, username=username)
 
@@ -248,6 +264,7 @@ def change_password(
     """
     Change a User's Password
     """
+    check_rate_limit(request, "api-newpassword", username)
     User = get_user_model()
     errors = []
 

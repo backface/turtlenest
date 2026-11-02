@@ -23,6 +23,7 @@ from bs4 import BeautifulSoup
 from apps.pages.models import Page
 from apps.users.models import User
 from apps.classrooms.models import Group
+from turtlenest.ratelimit import LIKE_NOTIFY_RATE, TOO_MANY, allow_once, is_limited
 from .models import (
     Project,
     Category,
@@ -386,8 +387,16 @@ def project_stats(request, id):
     )
 
 
+def too_many_requests():
+    return HttpResponse(TOO_MANY, status=429)
+
+
 def search(request, target="all"):
     q = request.GET.get("q") or ""
+    if is_limited(request, "web-search"):
+        return too_many_requests()
+    if target == "semantic" and is_limited(request, "web-semantic-search"):
+        return too_many_requests()
     if len(q) > 1:
         if target == "users":
             objects = User.objects.filter(
@@ -790,11 +799,22 @@ def delete(request, id):
 
 @login_required
 def like(request, id):
+    if is_limited(request, "web-like"):
+        return too_many_requests()
     like, created = Like.objects.get_or_create(project_id=id, liker=request.user)
     if not created:
         like.delete()
     else:
-        if like.project.user != request.user and like.project.user.notify_like:
+        if (
+            like.project.user != request.user
+            and like.project.user.notify_like
+            and allow_once(
+                request,
+                "like-notify",
+                f"{request.user.pk}:{like.project_id}",
+                LIKE_NOTIFY_RATE,
+            )
+        ):
             message = EmailMessage(
                 _("Someone liked your project!"),
                 render_to_string("emails/notify_like.txt", {"like": like}),
@@ -909,6 +929,8 @@ def publish_project(request, id):
 @login_required
 def add_comment(request, id):
     if request.method == "POST":
+        if is_limited(request, "web-comment"):
+            return too_many_requests()
         if not request.user.id == int(request.POST["author"]):
             raise (PermissionDenied)
 
@@ -949,6 +971,8 @@ def add_comment(request, id):
 @login_required
 def flag(request, id):
     if request.method == "POST":
+        if is_limited(request, "web-flag"):
+            return too_many_requests()
         project = get_object_or_404(Project, pk=id)
         form = FlagProjectForm(
             request.POST,
