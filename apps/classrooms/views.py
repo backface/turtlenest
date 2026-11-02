@@ -16,6 +16,9 @@ from django.contrib import messages
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ValidationError
+from django.db import transaction
+from django.db.models import Q
 from django_htmx.http import HttpResponseClientRefresh
 from apps.projects.models import Project
 from apps.users.models import User
@@ -51,6 +54,13 @@ class GroupDetailView(LoginRequiredMixin, DetailView):
     model = Group
     # template_name = 'group_detail.html'
     # context_object_name = 'group'
+
+    def get_queryset(self):
+        # only members and the host may see a group (roster, units, projects);
+        user = self.request.user
+        if user.is_superuser:
+            return Group.objects.all()
+        return Group.objects.filter(Q(members=user) | Q(host=user)).distinct()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -258,6 +268,48 @@ def remove_project(request, id, project_id):
     return HttpResponseClientRefresh()
     
 
+BULK_ADD_MAX_ROWS = 200
+
+
+def _parse_bulk_add(csv_data, group, host):
+    """Validate every CSV row before anything is written.
+
+    Returns ``(rows, errors)``; ``rows`` holds ``(username, password, user)``
+    with ``user`` None for accounts to create. Usernames keep the historic
+    ``group<id><name>`` scheme, so an existing account may only be updated
+    when it is a pupil account created by this host (``mentor``). That stops
+    a host from resetting the password of anybody else's account whose name
+    happens to match (e.g. group 30 + "1a" and group 3 + "01a").
+    """
+    rows, errors, seen = [], [], set()
+    lines = [line for line in csv.reader(io.StringIO(csv_data)) if any(f.strip() for f in line)]
+    if len(lines) > BULK_ADD_MAX_ROWS:
+        return [], [_("Too many rows (at most %(max)s).") % {"max": BULK_ADD_MAX_ROWS}]
+    for number, line in enumerate(lines, start=1):
+        if len(line) != 2 or not line[0].strip() or not line[1].strip():
+            errors.append(_("Line %(n)s: expected 'name, password'.") % {"n": number})
+            continue
+        name, password = line[0].strip(), line[1].strip()
+        username = f"group{group.id}{name}"
+        try:
+            User.username_validator(username)
+            if len(username) > User._meta.get_field("username").max_length:
+                raise ValidationError("too long")
+        except ValidationError:
+            errors.append(_("Line %(n)s: invalid name '%(name)s'.") % {"n": number, "name": name})
+            continue
+        if username.lower() in seen:
+            errors.append(_("Line %(n)s: '%(name)s' is listed twice.") % {"n": number, "name": name})
+            continue
+        seen.add(username.lower())
+        user = User.objects.filter(username__iexact=username).first()
+        if user is not None and not (user.is_puppet and user.mentor_id == host.id):
+            errors.append(_("Line %(n)s: the name '%(name)s' is already taken.") % {"n": number, "name": name})
+            continue
+        rows.append((username, password, user))
+    return rows, errors
+
+
 @login_required
 def bulk_add(request, id):
     group = get_object_or_404(Group, pk=id)
@@ -266,50 +318,42 @@ def bulk_add(request, id):
     if request.method == "POST":
         bulkAddForm = BulkAddForm(request.POST)
         if bulkAddForm.is_valid():
-            try:
-                csv_data = bulkAddForm.cleaned_data["data"]
-                reader = csv.reader(io.StringIO(csv_data))
-                for line in reader:
-                    if len(line) == 2:
-                        username = f"group{group.id}{line[0].strip()}"
-                        password = line[1].strip()
-                        if username and password:
-                            u, created = User.objects.get_or_create(
-                                username=username,
-                            )
-                            # create a fake email
-                            u.email = f"{username}@turtlestitch.org"                            
-                            u.mentor = request.user
-                            u.set_password(password)
-                            u.notify_comments = False
-                            u.notify_like = False
-                            u.add_to_group("Puppets")
-                            u.save()
-                            group.members.add(u)
-
-                            # add allauth email account
-                            new_account, created = EmailAddress.objects.get_or_create(
-                                user=u,
-                                email=u.email
-                            )
-                            new_account.verified = True
-                            new_account.primary = True
-                            new_account.save()                            
-                    else:
-                        raise (Exception("Invalid CSV data"))
-            except Exception as e:
-                messages.error(request, f"Error adding members: {e}")
+            rows, errors = _parse_bulk_add(
+                bulkAddForm.cleaned_data["data"], group, request.user
+            )
+            if errors:
+                # all or nothing: report every problem, change nothing
+                for error in errors:
+                    messages.error(request, error)
             else:
-                messages.success(request, "Members added")
+                with transaction.atomic():
+                    for username, password, user in rows:
+                        if user is None:
+                            user = User(
+                                username=username,
+                                # fake email, the pupil has none
+                                email=f"{username}@turtlestitch.org",
+                                mentor=request.user,
+                                notify_comment=False,
+                                notify_like=False,
+                            )
+                        # re-importing an own pupil resets the password
+                        user.set_password(password)
+                        user.save()
+                        user.add_to_group("Puppets")
+                        group.members.add(user)
+
+                        # add allauth email account
+                        EmailAddress.objects.update_or_create(
+                            user=user,
+                            email=user.email,
+                            defaults={"verified": True, "primary": True},
+                        )
+                messages.success(request, _("Members added"))
         # if request.htmx:
         #    return render(request, "classrooms/_members_bulkadd.html", { "group": group, "bulkAddForm": bulkAddForm })
         # else:
         return redirect(reverse("groups:group_detail", args=[group.id]))
-    else:
-        bulkAddForm = BulkAddForm()
-    # if request.htmx:
-    #    return render(request, "classrooms/_members_bulkadd.html", { "group": group, "bulkAddForm": bulkAddForm })
-    # else:
     return redirect(reverse("groups:group_detail", args=[group.id]))
 
 
