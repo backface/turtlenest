@@ -43,6 +43,16 @@ dev = [
     "coverage>=7.6",
 ]
 
+[tool.ruff]
+# deprecated, marked for removal
+extend-exclude = [
+    "apps/legacydb",
+    "api/api_legacy.py",
+    "api/test_api_legacy.py",
+]
+# also skip them when passed explicitly (editors, pre-commit)
+force-exclude = true
+
 [tool.coverage.run]
 source = ["apps", "api"]
 omit = [

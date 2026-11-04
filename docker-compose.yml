@@ -83,6 +83,7 @@ services:
     depends_on: 
       - db
 
+  # DEPRECATED, marked for removal: only for the disabled apps.legacydb
   # legacy-db:
   #   image: postgres:16    
   #   env_file:

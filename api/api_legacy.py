@@ -1,4 +1,8 @@
 ## Legacy turtlecloud API
+#
+# DEPRECATED, marked for removal: only for TurtleStitch 2.x clients.
+# Not served anymore: the route in turtlenest/urls.py is commented out.
+# New work goes into api_v1.py.
 
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
@@ -29,7 +33,7 @@ from apps.classrooms.models import Group, SelectedProject, Unit
 api = NinjaAPI(
     title="TurtleCloud Legacy API",
     version="0.1",
-    description="legacy API compatible with TurtleStitch v2.x",
+    description="DEPRECATED legacy API compatible with TurtleStitch v2.x, marked for removal",
     urls_namespace="api-legacy",
 )
 

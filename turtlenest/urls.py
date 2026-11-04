@@ -13,7 +13,8 @@ from django.views.generic import RedirectView
 # from wagtail import urls as wagtail_urls
 # from wagtail.documents import urls as wagtaildocs_urls
 
-from api.api_legacy import api as api_legacy
+# DEPRECATED, marked for removal; not served anymore
+# from api.api_legacy import api as api_legacy
 from api.api_v1 import api as api_v1
 from apps.classrooms.views import GroupListView
 
@@ -72,7 +73,8 @@ urlpatterns = [
     path("privacy/", RedirectView.as_view(url="/page/privacy")),
     path("about/", RedirectView.as_view(url="/page/about")),
    
-    path("api/", api_legacy.urls),
+    # DEPRECATED, marked for removal: legacy API for TurtleStitch 2.x clients, not served
+    # path("api/", api_legacy.urls),
     path("api/v1/", api_v1.urls),
 
     # lookup everything else in projects

@@ -116,8 +116,9 @@ INSTALLED_APPS = [
     
     "apps.wp_blog",
     
+    # DEPRECATED, marked for removal: legacy database import (one-off migration, done).
+    # Re-enable together with the "legacydb" database and router below.
     # "apps.legacydb",
-    # only needed for migrating or looking into the legacy database
 
     #"django_browser_reload",
     "django_cleanup.apps.CleanupConfig",
@@ -185,24 +186,17 @@ DATABASES = {
         "HOST": os.environ.get("POSTGRES_HOST", "localhost"),
         "PORT": os.environ.get("POSTGRES_PORT", "5432"),
     },
-    "legacydb": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.environ.get("LEGACYDB_DB", os.environ.get("POSTGRES_DB", "dbname")),
-        "USER": os.environ.get(
-            "LEGACYDB_USER", os.environ.get("POSTGRES_USER", "postgres")
-        ),
-        "PASSWORD": os.environ.get(
-            "LEGACYDB_PASSWORD", os.environ.get("POSTGRES_PASSWORD", "")
-        ),
-        "HOST": os.environ.get(
-            "LEGACYDB_HOST", os.environ.get("LEGACY_HOST", "legacy-db")
-        ),
-        "PORT": os.environ.get(
-            "LEGACYDB_PORT", os.environ.get("POSTGRES_PORT", "5432")
-        ),
-    },
+    # DEPRECATED, marked for removal: legacy database, see apps.legacydb
+    # "legacydb": {
+    #     "ENGINE": "django.db.backends.postgresql",
+    #     "NAME": os.environ.get("LEGACYDB_DB", "turtle"),
+    #     "USER": os.environ.get("LEGACYDB_USER", "turtle"),
+    #     "PASSWORD": os.environ.get("LEGACYDB_PASSWORD", ""),
+    #     "HOST": os.environ.get("LEGACYDB_HOST", "legacy-db"),
+    #     "PORT": os.environ.get("LEGACYDB_PORT", "5432"),
+    # },
 }
-DATABASE_ROUTERS = ["apps.legacydb.dbrouters.LegacyDbRouter"]
+# DATABASE_ROUTERS = ["apps.legacydb.dbrouters.LegacyDbRouter"]
 
 
 CACHES = {

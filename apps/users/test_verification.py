@@ -2,6 +2,7 @@
 
 import json
 from io import StringIO
+from unittest import skip
 
 from allauth.account.models import EmailAddress
 from django.contrib.auth.models import Group as AuthGroup
@@ -91,6 +92,7 @@ class VerifyOnSaveTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTrue(self.user.is_email_verified())
 
+    @skip("legacy API is deprecated and not routed")
     def test_legacy_save_verifies(self):
         response = self.client.post(
             "/api/projects/save?username=saver&projectname=P&tags=&ispublic=true",

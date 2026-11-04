@@ -2,6 +2,8 @@ import base64
 import os
 
 from django.conf import settings
+from unittest import skip
+
 from django.test import TestCase, Client
 from django.urls import reverse
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -9,6 +11,7 @@ from apps.projects.models import Project
 from apps.users.models import User
 
 
+@skip("legacy API is deprecated and not routed")
 class LegacyAPITests(TestCase):
     def setUp(self):
         self.client = Client()
