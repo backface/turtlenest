@@ -45,15 +45,13 @@ if not SECRET_KEY or SECRET_KEY == "CHANGE_ME":
 
 # APPEND_SLASH = False
 
-# Defaults to the real domains, never "*". Dev/test hosts are added below.
+# Defaults to the real domains, never "*". Loopback is always allowed (container healthcheck).
 _allowed_hosts = os.environ.get("ALLOWED_HOSTS", "")
 if not _allowed_hosts or _allowed_hosts == "CHANGE_ME":
     _allowed_hosts = (
         "turtlestitch.org *.turtlestitch.org backface.net *.backface.net"
     )
-ALLOWED_HOSTS = _allowed_hosts.split()
-if TESTING or DEBUG:
-    ALLOWED_HOSTS += ["localhost", "127.0.0.1", "[::1]"]
+ALLOWED_HOSTS = _allowed_hosts.split() + ["localhost", "127.0.0.1", "[::1]"]
 CORS_ALLOWED_ORIGINS = []
 CORS_ALLOWED_ORIGINS = []
 CSRF_TRUSTED_ORIGINS = [
