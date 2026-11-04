@@ -273,6 +273,11 @@ MIGRATION_MODULES = {
 ACCOUNT_SIGNUP_FIELDS = ['email*', 'username*', 'password1*', 'password2*']
 
 ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_USERNAME_BLACKLIST = [
+    "c", "admin", "administrator", "root", "staff", "moderator", "moderators",
+    "support", "help", "api", "static", "media", "login", "logout", "signup",
+    "user", "users", "accounts", "turtlestitch", "turtlenest", "snap",
+]
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 # API logins may stay unverified this many days after signup
 UNVERIFIED_GRACE_DAYS = 3

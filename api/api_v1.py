@@ -14,11 +14,15 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.hashers import check_password
+from django.core.exceptions import ValidationError
+from django.core.validators import validate_email
 
 from ninja import NinjaAPI
 from ninja import Schema
 from ninja.errors import HttpError
+from allauth.account.adapter import get_adapter
 from allauth.account.forms import ResetPasswordForm
+from allauth.account.utils import filter_users_by_email
 from allauth.account.models import EmailAddress
 # removed from allauth.account.utils import send_email_confirmation
 
@@ -193,19 +197,20 @@ def signup_user(
     password_repeat = f"snap${password_repeat}"
 
     if password != password_repeat:
-        return Errors(erros=["Passwords do not match"])
+        return 400, Errors(errors=["Passwords do not match"])
 
     try:
-        user = User.objects.get(username=username)
-        return 400, Errors(errors=[f"User {username} already exists",])
-    except User.DoesNotExist:
-        pass
+        username = get_adapter(request).clean_username(username)
+    except ValidationError as e:
+        return 400, Errors(errors=e.messages)
 
+    email = email.strip().lower()
     try:
-        user = User.objects.get(email=email)
+        validate_email(email)
+    except ValidationError:
+        return 400, Errors(errors=["Please enter a valid e-mail address"])
+    if filter_users_by_email(email):
         return 400, Errors(errors=[f"User with E-mail {email} already exists"])
-    except User.DoesNotExist:
-        pass
 
     # form = SignupForm(
     #     {
@@ -303,7 +308,9 @@ def change_password(
         password_repeat = f"snap${password_repeat}"
 
         if newpassword != password_repeat:
-            errors.append("The provided passwords do not match")
+            return api.create_response(
+                request, {"errors": ["The provided passwords do not match"]}, status=400
+            )
 
         if check_password(oldpassword, user.password):
             user.set_password(newpassword)
@@ -320,7 +327,7 @@ def change_password(
     else:
         raise HttpError(401, "Unauthorized. ")
 
-    return {"errors": errors}
+    return api.create_response(request, {"errors": errors}, status=400)
 
 
 @api.post("/logout", response=RedirectMessage, url_name="logout")
