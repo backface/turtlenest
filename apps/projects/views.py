@@ -64,7 +64,9 @@ PRIVATE_COLLECTIONS = [
 
 # @cache_page(60 * 15)
 def index(request):
-    featured = Project.objects.filter(categories__slug__in=["featured"]).order_by("?")
+    featured = Project.objects.filter(
+        categories__slug__in=["featured"], is_published=True
+    ).order_by("?")
     try:
         announcement = Page.objects.get(slug='announcement')
     except Page.DoesNotExist:
@@ -379,7 +381,7 @@ def project_details(request, project):
 
 @cache_page(60 * 15)
 def project_stats(request, id):
-    project = get_object_or_404(Project, pk=id)
+    project = get_visible_project(request, id)
     return render(
         request,
         "projects/_project_stats.html",
@@ -510,7 +512,7 @@ def category_list(request):
     #     Prefetch('projects', queryset=Project.objects.filter(id__in=subqry)))
     categories = Category.objects.all()
     for cat in categories:
-        cat.paginator = Paginator(cat.projects.all()[:6], 6)
+        cat.paginator = Paginator(cat.projects.filter(is_published=True)[:6], 6)
         cat.page_obj = cat.paginator.get_page(1)
     return render(
         request,
@@ -859,12 +861,9 @@ def delete_comment(request, id):
 
 @login_required
 def share_project(request, id):
+    # only the owner can share; moderators can only unshare or unpublish
     project = get_object_or_404(Project, pk=id)
-    if (
-        not request.user == project.user
-        and not request.user.is_moderator
-        and not request.user.is_superuser
-    ):
+    if request.user != project.user:
         raise (PermissionDenied)
     else:
         project.is_public = True
@@ -922,13 +921,12 @@ def unpublish_project(request, id):
 @login_required
 def publish_project(request, id):
     project = get_object_or_404(Project, pk=id)
-    if (
-        not request.user == project.user
-        and not request.user.is_moderator
-        and not request.user.is_superuser
-    ):
+    if request.user != project.user:
         raise (PermissionDenied)
     else:
+        if not project.is_public:
+            project.is_public = True
+            project.last_shared = timezone.now()
         project.is_published = True
         project.save()
         messages.success(request, "Project published")

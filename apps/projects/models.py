@@ -135,6 +135,9 @@ class Project(models.Model):
         else:
             del kwargs["no_timestamp"]
         self.slug = slugify(self.name, allow_unicode=True)
+        # only shared projects can be listed
+        if not self.is_public:
+            self.is_published = False
         super().save(*args, **kwargs)
 
     def image_tag(self):

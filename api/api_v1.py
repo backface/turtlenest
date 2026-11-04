@@ -373,6 +373,10 @@ def set_project_visibility(
     if request.user.is_authenticated and request.user.username == username:
         if ispublished is not None:
             project.is_published = ispublished
+            # publishing implies sharing
+            if ispublished and not project.is_public:
+                project.is_public = True
+                project.last_shared = timezone.now()
 
         
         if ispublic is not None:
@@ -493,8 +497,10 @@ def save_project(request, username: str, projectname: str):
     project, created = Project.objects.get_or_create(
         user=request.user, name=projectname
     )
-    project.is_public = True
-    project.is_published = True
+    # new projects are published, existing ones keep their visibility
+    if created:
+        project.is_public = True
+        project.is_published = True
     project.notes = notes
     project.update_tags_from_notes()
     project.update_embeddings()

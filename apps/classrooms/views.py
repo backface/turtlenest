@@ -10,6 +10,7 @@ from django.utils.translation import gettext_lazy as _
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 from django.shortcuts import get_object_or_404
+from django.http import Http404
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.template.loader import render_to_string
 from django.contrib import messages
@@ -202,6 +203,8 @@ def add_starter(request, group_id, project_id):
     project = get_object_or_404(Project, id=project_id)
     if not group.is_host(request.user):
         raise (PermissionDenied)
+    if not project.is_visible_to(request.user):
+        raise Http404
     newproject = SelectedProject(
         group=group, project=project, is_starter=True, unit_id=group.current_unit or ""
     )
