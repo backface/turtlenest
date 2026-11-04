@@ -43,8 +43,7 @@ class CommentForm(forms.ModelForm):
     # contents = MarkdownxFormField(min_length=1)
     class Meta:
         model = Comment
-        fields = ["contents", "project", "author"]
-        widgets = {"project": forms.HiddenInput(), "author": forms.HiddenInput()}
+        fields = ["contents"]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

@@ -365,7 +365,7 @@ def project_details(request, project):
         {
             "project": project,
             "group": group,
-            "comment_form": CommentForm({"project": project, "author": request.user}),
+            "comment_form": CommentForm(),
             "categories_form": CategoriesForm(instance=project),
             "remixed_from": remixed_from,
             "remixed_to": remixed_to,
@@ -389,6 +389,14 @@ def project_stats(request, id):
 
 def too_many_requests():
     return HttpResponse(TOO_MANY, status=429)
+
+
+def get_visible_project(request, id):
+    """The project if request.user may see it, otherwise 404."""
+    project = get_object_or_404(Project, pk=id)
+    if not project.is_visible_to(request.user):
+        raise Http404
+    return project
 
 
 MAX_SEARCH_LENGTH = 200
@@ -804,7 +812,8 @@ def delete(request, id):
 def like(request, id):
     if is_limited(request, "web-like"):
         return too_many_requests()
-    like, created = Like.objects.get_or_create(project_id=id, liker=request.user)
+    project = get_visible_project(request, id)
+    like, created = Like.objects.get_or_create(project=project, liker=request.user)
     if not created:
         like.delete()
     else:
@@ -934,12 +943,11 @@ def add_comment(request, id):
     if request.method == "POST":
         if is_limited(request, "web-comment"):
             return too_many_requests()
-        if not request.user.id == int(request.POST["author"]):
-            raise (PermissionDenied)
-
-        form = CommentForm(request.POST)
+        project = get_visible_project(request, id)
+        form = CommentForm(
+            request.POST, instance=Comment(project=project, author=request.user)
+        )
         if form.is_valid():
-            form.author = request.user
             comment = form.save()
             messages.success(request, "Comment posted!")
             if (
@@ -966,7 +974,7 @@ def add_comment(request, id):
             # print(form.errors)
             # print("invalid comment!")
             messages.error(request, "Invalid comment!")
-            return HttpResponse("error", status=500)
+            return HttpResponse("error", status=400)
     else:
         raise (PermissionDenied)
 
@@ -976,7 +984,7 @@ def flag(request, id):
     if request.method == "POST":
         if is_limited(request, "web-flag"):
             return too_many_requests()
-        project = get_object_or_404(Project, pk=id)
+        project = get_visible_project(request, id)
         form = FlagProjectForm(
             request.POST,
             instance=FlaggedProject(flagged_by=request.user, project=project),
@@ -1013,7 +1021,7 @@ def flag(request, id):
                 {"form": form, "project": project},
             )
     else:
-        project = get_object_or_404(Project, pk=id)
+        project = get_visible_project(request, id)
         form = FlagProjectForm(instance=FlaggedProject())
     return render(
         request, "projects/project_flag.html", {"form": form, "project": project}

@@ -286,8 +286,6 @@ _                    <a href="{% url 'projects:list_by_tag' tag.slug %}" class="
                         aria-invalid="true" 
                         id="id_contents" 
                         class="h-36 w-full"></textarea>
-                    <input type="hidden" name="author" value="{{ request.user.id }}" id="id_author">
-                    <input type="hidden" name="project" value="{{ project.id}}" id="id_project">
                 </div>
 
                 <button 

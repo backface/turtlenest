@@ -142,6 +142,10 @@ class Project(models.Model):
 
     image_tag.short_description = "Image"
 
+    def is_visible_to(self, user):
+        """Shared projects are visible to everyone, private ones only to the owner."""
+        return self.is_public or (user.is_authenticated and user.pk == self.user_id)
+
     def ilike(self, user):
         return self.likes.filter(liker=user).count() > 0
 

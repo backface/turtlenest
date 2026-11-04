@@ -151,7 +151,7 @@ class ProjectEditViewsTest(TestCase):
             'author': self.user.id
         }
         response = self.client.post(url, data)
-        self.assertEqual(response.status_code, 500)  # Expecting an error response
+        self.assertEqual(response.status_code, 400)
         self.assertEqual(Comment.objects.count(), 0)  # No comment should be added
 
 
