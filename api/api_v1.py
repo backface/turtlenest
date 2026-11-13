@@ -14,7 +14,7 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.hashers import check_password
-from django.core.exceptions import ValidationError
+from django.core.exceptions import RequestDataTooBig, ValidationError
 from django.core.validators import validate_email
 
 from ninja import NinjaAPI
@@ -48,6 +48,30 @@ class RateLimited(Exception):
 @api.exception_handler(RateLimited)
 def rate_limited(request, exc):
     return api.create_response(request, {"errors": [TOO_MANY]}, status=429)
+
+
+class NotFound(Exception):
+    pass
+
+
+@api.exception_handler(NotFound)
+def not_found(request, exc):
+    return api.create_response(request, {"errors": [str(exc)]}, status=404)
+
+
+def get_project_or_404(username, projectname):
+    try:
+        return Project.objects.get(user__username=username, name=projectname)
+    except Project.DoesNotExist:
+        raise NotFound(f"Project {projectname} not found")
+
+
+@api.exception_handler(RequestDataTooBig)
+def request_too_big(request, exc):
+    limit = settings.DATA_UPLOAD_MAX_MEMORY_SIZE // (1024 * 1024)
+    return api.create_response(
+        request, {"errors": [f"Project is too big (max {limit} MB)"]}, status=413
+    )
 
 
 def check_rate_limit(request, group, username=None):
@@ -376,7 +400,7 @@ def set_project_visibility(
     """
     Change the project's visibility.
     """
-    project = Project.objects.get(user__username=username, name=projectname)
+    project = get_project_or_404(username, projectname)
     if request.user.is_authenticated and request.user.username == username:
         if ispublished is not None:
             project.is_published = ispublished
@@ -412,7 +436,7 @@ def get_project_thumbnail(request, username: str, projectname: str):
     """
     Get a project's thumbnail.
     """
-    project = Project.objects.get(user__username=username, name=projectname)
+    project = get_project_or_404(username, projectname)
     if (
         request.user.is_authenticated and request.user.username == username
     ) or project.is_public:
@@ -430,7 +454,7 @@ def delete_project(request, username: str, projectname: str):
     """
     Delete a Project
     """
-    project = Project.objects.get(user__username=username, name=projectname)
+    project = get_project_or_404(username, projectname)
     if request.user.is_authenticated and request.user.username == username:
         project.delete()
         return {
@@ -450,7 +474,7 @@ def get_project(request, username: str, projectname: str, updatingnotes: bool = 
     """
     Load a project.
     """
-    project = Project.objects.get(user__username=username, name=projectname)
+    project = get_project_or_404(username, projectname)
     if (
         request.user.is_authenticated and request.user.username == username
     ) or project.is_public:

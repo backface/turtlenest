@@ -72,6 +72,9 @@ ALLAUTH_TRUSTED_PROXY_COUNT = TRUSTED_PROXY_COUNT
 # see turtlenest/ratelimit.py; off in tests unless a test enables it
 RATELIMIT_ENABLE = not TESTING
 
+# max request body Django reads into memory (Snap! project saves); keep <= nginx client_max_body_size
+DATA_UPLOAD_MAX_MEMORY_SIZE = int(os.environ.get("DATA_UPLOAD_MAX_MEMORY_SIZE", 10 * 1024 * 1024))
+
 # secure defaults
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
@@ -418,13 +421,6 @@ GRAPPELLI_ADMIN_TITLE = "TurtleStitch Nest Administration"
 GRAPPELLI_SWITCH_USER = True
 
 
-###################
-# filebrower
-###################
-
-FILEBROWSER_DIRECTORY = "uploads/"
-FILEBROWSER_ADMIN_VERSIONS = ["thumbnail", "small", "medium", "big", "large"]
-FILEBROWSER_MAX_UPLOAD_SIZE = 15485760
 
 
 ###################
