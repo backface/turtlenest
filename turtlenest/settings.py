@@ -17,6 +17,8 @@ from django.utils.translation import gettext_lazy as _
 from django.contrib import messages
 from django.core.exceptions import ImproperlyConfigured
 
+from turtlenest.hosts import parse_allowed_hosts
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -49,9 +51,9 @@ if not SECRET_KEY or SECRET_KEY == "CHANGE_ME":
 _allowed_hosts = os.environ.get("ALLOWED_HOSTS", "")
 if not _allowed_hosts or _allowed_hosts == "CHANGE_ME":
     _allowed_hosts = (
-        "turtlestitch.org *.turtlestitch.org backface.net *.backface.net"
+        "turtlestitch.org .turtlestitch.org backface.net .backface.net"
     )
-ALLOWED_HOSTS = _allowed_hosts.split() + ["localhost", "127.0.0.1", "[::1]"]
+ALLOWED_HOSTS = parse_allowed_hosts(_allowed_hosts) + ["localhost", "127.0.0.1", "[::1]"]
 CORS_ALLOWED_ORIGINS = []
 CORS_ALLOWED_ORIGINS = []
 CSRF_TRUSTED_ORIGINS = [
@@ -702,4 +704,15 @@ JAZZMIN_SETTINGS = {
     # override change forms on a per modeladmin basis
     "changeform_format_overrides": {"users": "collapsible", "auth.group": "vertical_tabs"},
     "language_chooser": False,
+}
+
+
+# without this, rejected hosts (400) and other security events are silent with DEBUG off
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {"console": {"class": "logging.StreamHandler"}},
+    "loggers": {
+        "django.security": {"handlers": ["console"], "level": "WARNING", "propagate": False},
+    },
 }
