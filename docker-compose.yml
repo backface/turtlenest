@@ -17,6 +17,18 @@ services:
       start_period: 10s
     restart: unless-stopped
 
+  # host folders shared with nginx must be writable by the container user
+  # (uid 1000); docker creates missing bind mount folders as root
+  fix-permissions:
+    image: backface/turtlenest:latest
+    user: "0"
+    entrypoint: ["sh", "-c"]
+    command: ["for d in /app/static /app/app-data/media; do find $$d ! -user 1000 -exec chown 1000:1000 {} +; done"]
+    volumes:
+      - ${APP_DATA_DIR?./app-data/}/media:/app/app-data/media
+      - ./static:/app/static
+    restart: "no"
+
   django:
     image: backface/turtlenest:latest
     build:
@@ -27,7 +39,10 @@ services:
     env_file:
       - '.env'      
     depends_on:
-      - db
+      db:
+        condition: service_started
+      fix-permissions:
+        condition: service_completed_successfully
     networks:
       # - public_proxy
       - default      
