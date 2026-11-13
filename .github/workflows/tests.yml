@@ -9,40 +9,37 @@ jobs:
   test:
     name: Run unit tests on Django
     runs-on: ubuntu-24.04
+    timeout-minutes: 30
 
     steps:
       - name: Checkout
         uses: actions/checkout@v5
 
-      - name: Show GitHub context   
-        env: 
-          GITHUB_CONTEXT: ${{ toJson(github) }}   
-        run: echo "$GITHUB_CONTEXT"
-        shell: bash
+      - name: Prepare .env
+        run: |
+          cp env.SAMPLE .env
+          echo "SECRET_KEY=$(openssl rand -hex 32)" >> .env
 
-      - name: Show user id
-        run: id
-        shell: bash
+      - name: Build image
+        run: docker compose build django
 
-      - run: cp env.SAMPLE .env
-      - run: echo "SECRET_KEY=$(openssl rand -hex 32)" >> .env
+      - name: Fix folder permissions
+        run: |
+          docker compose run --rm fix-permissions
+          ls -lnd static app-data/media
 
-      - run: cp docker-compose.dev.yml docker-compose.override.yml
+      - name: Start database
+        run: docker compose up -d --wait db
 
-      - name: create app-data folder
-        run: mkdir -p app-data/media
-      
-      - name: Set permissions
-        run: sudo chown -R 1000:1000 app-data
+      - name: Run tests
+        run: >
+          docker compose run --rm --no-deps -T --entrypoint python django
+          manage.py test --noinput -v 2
 
-      - run: docker compose build
-
-      - run: docker compose up -d
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres_password      
-          POSTGRES_DB: postgres
-          POSTGRES_HOST: db
-
-      - name: Run API Tests
-        run: docker compose exec -T django python manage.py test api
+      - name: Show container state and logs
+        if: failure()
+        run: |
+          docker compose ps -a
+          docker compose logs --no-color --tail 200
+          free -m
+          sudo dmesg | grep -iE "killed process|out of memory" || true
