@@ -529,18 +529,18 @@ def save_project(request, username: str, projectname: str):
             if request.session["group"]:
                 group = Group.objects.get(id=request.session["group"])
                 if group.current_unit:
-                    selected_project = SelectedProject.objects.get_or_create(
+                    SelectedProject.objects.get_or_create(
                         group=group,
                         project=project,
                         is_starter=False,
                         unit_id=group.current_unit,
                     )
                 else:
-                    selected_project = SelectedProject.objects.get_or_create(
+                    SelectedProject.objects.get_or_create(
                         group=group,
                         project=project,
                         is_starter=False
-                    )                    
+                    )
     except Group.DoesNotExist:
         del request.session["group"]
         pass
