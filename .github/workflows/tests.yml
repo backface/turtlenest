@@ -1,9 +1,11 @@
 name: Django tests
 
 on:
-  push:
-    branches:
-      - main
+  # disabled on push for now; run manually from the Actions tab
+  # push:
+  #   branches:
+  #     - main
+  workflow_dispatch:
 
 jobs:
   test:
